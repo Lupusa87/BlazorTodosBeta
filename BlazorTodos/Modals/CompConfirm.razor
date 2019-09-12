@@ -1,0 +1,26 @@
+﻿@inherits CompConfirmBase
+
+
+    <style id="styleConfirm">
+        .MyContainerConfirm {
+            display: grid;
+            position: relative;
+            min-width: 400px;
+            height: 200px;
+            grid-template-rows: 100px;
+            overflow: auto;
+            margin: 5px;
+            justify-content:center;
+            justify-items: center;
+            vertical-align:middle;
+        }
+    </style>
+
+    <div class="MyContainerConfirm">
+        <div style="margin:10px; margin-top:20px">
+            <h3 style="font-weight:bold;color:red;text-align:center;">@LocalData.uiTranslator.Translate(LocalData.ConfirmModalText)</h3>
+        </div>
+        <div style="margin:10px;">
+            <button class="btn btn-primary" @onclick="@CmdConfirm">@LocalData.uiTranslator.Translate("Confirm")</button>
+        </div>
+    </div>

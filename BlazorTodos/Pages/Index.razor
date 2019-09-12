@@ -1,0 +1,43 @@
+﻿@page "/"
+
+@inherits IndexBase
+
+    <div style="margin:20px;">
+        <br />
+        <h2>
+            @LocalData.uiTranslator.Translate("Welcome to") <b>Blazor Todos</b> @LocalData.uiTranslator.Translate("demo app backed with") <b>Azure Functions</b> @LocalData.uiTranslator.Translate("and") <b>Cosmos DB</b>.</h2>
+            <br />
+            <h3>@LocalData.uiTranslator.Translate("You can register and manage your todos.")</h3>
+
+            <br />
+            <div style="font-size:22px">
+
+                <span>@LocalData.uiTranslator.Translate("Please select") </span><a href="" class="ml-md-auto" @onclick="@CmdDisplayLogin">@LocalData.uiTranslator.Translate("Login")</a>
+                <span>@LocalData.uiTranslator.Translate("or") </span><a href="" class="ml-md-auto" @onclick="@CmdDisplayRegistration">@LocalData.uiTranslator.Translate("Register")</a>
+
+            </div>
+            <br />
+            <div style="font-size:22px">
+                <span>@LocalData.uiTranslator.Translate("For fast access without registration you can use open") </span><a href="" class="ml-md-auto" @onclick="@CmdLoginDemoUser">@LocalData.uiTranslator.Translate("Demo Account")</a>
+            </div>
+            <br />
+            <br />
+            <br />
+            <h6 style="color:red;font-weight:bold">@LocalData.uiTranslator.Translate("Warnings:")</h6>
+            <br />
+            <h6 style="color:red">@LocalData.uiTranslator.Translate("This app has only demonstration purposes, please don't keep any actual data.")</h6>
+
+            <br />
+            <h6 style="color:red">@LocalData.uiTranslator.Translate("User profile and todos, also app itself can be removed anytime.")</h6>
+
+
+            <br />
+            <h6 style="color:red">@LocalData.uiTranslator.Translate("User full name and todos count and feedback is public for everyone.")</h6>
+
+            <br />
+            <h6 style="color:red">@LocalData.uiTranslator.Translate("User can't have any complain about app functional.")</h6>
+
+
+
+
+</div>

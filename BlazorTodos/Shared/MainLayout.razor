@@ -1,0 +1,39 @@
+@inherits MainLayoutBase
+
+
+@using BlazorCSS
+@using BlazorContextMenu
+@using BlazorTodos.Components
+@using BlazorTodos.Modal
+@using BlazorTodos.Modals
+
+<style id="styleMainLayout">
+    .MyContainerMainLayout {
+        display: grid;
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        grid-template-rows: 45px auto 30px;
+        overflow: hidden;
+        align-self: center;
+        margin: 0px;
+        font-family: Sylfaen;
+    }
+</style>
+<div class="MyContainerMainLayout" @onmouseup="@CmdOnMouseUp">
+    <div style="vertical-align:top;grid-row:1/1;">
+        <CompCSS></CompCSS>
+        <CompModal btModal="@LocalData.btModal"></CompModal>
+        <CompModal btModal="@LocalData.btModalMessage"></CompModal>
+        <CompModal btModal="@LocalData.btModalError"></CompModal>
+        <CompModal btModal="@LocalData.btModalConfirm"></CompModal>
+        <CompContextMenu @ref="@LocalData.compContextMenu" @ref:suppressField bcMenu="@LocalData.bcMenu"></CompContextMenu>
+        <CompHeader @ref="@LocalData.compHeader" @ref:suppressField></CompHeader>
+    </div>
+    <div style="background-color:#f2f2f2;padding:10px;vertical-align:top;grid-row:2/2;">
+        @Body
+    </div>
+    <div style="vertical-align:top;grid-row:3/3;">
+        <CompFooter @ref="@LocalData.compFooter" @ref:suppressField></CompFooter>
+    </div>
+</div>

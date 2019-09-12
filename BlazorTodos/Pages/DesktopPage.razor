@@ -1,0 +1,33 @@
+﻿@page "/DesktopPage"
+
+
+
+@inherits DesktopPageBase
+
+<style id="styleDesktop">
+
+    .MyContainerDesktop {
+        display: grid;
+        position: relative;
+        grid-template-columns: repeat(@LocalData.DesktopItemsList.Max(x=>x.Column),150px);
+        grid-template-rows: repeat(@LocalData.DesktopItemsList.Max(x=>x.Row),150px);
+    width:100%;
+    height:100%;
+        overflow: hidden;
+        align-self: center;
+        background-color: #A5B4FC;
+        color: #f2f2f2;
+        font-size: 20px;
+    padding:50px;
+    }
+</style>
+
+
+<div class="MyContainerDesktop">
+    @foreach (var item in LocalData.DesktopItemsList)
+    {
+        <CompDesktopItem desktopItem="@item"></CompDesktopItem>
+
+    }
+</div>
+

@@ -1,0 +1,124 @@
+﻿@page "/TodosPage"
+
+
+@inherits TodosPageBase
+
+
+<style id="styleTodos">
+
+        tr:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+    </style>
+
+
+@if (LocalData.IsAuthenticated)
+{
+
+    <div style="display:flex;margin:10px;margin-left:0px">
+        <h3 style="margin-right:50px;padding-top:5px">@TodosListCount</h3>
+        <button style="height:35px;margin-left:100px;margin:5px" class="btn btn-primary" @onclick="@CmdAdd">@LocalData.uiTranslator.Translate("Add")</button>
+        <button style="height:35px;margin:5px" class="btn btn-primary" @onclick="@CmdUpdate">@LocalData.uiTranslator.Translate("Update")</button>
+        <button style="height:35px;margin:5px" class="btn btn-primary" @onclick="@CmdDelete">@LocalData.uiTranslator.Translate("Delete")</button>
+        @*<button style="height:35px;margin:5px" class="btn btn-primary" onclick="@CmdReload">Refresh</button>*@
+    </div>
+
+
+    @if (LocalData.TsTodosList == null)
+    {
+        <p><em>@LocalData.uiTranslator.Translate("Loading...")</em></p>
+    }
+    else
+    {
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>N</th>
+                    <th>@LocalData.uiTranslator.Translate("Created")</th>
+                    <th>@LocalData.uiTranslator.Translate("Priority")</th>
+                    <th>@LocalData.uiTranslator.Translate("HasDue")</th>
+                    <th>@LocalData.uiTranslator.Translate("Due")</th>
+                    <th>@LocalData.uiTranslator.Translate("Days")</th>
+                    <th>@LocalData.uiTranslator.Translate("Name")</th>
+                    <th>@LocalData.uiTranslator.Translate("Description")</th>
+                    <th>@LocalData.uiTranslator.Translate("Category")</th>
+                    <th>@LocalData.uiTranslator.Translate("Done")</th>
+                    <th>@LocalData.uiTranslator.Translate("HasRemidner")</th>
+                    <th>@LocalData.uiTranslator.Translate("RemidnDate")</th>
+                    <th>@LocalData.uiTranslator.Translate("IsRemidned")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var todo in LocalData.TsTodosList)
+                {
+                    
+                        <tr style="@CmdGetStyle(todo.ID==CurrID)" @onclick="@(e => CmdRowClick(e, todo.ID))">
+                            <td>@todo.N</td>
+                            <td>@todo.CreateDate.ToString("MM/dd/yyyy HH:mm:ss.fff")</td>
+                            <td>@todo.Priority</td>
+                            <td>
+                                @if (@todo.HasDueDate)
+                                {
+                                    <input type="checkbox" checked />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" />
+                                }
+                            </td>
+                            <td>@todo.DueDate.ToString("MM/dd/yyyy HH:mm:ss.fff")</td>
+                            <td>@todo.DaysLeft</td>
+                            <td>@todo.Name</td>
+                            <td>@todo.Description</td>
+                            <td>@todo.Category</td>
+                            <td>
+                                @if (@todo.IsDone)
+                                {
+                                    <input type="checkbox" checked />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" />
+                                }
+                            </td>
+                            <td>
+                                @if (@todo.HasRemindDate)
+                                {
+                                    <input type="checkbox" checked />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" />
+                                }
+                            </td>
+                            <td>@todo.RemindDate.ToString("MM/dd/yyyy HH:mm:ss.fff")</td>
+                            <td>
+                                @if (@todo.IsReminderEmailed)
+                                {
+                                    <input type="checkbox" checked />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" />
+                                }
+                            </td>
+                        </tr>
+                   
+                    }
+                    </tbody>
+        </table>
+    }
+
+
+
+}
+else
+{
+    <div>
+
+        <span>@LocalData.uiTranslator.Translate("You are not authenticated, please") </span><a href="" class="ml-md-auto" @onclick="@CmdDisplayLogin">@LocalData.uiTranslator.Translate("Login")</a>
+</div>
+}
+
+

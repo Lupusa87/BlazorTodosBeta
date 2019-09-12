@@ -1,0 +1,60 @@
+﻿@page "/UISupportedLanguagesPage"
+
+
+@inherits UISupportedLanguagesPageBase
+
+<style id="styleUISupportedLanguages">
+
+    tr:hover {
+        background-color: rgba(0,0,0,0.05);
+    }
+</style>
+
+
+<h3 style="margin-right:50px;padding-top:5px">@SupportedLanguagesListCount</h3>
+
+
+
+@if (LocalData.UISupportedLanguagesList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<div style="width:auto;height:@(LocalData.WindowSize.H-250)px;overflow:auto;display:block;">
+
+    <table class="table" >
+        <thead>
+            <tr>
+                <th>N</th>
+                <th>@LocalData.uiTranslator.Translate("Name")</th>
+                <th>@LocalData.uiTranslator.Translate("Code")</th>
+                <th>@LocalData.uiTranslator.Translate("Action")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in LocalData.UISupportedLanguagesList.OrderBy(x=>x.N))
+            {
+            <tr>
+                <td>@item.N</td>
+                <td>@item.Name</td>
+                <td>@item.Code</td>
+                @if (item.Exists)
+                {
+                    <td><button style="height:30px;margin:5px" class="btn btn-primary btn-sm" @onclick="@(e => CmdViewWordsList(item.Name))">@LocalData.uiTranslator.Translate("View")</button></td>
+                }
+                else
+                {
+                    <td><button style="height:30px;margin:5px" class="btn btn-primary btn-sm" @onclick="@(e => CmdAddUILanguage(item.Name))">@LocalData.uiTranslator.Translate("Add")</button></td>
+                }
+
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+}
+
+
+
+

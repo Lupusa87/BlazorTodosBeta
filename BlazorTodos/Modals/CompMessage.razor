@@ -1,0 +1,28 @@
+﻿@inherits CompMessageBase
+
+
+<style id="styleMessage">
+    .MyContainerMessage {
+        display: grid;
+        position: relative;
+        min-width: 300px;
+        height: 200px;
+        grid-template-rows: 1fr;
+        overflow: auto;
+        align-self: center;
+        margin: 5px;
+    }
+</style>
+
+<div class="MyContainerMessage">
+
+        @foreach (var item in LocalData.BTMessagesList)
+        {
+            <div>
+                <h3 style="color:darkblue;text-align:center;margin:10px">@item.ID) @item.Message</h3>
+            </div>
+        }
+
+    </div>
+
+

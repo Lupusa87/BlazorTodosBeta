@@ -1,0 +1,33 @@
+﻿
+@inherits CompAddOrUpdateCategoryBase
+
+<style id="styleAddOrupdateCat">
+
+    .MyContainerAddOrUpdateCat {
+        display: grid;
+        position: relative;
+        width: 700px;
+        height: 400px;
+        grid-template-columns: 200px 500px;
+        grid-template-rows: 300px 100px;
+        overflow: hidden;
+        align-self: center;
+        margin: 20px;
+        margin-top: 30px;
+    }
+</style>
+
+
+
+<div class="MyContainerAddOrupdateCat">
+    <div style="display:flex;vertical-align:top;text-align:center;grid-row:1/1;margin:20px">
+        <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem;">@LocalData.uiTranslator.Translate("Name")</label>
+        <input style="margin:10px;line-height:30px;width:400px" type="text" @bind="@LocalData.currCategory.Name" minlength="3" maxlength="100" required />
+    </div>
+
+    <div style="grid-row:2/2;margin:10px;margin-left:120px;margin-bottom:30px">
+        <button class="btn btn-primary" @onclick="@CmdAddOrUpdateCategory" disabled="@IsButtonDisabled">@LocalData.uiTranslator.Translate(ButtonName)</button>
+    </div>
+
+
+</div>

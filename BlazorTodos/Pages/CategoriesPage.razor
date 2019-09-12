@@ -1,0 +1,67 @@
+﻿@page "/CategoriesPage"
+
+
+@inherits CategoriesPageBase
+
+    <style id="styleCategories">
+
+    tr:hover   {
+        background-color:rgba(0,0,0,0.05);
+    }
+    </style>
+
+
+
+@if (LocalData.IsAuthenticated)
+{
+
+    <div style="display:flex;margin:10px;margin-left:0px">
+        <h3 style="margin-right:50px;padding-top:5px">@CategoriesListCount</h3>
+        <button style="height:35px;margin-left:100px;margin:5px" class="btn btn-primary" @onclick="@CmdAdd">@LocalData.uiTranslator.Translate("Add")</button>
+        <button style="height:35px;margin:5px" class="btn btn-primary" @onclick="@CmdUpdate">@LocalData.uiTranslator.Translate("Update")</button>
+        <button style="height:35px;margin:5px" class="btn btn-primary" @onclick="@CmdDelete">@LocalData.uiTranslator.Translate("Delete")</button>
+    </div>
+
+
+    @if (LocalData.TSCategoriesList == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>N</th>
+                    <th>@LocalData.uiTranslator.Translate("Name")</th>
+                    <th>@LocalData.uiTranslator.Translate("Todos Count")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in LocalData.TSCategoriesList)
+                {
+                    
+                        <tr style="@CmdGetStyle(category.ID==CurrID)" @onclick="@(e => CmdRowClick(e, category.ID))">
+                            <td>@category.N</td>
+                            <td>@category.Name</td>
+                            <td>@category.TodosCount</td>
+                        </tr>
+                   
+                }
+            </tbody>
+        </table>
+    }
+
+
+
+}
+else
+{
+    <div>
+
+        <span>@LocalData.uiTranslator.Translate("You are not authenticated, please") </span><a href="" class="ml-md-auto" @onclick="@CmdDisplayLogin">@LocalData.uiTranslator.Translate("Login")</a>
+    </div>
+}
+
+

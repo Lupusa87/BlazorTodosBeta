@@ -1,0 +1,61 @@
+﻿@inherits CompFooterBase
+
+
+
+<style id="styleFooter">
+
+    .MyContainerFooter {
+        display: grid;
+        position: relative;
+        grid-template-columns: 270px auto 230px 40px;
+        overflow: hidden;
+        align-self: center;
+        background-color:#494849;
+        color:#f2f2f2;
+        font-size:14px;
+    }
+</style>
+
+
+<div class="MyContainerFooter">
+    <div style="grid-column:1/1;">
+        <label style="margin-left:10px;text-align:left;line-height:30px;">
+            ©Lupusa, @LocalFunctions.ToLocalDate(DateTime.Now).Year. @LocalData.uiTranslator.Translate("All Rights Reserved").
+        </label>
+    </div>
+    <div style="text-align:center;grid-column:2/2;">
+        <label style="line-height:30px;">
+            @LocalData.uiTranslator.Translate("Users") @LocalData.tsStat.UsersCount (@LocalData.uiTranslator.Translate("live") @LocalData.tsStat.LiveUsersCount), @LocalData.uiTranslator.Translate("Todos") @LocalData.tsStat.TodosCount, @LocalData.uiTranslator.Translate("Visitors") @LocalData.tsStat.IPsCount, @LocalData.uiTranslator.Translate("Visits") @LocalData.tsStat.VisitsCount, @LocalData.uiTranslator.Translate("Likes") @LocalData.tsStat.LikesCount, @LocalData.uiTranslator.Translate("Dislikes") @LocalData.tsStat.DislikesCount, @LocalData.uiTranslator.Translate("Feedback") @LocalData.tsStat.FeedbackCount
+        </label>
+    </div>
+    <div style="grid-column:3/4;">
+        @if (LocalData.uiTranslator.TSUILanguagesList.Any())
+        {
+            <select style="margin:5px;height:24px;width:120px" @bind="@ComboSelectedIndex">
+
+                <option value="0" selected>@LocalData.uiTranslator.Translate(LocalData.uiTranslator.TSUILanguagesList.First().Name)</option>
+                @for (int i = 1; i < LocalData.uiTranslator.TSUILanguagesList.Count; i++)
+                {
+                    <option value="@i">@LocalData.uiTranslator.Translate(LocalData.uiTranslator.TSUILanguagesList[i].Name)</option>
+                }
+                <option value="@LocalData.uiTranslator.TSUILanguagesList.Count">@LocalData.uiTranslator.Translate("Manage Languages")</option>
+            </select>
+        }
+        else
+        {
+         <select style="margin:5px;height:24px;width:120px" ></select>
+        }
+        </div>
+    <div style="grid-column:4/5;">
+        @if (LocalData.IsReady)
+        {
+            <img width="24" height="24" title="Ready State" style="margin:3px;" src="icons/Connected.png" />
+        }
+        else
+        {
+            <img width="24" height="24" title="Ready State" style="margin:3px;" src="icons/Disconnected.png" />
+        }
+    </div>
+</div>
+
+

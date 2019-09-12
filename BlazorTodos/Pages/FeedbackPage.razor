@@ -1,0 +1,97 @@
+﻿@page "/FeedbackPage"
+
+
+<style id="styleFeedback">
+
+    tr:hover {
+        background-color: rgba(0,0,0,0.05);
+    }
+</style>
+
+@inherits FeedbackPageBase
+
+
+<div style="display:flex;margin:10px;margin-left:0px">
+    <h3 style="margin-right:50px;padding-top:5px">@LocalData.uiTranslator.Translate("FeedbackListCount")</h3>
+
+    @if (LocalData.IsAuthenticated)
+    {
+        @if (!LocalData.CurrTSUser.UserName.Equals("demouser"))
+        {
+<button style="height:35px;margin-left:100px;margin:5px" class="btn btn-primary" @onclick="@CmdAddOrUpdateFeedback">@LocalData.uiTranslator.Translate(AddOrUpdateButton)</button>
+        }
+    }
+
+
+    <h4 style="margin:5px;margin-left:25px;line-height:30px;">Total </h4>
+
+    <img width="35" height="35" style="margin:2px;margin-left:10px" @onclick="@CmdLike" title=@LocalData.uiTranslator.Translate("Total likes") src="icons/Like.png" />
+    <h4 style="margin:5px;line-height:30px;">@LocalData.tsStat.LikesCount</h4>
+
+    <img width="35" height="35" style="margin:2px;margin-left:10px" @onclick="@CmdDislike" title=@LocalData.uiTranslator.Translate("Total dislikes") src="icons/Dislike.png" />
+    <h4 style="margin:5px;line-height:30px;">@LocalData.tsStat.DislikesCount</h4>
+
+
+    @if (LocalData.IsAuthenticated)
+    {
+        @if (!LocalData.CurrTSUser.UserName.Equals("demouser"))
+        {
+            @if (LocalData.currReaction.UserID.Equals(Guid.Empty))
+            {
+                <h4 style="margin:5px;margin-left:50px;line-height:30px;">@LocalData.uiTranslator.Translate("You did not reacted yet")</h4>
+            }
+            else
+            {
+<h4 style="margin:5px;margin-left:50px;line-height:30px">@LocalData.uiTranslator.Translate("Your reaction is")</h4>
+
+                @if (LocalData.currReaction.LikeOrDislike)
+                {
+                    <img width="35" height="35" style="margin:2px;margin-left:5px" src="icons/Like.png" />
+                }
+                else
+                {
+                    <img width="35" height="35" style="margin:2px;margin-left:5px" src="icons/Dislike.png" />
+
+                }
+            }
+        }
+    }
+</div>
+
+
+@if (FeedbackList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>N</th>
+                <th>@LocalData.uiTranslator.Translate("User")</th>
+                <th>@LocalData.uiTranslator.Translate("Feedback")</th>
+                <th>@LocalData.uiTranslator.Translate("Date")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var feedback in FeedbackList)
+            {
+                <tr>
+                    <td>@feedback.N</td>
+                    <td>@feedback.UserName</td>
+                    <td>@feedback.Text</td>
+                    <td>@feedback.AddDate.ToString("MM/dd/yyyy HH:mm:ss.fff")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+
+
+
+

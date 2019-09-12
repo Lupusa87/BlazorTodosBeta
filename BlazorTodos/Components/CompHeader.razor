@@ -1,0 +1,74 @@
+﻿@inherits CompHeaderBase
+
+
+
+<style id="styleHeader">
+
+    .MyContainerHeader {
+        display: grid;
+        position: relative;
+        height:45px;
+        grid-template-columns: 350px auto 350px;
+        overflow: hidden;
+        background-color: #494849;
+        color:#f2f2f2;
+    }
+
+    .myButton {
+        box-sizing: border-box;
+        font-size: 16px;
+        text-align: center;
+        padding: 2px 5px 2px 5px;
+        margin: 0 2px 0 2px;
+        white-space: nowrap;
+        background-color: transparent;
+        border: 1px solid #494849;
+    border-radius:5px;
+    }
+
+    .myButton:focus
+    {
+         -moz-appearance: none;
+          -webkit-appearance: none;
+          border:1px solid #f2f2f2;
+    }
+
+    .myButton:hover {
+        background-color: #808080;
+    }
+
+</style>
+
+
+<div class="MyContainerHeader">
+    <div style="display:flex;align-items:center;grid-column:1/1;">
+        @if (LocalData.IsAuthenticated)
+        {
+            <img width="26" height="26" style="margin:2px;margin-left:15px" @onclick="@(e => LocalFunctions.CmdNavigate("DesktopPage"))" title="Desktop" src="icons/Desktop.png" />
+        }
+        else
+        {
+            <div tabindex="0" style="margin-left:15px" class="myButton" @onclick="@(e => LocalFunctions.CmdNavigate())">@LocalData.uiTranslator.Translate("Home")</div>
+            <div tabindex="0" class="myButton" @onclick="@(e => LocalFunctions.DisplayModal(Classes.Enums.ModalForm.Registration))">@LocalData.uiTranslator.Translate("Registration")</div>
+            <div tabindex="0" class="myButton" @onclick="@(e => LocalFunctions.CmdNavigate("OnlineUsersPage"))">@LocalData.uiTranslator.Translate("Online Users")</div>
+            <div tabindex="0" class="myButton" @onclick="@(e => LocalFunctions.CmdNavigate("FeedbackPage"))">@LocalData.uiTranslator.Translate("Feedback")</div>
+            <div tabindex="0" class="myButton" @onclick="@(e => LocalFunctions.CmdNavigate("AboutPage"))">@LocalData.uiTranslator.Translate("About")</div>
+        }
+    </div>
+    <div style="text-align:center;grid-column:2/2;height:45px">
+        <img  style="margin-top:-5px;width:30px;height:30px" src="icons/AppIcon.png" />
+        <label style="margin-left:15px;line-height:45px;font-size:22px;font-weight:bold">
+            B l a z o r   &#160;&#160;&#160;   T o d o s
+        </label>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:flex-end;grid-column:3/3;">
+        <div id="mydiv456" tabindex="0" style="margin-right:15px" class="myButton" @onclick="@(e => CmdLoginLogout(e, "mydiv456"))">@LocalData.uiTranslator.Translate(LocalData.LoginLogout)</div>
+    </div>
+</div>
+
+
+@*<div>
+    <a href="/ProfilePage" class="ml-md-auto">@LocalData.UserName</a>
+    <a href="" class="ml-md-auto" onclick="@CmdOnClick">@LocalData.LoginLogout</a>
+    <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+</div>*@

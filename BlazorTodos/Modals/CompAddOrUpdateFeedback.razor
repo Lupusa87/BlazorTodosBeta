@@ -1,0 +1,32 @@
+﻿
+@inherits CompAddOrUpdateFeedbackBase
+
+<style id="styleAddOrupdateFeedback">
+
+    .MyContainerAddOrUpdateFeedback {
+        display: grid;
+        position: relative;
+        width: 650px;
+        height: 420px;
+        grid-template-rows: 300px 100px;
+        overflow: hidden;
+        align-self: center;
+        margin: 20px;
+        margin-top: 30px;
+    }
+</style>
+
+
+
+<div class="MyContainerAddOrupdateFeedback">
+    <div style="display:flex;vertical-align:top;text-align:center;grid-row:1/1;margin:20px">
+        <label style="text-align:right;margin:10px;line-height:30px;color:darkblue;font-size:1.2rem;width:120px">@LocalData.uiTranslator.Translate("Feedback")</label>
+        <input style="margin:10px;line-height:30px;width:500px" type="text" @bind="@LocalData.currFeedback.Text" minlength="3" maxlength="1000" required />
+    </div>
+
+    <div style="grid-column:2/2;grid-row:2/2;margin:10px;margin-bottom:30px">
+        <button class="btn btn-primary" style="margin-left:160px" @onclick="@CmdAddOrUpdateFeedback" disabled="@IsButtonDisabled">@LocalData.uiTranslator.Translate(ButtonName)</button>
+    </div>
+
+
+</div>

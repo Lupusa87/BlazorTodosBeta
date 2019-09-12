@@ -1,0 +1,52 @@
+﻿@page "/OnlineUsersPage"
+
+
+@inherits OnlineUsersPageBase
+
+<style id="styleOnlineUsers">
+
+    tr:hover {
+        background-color: rgba(0,0,0,0.05);
+    }
+</style>
+
+
+<h3 style="margin-right:50px;padding-top:5px">@UsersListCount</h3>
+
+
+
+@if (TsUserOpenList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>N</th>
+                <th>@LocalData.uiTranslator.Translate("FullName")</th>
+                <th>@LocalData.uiTranslator.Translate("Registered")</th>
+                <th>@LocalData.uiTranslator.Translate("Days")</th>
+                <th>@LocalData.uiTranslator.Translate("TodosCount")</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in TsUserOpenList)
+            {
+                <tr>
+                    <td>@user.N</td>
+                    <td>@user.FullName</td>
+                    <td>@user.CreateDate.ToShortDateString()</td>
+                    <td>@user.Days</td>
+                    <td>@user.TodosCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+

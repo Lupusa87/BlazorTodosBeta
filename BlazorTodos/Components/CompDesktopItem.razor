@@ -1,0 +1,80 @@
+﻿@inherits CompDesktopItemBase
+
+<style id="styleDesktopItem">
+
+    .MyDesktopItem {
+        display:grid;
+        grid-template-rows: 70px auto;
+        height: 150px;
+        width: 150px;
+        justify-items: center;
+    }
+
+
+    .myDiv {
+        box-sizing: border-box;
+        white-space: nowrap;
+        background-color: transparent;
+        border-radius:5px;
+        grid-row:1/1;
+        border:3px solid #DCCC97;
+        padding:7px;
+        width:70px;
+        height:70px;
+        vertical-align:central;
+        align-content:center;
+        align-items:center;
+    }
+
+    .myDiv:focus
+    {
+         -moz-appearance: none;
+          -webkit-appearance: none;
+          border:3px solid #ff4d4d;
+    }
+
+
+    .myDiv:focus + .myText {
+        font-weight:bold;
+       
+    }
+
+    .myText {
+        grid-row:2/2;
+        vertical-align:top;
+        margin-top:10px;
+        text-align:center;
+        line-height:30px;
+        width:150px;
+        height:50px;
+        white-space:nowrap;
+        color:#0000cc;
+    }
+
+
+
+    .MyDesktopItem:hover > label  {
+        font-weight:bold;
+       
+    }
+
+    .MyDesktopItem:hover > div  {
+       border:3px solid #ff4d4d;
+       font-weight:bold;
+       
+    }
+
+
+</style>
+
+
+
+    <div class="MyDesktopItem" @onclick="@CmdOnClick" style="grid-column:@desktopItem.Column/@desktopItem.Column;grid-row:@desktopItem.Row/@desktopItem.Row;">
+        <div class="myDiv" tabindex="0">
+            <img width="50" height="50" src="@desktopItem.Icon" />
+        </div>
+        <label class="myText">
+            @LocalData.uiTranslator.Translate(desktopItem.Text)
+        </label>
+    </div>
+   

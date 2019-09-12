@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AzureFunctionsVersion>v2</AzureFunctionsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.5.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.30-beta1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+    <PackageReference Include="System.Text.Json" Version="4.6.0-preview7.19362.9" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="host.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="local.settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AzureTranslatorAPI\AzureTranslatorAPI.csproj" />
+    <ProjectReference Include="..\GoogleTranslatorAPI\GoogleTranslatorAPI.csproj" />
+    <ProjectReference Include="..\TodosCosmos\TodosCosmos.csproj" />
+    <ProjectReference Include="..\TodosGlobal\TodosGlobal.csproj" />
+    <ProjectReference Include="..\TodosShared\TodosShared.csproj" />
+  </ItemGroup>
+</Project>

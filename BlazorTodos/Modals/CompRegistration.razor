@@ -1,0 +1,59 @@
+﻿
+@inherits CompRegistrationBase
+
+<style>
+
+    .MyContainerRegistration {
+        display: grid;
+        position: relative;
+        width: 500px;
+        height: 400px;
+        grid-template-columns: 0.8fr 1.2fr;
+        grid-template-rows: 300px 100px;
+        overflow: hidden;
+        align-self: center;
+        margin: 20px;
+        margin-top: 30px;
+    }
+</style>
+
+
+
+<div class="MyContainerRegistration">
+    <div style="vertical-align:top;text-align:right;grid-column:1/1;grid-row:1/1;">
+        <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("UserName")</label>
+        <br />
+        <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Password")</label>
+        <br />
+        <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Confirm Password")</label>
+        <br />
+        <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("FullName")</label>
+        <br />
+        <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Email")</label>
+        <br />
+        <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Emailed Code")</label>
+    </div>
+
+    <div style="vertical-align:top;grid-column:2/2;grid-row:1/1;">
+        <input style="margin:10px;line-height:30px" type="text" @bind="@tsUser.UserName" minlength="3" maxlength="100" required />
+        <input style="margin:10px;line-height:30px" type="password" @bind="@tsUser.Password" minlength="6" maxlength="30" required />
+        <input style="margin:10px;line-height:30px" type="password" @bind="@ConfirmPassword" minlength="6" maxlength="30" required />
+        <input style="margin:10px;line-height:30px;width:250px" type="text" @bind="@tsUser.FullName" minlength="3" maxlength="100" required />
+        <input style="margin:10px;line-height:30px;width:250px" type="email" @bind="@tsUser.Email" autocomplete="on" required />
+        <div style="display:flex;margin:10px;">
+            <input style="line-height:30px;width:200px" type="text" disabled="@IsEmailedCodeDisabled" @bind="@tsUser.EmailedCode" minlength="10" maxlength="10" required/>
+            @if (IsSendMailVisible)
+            {
+                <img width="35" height="30" style="margin:2px;margin-left:5px" @onclick="@CmdSendMail" title=@LocalData.uiTranslator.Translate("Send code to mail") src="icons/SendMail.png" />
+            }
+        </div>
+    </div>
+
+   
+
+    <div style="grid-column:2/2;grid-row:2/2;margin:10px;">
+        <button class="btn btn-primary" @onclick="@CmdAddUser" disabled="@IsButtonDisabled">@LocalData.uiTranslator.Translate("Register")</button>
+</div>
+
+
+</div>

@@ -1,0 +1,72 @@
+﻿@page "/ProfilePage"
+
+@inherits ProfilePageBase
+
+<h3>@LocalData.uiTranslator.Translate("User Profile")</h3>
+
+
+@if(LocalData.IsAuthenticated)
+{
+
+
+    <style>
+
+        .MyContainerProfile {
+            display: grid;
+            position: relative;
+            width: 500px;
+            height: 400px;
+            grid-template-columns: 0.8fr 1.2fr;
+            grid-template-rows: 300px 100px;
+            overflow: hidden;
+            align-self: center;
+            margin: 20px;
+            margin-top: 30px;
+        }
+    </style>
+
+
+
+    <div class="MyContainerProfile">
+        <div style="vertical-align:top;text-align:right;grid-column:1/1;grid-row:1/1;">
+            <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("UserName")</label>
+            <br />
+            <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("FullName")</label>
+            <br />
+            <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Email")</label>
+            <br />
+            <br />
+
+            @if (!LocalData.CurrTSUser.UserName.Equals("demouser"))
+            {
+                <div style="font-size:18px">
+                    <a href="ProfilePage" class="ml-md-auto" @onclick="@CmdDisplayChangePassword">@LocalData.uiTranslator.Translate("Change Password")</a>
+                </div>
+            }
+        </div>
+
+        <div style="vertical-align:top;grid-column:2/2;grid-row:1/1;">
+            <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem;font-weight:bold">
+                @LocalData.CurrTSUser.UserName
+            </label>
+            <br />
+            <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem;font-weight:bold">
+                @LocalData.CurrTSUser.FullName
+            </label>
+            <br />
+            <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem;font-weight:bold">
+                @LocalData.CurrTSUser.Email
+            </label>
+        </div>
+    </div>
+
+
+
+    }
+    else
+    {
+    <div>
+
+        <span>@LocalData.uiTranslator.Translate("You are not authenticated, please login.")</span>
+    </div>
+    }

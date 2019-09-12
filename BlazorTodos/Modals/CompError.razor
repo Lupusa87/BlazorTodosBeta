@@ -1,0 +1,41 @@
+﻿@inherits CompErrorBase
+
+<style id="styleError">
+    .MyContainerError {
+        display: grid;
+        position: relative;
+        min-width:300px;
+        height:200px;
+        grid-template-rows: 1fr;
+        overflow: auto;
+        align-self: center;
+        margin: 5px;
+    }
+</style>
+
+        <div class="MyContainerError">
+
+            @if (LocalData.ProductionOrDevelopmentMode)
+            {
+                @foreach (var item in LocalData.BTErrorsList)
+                {
+            <div>
+                <h3 style="color:red;text-align:center;margin:10px">@item.ID) @item.Message</h3>
+            </div>
+                }
+            }
+            else
+            {
+
+                @foreach (var item in LocalData.BTErrorsList)
+                {
+        <div>
+            <h3 style="color:red;text-align:center;margin:10px">@item.ID) @item.Message </h3>
+            <h6 style="color:darkblue;text-align:center;margin:10px">@item.OccurDate.ToString("MM/dd/yyyy HH:mm:ss.fff") @item.Source </h6>
+        </div>
+                }
+
+            }
+
+
+        </div>

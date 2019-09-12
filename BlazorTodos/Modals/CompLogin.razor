@@ -1,0 +1,48 @@
+﻿@inherits CompLoginBase
+    <style>
+
+.MyContainerLogin{
+            display:grid;
+            position:relative;
+            width:500px;
+            height:200px;
+            grid-template-columns: 0.8fr 1.2fr;
+            grid-template-rows:1fr 1fr;
+            overflow:hidden;
+            align-self:center;
+            margin:20px;
+            margin-top:30px;
+    }
+</style>
+
+
+
+    <div class="MyContainerLogin">
+        <div style="vertical-align:top;text-align:right;grid-column:1/1;grid-row:1/1;">
+            <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("UserName")</label>
+            <br />
+            <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Password")</label>
+        </div>
+
+        <div style="vertical-align:top;grid-column:2/2;grid-row:1/1;">
+            <input style="margin:10px;line-height:30px" type="text" @bind="@UserName" minlength="3" maxlength="100" required />
+            <div style="display:flex;margin:10px;">
+                <input style="line-height:30px" type="password" @bind="@UserPassword" minlength="6" maxlength="30" required @onkeyup="@cmdKeyUp" />
+                @if (IsRecoveryIconVisible)
+                {
+                    <img width="35" height="30" style="margin:2px;margin-left:5px" @onclick="@CmdRecoverPass" title="Password recovery" src="icons/SendMail.png" />
+                }
+            </div>
+            </div>
+
+
+
+
+            <div style="grid-column:2/2;grid-row:2/2;display:flex;margin:10px;">
+                <button style="height:35px;margin-left:100px;margin:5px" class="btn btn-primary" @onclick="@CmdAuthorize" disabled="@IsButtonDisabled">@LocalData.uiTranslator.Translate("Login")</button>
+                <button style="height:35px;margin:5px" class="btn btn-primary" @onclick="@CmdRegister">@LocalData.uiTranslator.Translate("Register")</button>
+            </div>
+
+
+
+        </div>
