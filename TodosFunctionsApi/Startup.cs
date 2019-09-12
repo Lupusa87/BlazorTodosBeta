@@ -58,9 +58,6 @@ namespace TodosFunctionsApi
             SeedData seed = new SeedData(new CosmosClient(endpoint, authKey));
 
 
-
-
-
             //builder.Services.AddHttpClient();
 
             //builder.Services.AddSingleton((s) =>
