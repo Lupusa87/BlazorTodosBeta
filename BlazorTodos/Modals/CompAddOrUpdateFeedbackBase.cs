@@ -13,11 +13,11 @@ namespace BlazorTodos.Modals
     public class CompAddOrUpdateFeedbackBase : ComponentBase
     {
 
-        [Parameter] protected string UniqueID { get; set; }
+        [Parameter] public string UniqueID { get; set; }
 
         protected bool IsButtonDisabled { get; set; } = false;
 
-        [Parameter] protected string ButtonName { get; set; } = "Add feedback";
+        [Parameter] public string ButtonName { get; set; } = "Add feedback";
 
         protected override void OnInitialized()
         {

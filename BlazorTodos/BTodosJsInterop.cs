@@ -10,14 +10,14 @@ namespace BlazorTodos
     {
         public static IJSRuntime jsRuntime;
         
-        public static Task<bool> Alert(string msg)
+        public static ValueTask<bool> Alert(string msg)
         {
 
             return jsRuntime.InvokeAsync<bool>(
                 "BTodosJSFunctions.Alert", msg);
         }
 
-        public static Task<bool> Log(string msg)
+        public static ValueTask<bool> Log(string msg)
         {
 
             return jsRuntime.InvokeAsync<bool>(
@@ -26,57 +26,57 @@ namespace BlazorTodos
 
 
 
-        public static Task<int> GetTimezoneOffset()
+        public static ValueTask<int> GetTimezoneOffset()
         {
             return jsRuntime.InvokeAsync<int>(
                 "BTodosJSFunctions.GetTimezoneOffset");
         }
 
-        public static Task<long> GetDateMilliseconds()
+        public static ValueTask<long> GetDateMilliseconds()
         {
             return jsRuntime.InvokeAsync<long>(
                 "BTodosJSFunctions.GetDateMilliseconds");
         }
 
 
-        public static Task<string> GetMachineID()
+        public static ValueTask<string> GetMachineID()
         {
             return jsRuntime.InvokeAsync<string>(
                 "BTodosJSFunctions.GetMachineID");
         }
 
-        public static Task<double> GetElementActualWidth(string elementID)
+        public static ValueTask<double> GetElementActualWidth(string elementID)
         {
             return jsRuntime.InvokeAsync<double>(
                 "BTodosJSFunctions.GetElementActualWidth", elementID);
         }
 
-        public static Task<double> GetElementActualHeight(string elementID)
+        public static ValueTask<double> GetElementActualHeight(string elementID)
         {
             return jsRuntime.InvokeAsync<double>(
                 "BTodosJSFunctions.GetElementActualHeight", elementID);
         }
 
-        public static Task<double> GetElementActualTop(string elementID)
+        public static ValueTask<double> GetElementActualTop(string elementID)
         {
             return jsRuntime.InvokeAsync<double>(
                 "BTodosJSFunctions.GetElementActualTop", elementID);
         }
 
-        public static Task<double> GetElementActualLeft(string elementID)
+        public static ValueTask<double> GetElementActualLeft(string elementID)
         {
             return jsRuntime.InvokeAsync<double>(
                 "BTodosJSFunctions.GetElementActualLeft", elementID);
         }
 
 
-        public static Task<double> GetWindowWidth()
+        public static ValueTask<double> GetWindowWidth()
         {
             return jsRuntime.InvokeAsync<double>(
                 "BTodosJSFunctions.GetWindowWidth");
         }
 
-        public static Task<double> GetWindowHeight()
+        public static ValueTask<double> GetWindowHeight()
         {
             return jsRuntime.InvokeAsync<double>(
                 "BTodosJSFunctions.GetWindowHeight");

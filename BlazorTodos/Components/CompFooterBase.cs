@@ -11,9 +11,6 @@ namespace BlazorTodos.Components
     {
 
 
-
-        private bool FirstLoad = true;
-
         public int ComboSelectedIndex
         {
             get
@@ -46,15 +43,16 @@ namespace BlazorTodos.Components
         }
 
 
-        protected override void OnAfterRender()
+
+
+        protected override void OnAfterRender(bool firstRender)
         {
-            if (FirstLoad)
+
+            if (firstRender)
             {
 
                 if (LocalData.uiTranslator.TSUILanguagesList.Any())
                 {
-
-                    FirstLoad = false;
 
                     if (LocalData.uiTranslator.ComboUILanguagesSelectedIndex > 0)
                     {
@@ -63,7 +61,7 @@ namespace BlazorTodos.Components
                 }
             }
 
-            base.OnAfterRender();
+            base.OnAfterRender(firstRender);
         }
 
 

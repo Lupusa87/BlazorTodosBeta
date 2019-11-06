@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -216,7 +217,7 @@ namespace BlazorTodos.Pages
         }
 
 
-        public void CmdRowClick(UIMouseEventArgs e, Guid id)
+        public void CmdRowClick(MouseEventArgs e, Guid id)
         {
             CurrID = id;
 

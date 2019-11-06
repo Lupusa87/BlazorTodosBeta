@@ -21,11 +21,11 @@ namespace BlazorTodos
     public static class LocalFunctions
     {
         private static TimerHelper timerHelper = new TimerHelper();
-        public static IUriHelper uriHelper { get; set; } = null;
+        public static NavigationManager navigationManager { get; set; } = null;
 
         public static void CmdNavigate(string ParRoute = "")
         {
-            uriHelper.NavigateTo("/" + ParRoute);
+            navigationManager.NavigateTo("/" + ParRoute);
         }
 
 
@@ -671,43 +671,46 @@ namespace BlazorTodos
                 LocalData.uiTranslator.TSUILanguagesList = await WebApiFunctions.CmdGetAllUILanguages();
 
 
+               
 
-                List<TSUILanguage> ListInIndexedDB = await LocalData.indexDbManager.GetRecords<TSUILanguage>("UILanguages");
-
-
-
-
-                foreach (var item in LocalData.uiTranslator.TSUILanguagesList)
+                if (LocalData.UsingIndexedDb)
                 {
-                    if (ListInIndexedDB is null)
+                    List<TSUILanguage> ListInIndexedDB = await LocalData.indexedDbManager.GetRecords<TSUILanguage>("UILanguages");
+
+                    foreach (var item in LocalData.uiTranslator.TSUILanguagesList)
                     {
-                        await AddUILanguageAndStore(item);
-                    }
-                    else
-                    {
-                        if (ListInIndexedDB.Any(x => x.Code.Equals(item.Code, StringComparison.InvariantCultureIgnoreCase)))
+                        if (ListInIndexedDB is null)
                         {
-                            if (item.Version != ListInIndexedDB.Single(x => x.Code.Equals(item.Code, StringComparison.InvariantCultureIgnoreCase)).Version)
-                            {
 
-                                var updateRecord = new StoreRecord<TSUILanguage>
-                                {
-                                    Storename = "UILanguages",
-                                    Data = item
-                                };
+                            await AddUILanguageAndStore(item);
 
-                                await LocalData.indexDbManager.UpdateRecord(updateRecord);
-                                await LocalData.indexDbManager.ClearStore("UILangDict" + item.Code);
-                            }
                         }
                         else
                         {
-                            await AddUILanguageAndStore(item);
+                            if (ListInIndexedDB.Any(x => x.Code.Equals(item.Code, StringComparison.InvariantCultureIgnoreCase)))
+                            {
+                                if (item.Version != ListInIndexedDB.Single(x => x.Code.Equals(item.Code, StringComparison.InvariantCultureIgnoreCase)).Version)
+                                {
+
+                                    var updateRecord = new StoreRecord<TSUILanguage>
+                                    {
+                                        Storename = "UILanguages",
+                                        Data = item
+                                    };
+
+                                    await LocalData.indexedDbManager.UpdateRecord(updateRecord);
+                                    await LocalData.indexedDbManager.ClearStore("UILangDict" + item.Code);
+                                }
+                            }
+                            else
+                            {
+                                await AddUILanguageAndStore(item);
+                            }
                         }
+
+
+
                     }
-
-                   
-
                 }
 
             }
@@ -717,19 +720,22 @@ namespace BlazorTodos
 
         private static async Task AddUILanguageAndStore(TSUILanguage item)
         {
-            var newRecord = new StoreRecord<TSUILanguage>
+            if (LocalData.UsingIndexedDb)
             {
-                Storename = "UILanguages",
-                Data = item
-            };
+                var newRecord = new StoreRecord<TSUILanguage>
+                {
+                    Storename = "UILanguages",
+                    Data = item
+                };
 
-            await LocalData.indexDbManager.AddRecord(newRecord);
+                await LocalData.indexedDbManager.AddRecord(newRecord);
 
 
-            if (!item.Code.Equals("en", StringComparison.InvariantCultureIgnoreCase))
-            {               
-                AddStoreForLang(item.Code);
+                if (!item.Code.Equals("en", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    AddStoreForLang(item.Code);
 
+                }
             }
         }
 
@@ -768,9 +774,13 @@ namespace BlazorTodos
 
         public static async Task GetUILangDict()
         {
+            List<TSUIWordsPair> dictInIndexedDB = null;
 
 
-            List<TSUIWordsPair> dictInIndexedDB = await LocalData.indexDbManager.GetRecords<TSUIWordsPair>("UILangDict" + LocalData.uiTranslator.CurrUILanguage.Code);
+            if (LocalData.UsingIndexedDb)
+            {
+                dictInIndexedDB = await LocalData.indexedDbManager.GetRecords<TSUIWordsPair>("UILangDict" + LocalData.uiTranslator.CurrUILanguage.Code);
+            }
 
             if (dictInIndexedDB is null)
             {
@@ -804,15 +814,20 @@ namespace BlazorTodos
 
             LocalData.uiTranslator.PrepareDict(await WebApiFunctions.CmdGetAllUIWordForeigns(LocalData.uiTranslator.CurrUILanguage.ID));
 
-            foreach (var item in LocalData.uiTranslator.TSUIWordsPairsList)
-            {
-                var newRecord = new StoreRecord<TSUIWordsPair>
-                {
-                    Storename = "UILangDict" + LocalData.uiTranslator.CurrUILanguage.Code,
-                    Data = item
-                };
 
-                await LocalData.indexDbManager.AddRecord(newRecord);
+
+            if (LocalData.UsingIndexedDb)
+            {
+                foreach (var item in LocalData.uiTranslator.TSUIWordsPairsList)
+                {
+                    var newRecord = new StoreRecord<TSUIWordsPair>
+                    {
+                        Storename = "UILangDict" + LocalData.uiTranslator.CurrUILanguage.Code,
+                        Data = item
+                    };
+
+                    await LocalData.indexedDbManager.AddRecord(newRecord);
+                }
             }
         }
 

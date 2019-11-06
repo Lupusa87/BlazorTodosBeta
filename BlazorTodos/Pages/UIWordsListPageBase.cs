@@ -15,7 +15,7 @@ namespace BlazorTodos.Pages
     {
 
         [Parameter]
-        protected string CurrLangName { get; set; }
+        public string CurrLangName { get; set; }
 
         public List<TSUILanguage> UIExistingLanguagesList { get; set; }
 

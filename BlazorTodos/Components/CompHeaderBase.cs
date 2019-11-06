@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static BlazorTodos.Classes.CustomClasses;
 using static BlazorTodos.Classes.Enums;
+
 
 namespace BlazorTodos.Components
 {
@@ -18,7 +20,7 @@ namespace BlazorTodos.Components
         }
 
 
-        public async void CmdLoginLogout(UIMouseEventArgs e, string ElementID)
+        public async void CmdLoginLogout(MouseEventArgs e, string ElementID)
         {
 
             if (LocalData.LoginLogout.Equals("Login"))

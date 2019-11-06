@@ -13,11 +13,11 @@ namespace BlazorTodos.Modals
     public class CompAddOrUpdateTodoBase : ComponentBase
     {
 
-        [Parameter] protected string UniqueID { get; set; }
+        [Parameter] public string UniqueID { get; set; }
 
         protected bool IsButtonDisabled { get; set; } = false;
 
-        [Parameter] protected string ButtonName { get; set; } = "Add todo";
+        [Parameter] public string ButtonName { get; set; } = "Add todo";
 
 
         protected List<string> OptionsList { get; set; } = new List<string>();
@@ -133,7 +133,7 @@ namespace BlazorTodos.Modals
         }
 
 
-        public void ComboPrioritySelectionChanged(UIChangeEventArgs e)
+        public void ComboPrioritySelectionChanged(ChangeEventArgs e)
         {
             if (int.TryParse(e.Value.ToString(), out int val))
             {
@@ -143,7 +143,7 @@ namespace BlazorTodos.Modals
         }
 
 
-        public void ComboCategorySelectionChanged(UIChangeEventArgs e)
+        public void ComboCategorySelectionChanged(ChangeEventArgs e)
         {
             if (int.TryParse(e.Value.ToString(), out int val))
             {
@@ -210,7 +210,7 @@ namespace BlazorTodos.Modals
 
 
 
-        public void ComboOptionsSelectionChanged(UIChangeEventArgs e)
+        public void ComboOptionsSelectionChanged(ChangeEventArgs e)
         {
             NumbersList = new List<int>();
 
@@ -264,7 +264,7 @@ namespace BlazorTodos.Modals
             }
         }
 
-        public void ComboNumbersSelectionChanged(UIChangeEventArgs e)
+        public void ComboNumbersSelectionChanged(ChangeEventArgs e)
         {
             
             if (byte.TryParse(e.Value.ToString(), out byte val))
@@ -291,7 +291,7 @@ namespace BlazorTodos.Modals
 
       
 
-        public void CmdDueDateOnChange(UIChangeEventArgs e)
+        public void CmdDueDateOnChange(ChangeEventArgs e)
         {
             DateTime d;
             if (DateTime.TryParse(e.Value.ToString(), out d))

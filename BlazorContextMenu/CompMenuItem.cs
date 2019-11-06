@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.RenderTree;
+using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,9 +10,9 @@ namespace BlazorContextMenu
     internal class CompMenuItem:ComponentBase
     {
         [Parameter]
-        protected ComponentBase parent { get; set; }
+        public ComponentBase parent { get; set; }
 
-        [Parameter] protected BCMenuItem bcMenuItem { get; set; }
+        [Parameter] public BCMenuItem bcMenuItem { get; set; }
 
 
         private CompContextMenu _parent;
@@ -35,14 +36,14 @@ namespace BlazorContextMenu
             builder.AddAttribute(2, "id", bcMenuItem.ID);
             builder.AddAttribute(3, "class", "bContextMenuItem");
             builder.AddAttribute(4, "style", "height:30px");
-            builder.AddAttribute(5, "onclick", EventCallback.Factory.Create<UIMouseEventArgs>(this, OnClick));
+            builder.AddAttribute(5, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, OnClick));
             builder.AddContent(6, bcMenuItem.Text);
 
             builder.CloseElement();
 
         }
 
-        private void OnClick(UIMouseEventArgs e)
+        private void OnClick(MouseEventArgs e)
         {
             if (bcMenuItem.Children is null)
             {

@@ -11,7 +11,7 @@ namespace BlazorTodos.Modal
     {
 
         [Parameter]
-        protected BTModal btModal { get; set; }
+        public BTModal btModal { get; set; }
 
 
         protected string Title { get; set; }
@@ -28,9 +28,9 @@ namespace BlazorTodos.Modal
             base.OnInitialized();
         }
 
-        protected override void OnAfterRender()
-        {
 
+        protected override void OnAfterRender(bool firstRender)
+        {
             if (btModal.OnShow == null)
             {
                 btModal.OnShow = ShowModal;
@@ -61,8 +61,10 @@ namespace BlazorTodos.Modal
             //        break;
             //}
 
-            base.OnAfterRender();
+            base.OnAfterRender(firstRender);
         }
+
+
 
         public void Refresh()
         {

@@ -37,7 +37,7 @@ namespace TodosFunctionsApi
             EnsureDemoUser();
             ReadDBSettings();
             
-            SeedUILanguageData.Seed();
+            //SeedUILanguageData.Seed();
 
 
         }

@@ -20,10 +20,10 @@
                 @switch (btModal.modalForm)
                 {
                     case Classes.Enums.ModalForm.Message:
-                        <CompMessage @ref="@LocalData.compMessage" @ref:suppressField UniqueID="@LocalFunctions.GetUniqueID()"></CompMessage>
+                        <CompMessage @ref="@LocalData.compMessage" UniqueID="@LocalFunctions.GetUniqueID()"></CompMessage>
                         break;
                     case Classes.Enums.ModalForm.Error:
-                        <CompError @ref="@LocalData.compError" @ref:suppressField UniqueID="@LocalFunctions.GetUniqueID()"></CompError>
+                        <CompError @ref="@LocalData.compError" UniqueID="@LocalFunctions.GetUniqueID()"></CompError>
                         break;
                     case Classes.Enums.ModalForm.Confirm:
                         <CompConfirm></CompConfirm>
@@ -35,13 +35,13 @@
                         <CompRegistration></CompRegistration>
                         break;
                     case Classes.Enums.ModalForm.AddOrUpdateTodo:
-                        <CompAddOrUpdateTodo @ref="@LocalData.compAddOrUpdateTodo" @ref:suppressField UniqueID="@LocalFunctions.GetUniqueID()"></CompAddOrUpdateTodo>
+                        <CompAddOrUpdateTodo @ref="@LocalData.compAddOrUpdateTodo" UniqueID="@LocalFunctions.GetUniqueID()"></CompAddOrUpdateTodo>
                         break;
                     case Classes.Enums.ModalForm.AddOrUpdateCategory:
-                        <CompAddOrUpdateCategory @ref="@LocalData.compAddOrUpdateCategory" @ref:suppressField UniqueID="@LocalFunctions.GetUniqueID()"></CompAddOrUpdateCategory>
+                        <CompAddOrUpdateCategory @ref="@LocalData.compAddOrUpdateCategory" UniqueID="@LocalFunctions.GetUniqueID()"></CompAddOrUpdateCategory>
                         break;
                     case Classes.Enums.ModalForm.AddOrUpdateFeedback:
-                        <CompAddOrUpdateFeedback @ref="@LocalData.compAddOrUpdateFeedback" @ref:suppressField UniqueID="@LocalFunctions.GetUniqueID()"></CompAddOrUpdateFeedback>
+                        <CompAddOrUpdateFeedback @ref="@LocalData.compAddOrUpdateFeedback" UniqueID="@LocalFunctions.GetUniqueID()"></CompAddOrUpdateFeedback>
                         break;
                     case Classes.Enums.ModalForm.ChangePassword:
                         <CompChangePassword></CompChangePassword>

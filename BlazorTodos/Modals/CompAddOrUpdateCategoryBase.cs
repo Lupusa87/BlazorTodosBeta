@@ -13,11 +13,11 @@ namespace BlazorTodos.Modals
     public class CompAddOrUpdateCategoryBase : ComponentBase
     {
 
-        [Parameter] protected string UniqueID { get; set; }
+        [Parameter] public string UniqueID { get; set; }
 
         protected bool IsButtonDisabled { get; set; } = false;
 
-        [Parameter] protected string ButtonName { get; set; } = "Add category";
+        [Parameter] public string ButtonName { get; set; } = "Add category";
 
 
         protected override void OnInitialized()

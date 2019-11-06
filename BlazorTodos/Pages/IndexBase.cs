@@ -19,10 +19,8 @@ namespace BlazorTodos.Pages
     {
 
 
-
-        protected override void OnAfterRender()
+        protected override void OnAfterRender(bool firstRender)
         {
-
             if (LocalData.uiTranslator != null)
             {
 
@@ -30,10 +28,10 @@ namespace BlazorTodos.Pages
                 LocalData.uiTranslator.OnUILanguageChanged = TranslatorOnUILanguageChanged;
             }
 
-
-            base.OnAfterRender();
+            base.OnAfterRender(firstRender);
         }
 
+      
         public void TranslatorOnNotFoundWord(string word)
         {
             BTodosJsInterop.Log("Could not translate word - " + word + ", not found!");

@@ -10,7 +10,7 @@ namespace BlazorTodos.Modals
     public class CompMessageBase:ComponentBase
     {
 
-        [Parameter] protected string UniqueID { get; set; }
+        [Parameter] public string UniqueID { get; set; }
 
 
         protected override void OnParametersSet()

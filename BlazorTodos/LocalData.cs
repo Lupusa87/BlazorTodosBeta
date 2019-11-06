@@ -152,7 +152,10 @@ namespace BlazorTodos
 
         public static UITranslator uiTranslator { get; set; } = new UITranslator();
 
-        public static IndexedDBManager indexDbManager { get; set; } = null;
+
+        public static bool UsingIndexedDb { get; set; } = false;
+
+        public static IndexedDBManager indexedDbManager { get; set; } = null;
 
 
         public static List<TSUILanguageShortEx> UISupportedLanguagesList { get; set; } = null;

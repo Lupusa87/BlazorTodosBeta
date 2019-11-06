@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,12 @@ namespace BlazorTodos.Shared
         HttpClient httpClient { get; set; }
 
         [Inject]
-        IUriHelper uriHelper { get; set; }
+        NavigationManager navigationManager { get; set; }
 
         [Inject]
         IJSRuntime jsRuntime { get; set; }
 
-        [Inject] IndexedDBManager indexDbManager { get; set; }
+       // [Inject] IndexedDBManager indexedDbManager { get; set; }
 
         protected override void OnInitialized()
         {
@@ -31,9 +32,9 @@ namespace BlazorTodos.Shared
                 WebApiFunctions.httpClient = httpClient;
             }
 
-            if (LocalFunctions.uriHelper is null)
+            if (LocalFunctions.navigationManager is null)
             {
-                LocalFunctions.uriHelper = uriHelper;
+                LocalFunctions.navigationManager = navigationManager;
             }
 
             if (BTodosJsInterop.jsRuntime is null)
@@ -41,16 +42,20 @@ namespace BlazorTodos.Shared
                 BTodosJsInterop.jsRuntime = jsRuntime;
             }
 
-            if (LocalData.indexDbManager is null)
+            if (LocalData.UsingIndexedDb)
             {
-                LocalData.indexDbManager = indexDbManager;
 
+                if (LocalData.indexedDbManager is null)
+                {
+                    //LocalData.indexedDbManager = indexedDbManager;
+
+                }
             }
 
 
-            if (!uriHelper.GetBaseUri().Equals(uriHelper.GetAbsoluteUri()))
+            if (!navigationManager.BaseUri.Equals(navigationManager.Uri))
             {
-                uriHelper.NavigateTo("/");
+                navigationManager.NavigateTo("/");
             }
 
 
@@ -72,19 +77,19 @@ namespace BlazorTodos.Shared
             StateHasChanged();
         }
 
-        protected override void OnAfterRender()
+
+
+        protected override void OnAfterRender(bool firstRender)
         {
 
-
-            if (LocalData.compContextMenu !=null)
+            if (LocalData.compContextMenu != null)
             {
                 LocalData.compContextMenu.OnClick = ContextMenuOnClick;
             }
 
-
-
-            base.OnAfterRender();
+            base.OnAfterRender(firstRender);
         }
+
 
         private void ContextMenuOnClick(int id)
         {
@@ -104,7 +109,7 @@ namespace BlazorTodos.Shared
         }
 
 
-        protected void CmdOnMouseUp(UIMouseEventArgs e)
+        protected void CmdOnMouseUp(MouseEventArgs e)
         {
 
             if (LocalData.bcMenu.ID > -1)

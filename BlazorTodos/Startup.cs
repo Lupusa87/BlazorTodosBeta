@@ -13,8 +13,9 @@ namespace BlazorTodos
 
             //services.AddSingleton<UITranslator>();
 
-
-            services.AddIndexedDB(dbStore =>
+            if (LocalData.UsingIndexedDb)
+            {
+                services.AddIndexedDB(dbStore =>
             {
                 dbStore.DbName = "UILangDictDB";
                 dbStore.Version = 1;
@@ -49,6 +50,7 @@ namespace BlazorTodos
                     }
                 });
             });
+            }
         }
 
         public void Configure(IComponentsApplicationBuilder app)

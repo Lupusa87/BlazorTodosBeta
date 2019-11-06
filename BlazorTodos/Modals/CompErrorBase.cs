@@ -11,7 +11,7 @@ namespace BlazorTodos.Modals
     {
 
 
-        [Parameter] protected string UniqueID { get; set; }
+        [Parameter] public string UniqueID { get; set; }
 
 
         public void refresh()

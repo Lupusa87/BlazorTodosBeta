@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -151,7 +152,7 @@ namespace BlazorTodos.Modals
         }
 
 
-        public void cmdKeyUp(UIKeyboardEventArgs e)
+        public void cmdKeyUp(KeyboardEventArgs e)
         {
             if (e.Key=="Enter")
             {
