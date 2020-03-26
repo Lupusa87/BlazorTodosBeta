@@ -91,8 +91,11 @@ namespace BlazorTodos
                     LocalData.IsReady = b;
 
 
+                    if (LocalData.UsingUITranslator)
+                    {
+                        await GetUILanguages();
+                    }
 
-                    await GetUILanguages();
 
 
                     LocalData.compFooter.Refresh();

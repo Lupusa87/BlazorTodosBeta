@@ -25,8 +25,8 @@ namespace BlazorTodos
 
         static JsonSerializerOptions opt = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            PropertyNameCaseInsensitive = true
+           PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+           PropertyNameCaseInsensitive = true
 
         };
 
@@ -36,11 +36,11 @@ namespace BlazorTodos
             {
                 string a = await client.GetStringAsync(requestUri);
 
-                //BTodosJsInterop.Log(a);
+                
+                return JsonSerializer.Deserialize<T>(a, opt);
 
-                JsonDocument document = JsonDocument.Parse(a, options);
-
-                return JsonSerializer.Deserialize<T>(document.RootElement.GetProperty("value").GetRawText(), opt);
+                //JsonDocument document = JsonDocument.Parse(a, options);
+                //return JsonSerializer.Deserialize<T>(document.RootElement.GetProperty("value").GetRawText(), opt);
             }
             else
             {
@@ -50,14 +50,17 @@ namespace BlazorTodos
 
         public static async Task<T> MyPostFormGetJsonAsync<T>(this HttpClient client, string requestUri, HttpContent content)
         {
+
             if (client is HttpClient)
             {
 
                 var response = await client.PostAsync(requestUri, content);
-              
-                JsonDocument document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
 
-                return JsonSerializer.Deserialize<T>(document.RootElement.GetProperty("value").GetRawText(), opt);
+                return JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync(), opt);
+
+                
+                //JsonDocument document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+                //return JsonSerializer.Deserialize<T>(document.RootElement.GetProperty("value").GetRawText(), opt);
 
             }
             else
@@ -106,11 +109,14 @@ namespace BlazorTodos
                 });
 
 
-                var stringContent = await response.Content.ReadAsStringAsync();
+                return await response.Content.ReadAsStringAsync();
 
-                JsonDocument document = JsonDocument.Parse(stringContent);
 
-                return document.RootElement.GetProperty("value").GetRawText();
+                //var stringContent = await response.Content.ReadAsStringAsync();
+
+                //JsonDocument document = JsonDocument.Parse(stringContent);
+
+                //return document.RootElement.GetProperty("value").GetRawText();
 
             }
             else
@@ -128,15 +134,14 @@ namespace BlazorTodos
                 Content = new StringContent(JsonSerializer.Serialize(content, opt), Encoding.UTF8, "application/json")
             });
 
-          
-            var stringContent = await response.Content.ReadAsStringAsync();
-          
-            JsonDocument document = JsonDocument.Parse(stringContent);
 
+            return JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync(), opt);
 
-            T a = JsonSerializer.Deserialize<T>(document.RootElement.GetProperty("value").GetRawText(), opt);
-         
-            return a;
+            //var stringContent = await response.Content.ReadAsStringAsync();
+
+            //JsonDocument document = JsonDocument.Parse(stringContent);
+
+            //return JsonSerializer.Deserialize<T>(document.RootElement.GetProperty("value").GetRawText(), opt);
 
         }
 
@@ -149,14 +154,15 @@ namespace BlazorTodos
                 Content = new StringContent(JsonSerializer.Serialize(content, opt), Encoding.UTF8, "application/json")
             });
 
-            
-            var stringContent = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<U>(await response.Content.ReadAsStringAsync(), opt);
 
-            JsonDocument document = JsonDocument.Parse(stringContent);
+            //var stringContent = await response.Content.ReadAsStringAsync();
 
-            U a = JsonSerializer.Deserialize<U>(document.RootElement.GetProperty("value").GetRawText(), opt);
+            //JsonDocument document = JsonDocument.Parse(stringContent);
 
-            return a;
+            //return JsonSerializer.Deserialize<U>(document.RootElement.GetProperty("value").GetRawText(), opt);
+
+
 
         }
     }

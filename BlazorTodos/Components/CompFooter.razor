@@ -29,23 +29,26 @@
         </label>
     </div>
     <div style="grid-column:3/4;">
-        @if (LocalData.uiTranslator.TSUILanguagesList.Any())
+        @if (LocalData.UsingUITranslator)
         {
-            <select style="margin:5px;height:24px;width:120px" @bind="@ComboSelectedIndex">
+            @if (LocalData.uiTranslator.TSUILanguagesList.Any())
+            {
+                <select style="margin:5px;height:24px;width:120px" @bind="@ComboSelectedIndex">
 
-                <option value="0" selected>@LocalData.uiTranslator.Translate(LocalData.uiTranslator.TSUILanguagesList.First().Name)</option>
-                @for (int i = 1; i < LocalData.uiTranslator.TSUILanguagesList.Count; i++)
-                {
-                    <option value="@i">@LocalData.uiTranslator.Translate(LocalData.uiTranslator.TSUILanguagesList[i].Name)</option>
-                }
-                <option value="@LocalData.uiTranslator.TSUILanguagesList.Count">@LocalData.uiTranslator.Translate("Manage Languages")</option>
-            </select>
+                    <option value="0" selected>@LocalData.uiTranslator.Translate(LocalData.uiTranslator.TSUILanguagesList.First().Name)</option>
+                    @for (int i = 1; i < LocalData.uiTranslator.TSUILanguagesList.Count; i++)
+                    {
+                        <option value="@i">@LocalData.uiTranslator.Translate(LocalData.uiTranslator.TSUILanguagesList[i].Name)</option>
+                    }
+                    <option value="@LocalData.uiTranslator.TSUILanguagesList.Count">@LocalData.uiTranslator.Translate("Manage Languages")</option>
+                </select>
+            }
+            else
+            {
+                <select style="margin:5px;height:24px;width:120px"></select>
+            }
         }
-        else
-        {
-         <select style="margin:5px;height:24px;width:120px" ></select>
-        }
-        </div>
+    </div>
     <div style="grid-column:4/5;">
         @if (LocalData.IsReady)
         {

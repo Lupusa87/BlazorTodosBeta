@@ -17,6 +17,8 @@ namespace TodosFunctionsApi
         {
 
             cosmosClient.CreateDatabaseIfNotExistsAsync(CosmosAPI.databaseID, 400).Wait();
+
+            
             Database database = cosmosClient.GetDatabase(CosmosAPI.databaseID);
 
             if (database is null)
@@ -33,10 +35,10 @@ namespace TodosFunctionsApi
                 throw new ArgumentException("container is null");
             }
 
-            
+
             EnsureDemoUser();
             ReadDBSettings();
-            
+
             //SeedUILanguageData.Seed();
 
 

@@ -13,7 +13,7 @@ namespace TodosFunctionsApi.API
     {
 
         [FunctionName("FunTestAPI")]
-        public ActionResult<IEnumerable<string>> testapi(
+        public ActionResult<IEnumerable<string>> Testapi(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "testapi")] HttpRequest req,
             ILogger log)
         {

@@ -57,25 +57,20 @@ namespace BlazorTodos
 
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 
-
                 string username = GlobalFunctions.ConvertToPlainString(ParUserName);
-
-
 
                 if (string.IsNullOrEmpty(username))
                 {
 
                     return new JwtResult { ErrorMessage = "Username is not provided!" };
                 }
-
+               
 
                 string password = GlobalFunctions.ConvertToPlainString(ParPassword);
                 if (string.IsNullOrEmpty(password))
                 {
                     return new JwtResult { ErrorMessage = "Password is not provided!" };
                 }
-
-
 
 
                 var formContent = new FormUrlEncodedContent(new[]
@@ -85,7 +80,6 @@ namespace BlazorTodos
                     new KeyValuePair<string, string>("UserType", ((int)ParWebApiUserTypesEnum).ToString() + GlobalFunctions.GetRandomAlphaNumeric()),
                     new KeyValuePair<string, string>("MachineID", LocalData.MachineID + GlobalFunctions.GetRandomAlphaNumeric()),
                 });
-
 
                 return await httpClient.MyPostFormGetJsonAsync<JwtResult>("token", formContent);
 

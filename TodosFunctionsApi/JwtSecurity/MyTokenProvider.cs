@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using static TodosShared.TSEnums;
 using TodosShared;
-using Microsoft.IdentityModel.Tokens;
 using TodosGlobal;
 using TodosCosmos.DocumentClasses;
 using TodosCosmos;
+using Google.Apis.Auth;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace TodosFunctionsApi.JwtSecurity
 {
@@ -88,7 +89,7 @@ namespace TodosFunctionsApi.JwtSecurity
             };
 
 
-         
+        
             // Create the JWT and write it to a string
             var jwt = new JwtSecurityToken(
                 issuer: _options.Issuer,

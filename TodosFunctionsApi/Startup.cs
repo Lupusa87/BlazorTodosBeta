@@ -31,8 +31,6 @@ namespace TodosFunctionsApi
         {
 
 
-            // builder.Services.Adds
-
             string endpoint = configuration["MyEndPoint"];
             if (string.IsNullOrEmpty(endpoint))
             {

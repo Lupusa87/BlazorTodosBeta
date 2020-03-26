@@ -1,21 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <LangVersion>7.3</LangVersion>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <!--<OutputType>Exe</OutputType>
+    <LangVersion>7.3</LangVersion>-->
     <RazorLangVersion>3.0</RazorLangVersion>
     <!--<BlazorLinkOnBuild>false</BlazorLinkOnBuild>-->
    
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview2.19528.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="3.1.0-preview2.19528.8" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview2.19528.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Blazor.DevServer" Version="3.1.0-preview2.19528.8" PrivateAssets="all" />
-    <PackageReference Include="System.Text.Json" Version="4.7.0-preview2.19523.17" />
-    <PackageReference Include="TG.Blazor.IndexedDB" Version="1.2.1-preview" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview2.20160.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.0-preview2.20160.5" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview2.20160.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.0-preview2.20160.5" PrivateAssets="all" />
+    <PackageReference Include="System.Text.Json" Version="5.0.0-preview.1.20120.5" />
+    <PackageReference Include="TG.Blazor.IndexedDB" Version="1.5.0-preview" />
   </ItemGroup>
  
   <ItemGroup>

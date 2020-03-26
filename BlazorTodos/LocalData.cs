@@ -19,7 +19,7 @@ namespace BlazorTodos
 {
     public class LocalData
     {
-        public static bool WebOrLocalMode = false;
+        public static bool WebOrLocalMode = true;
         public static bool ProductionOrDevelopmentMode = false;
 
         public static Uri WebApi_Uri
@@ -149,6 +149,9 @@ namespace BlazorTodos
 
         public static string oldFeedbackText { get; set; }
 
+
+
+        public static bool UsingUITranslator { get; set; } = false;
 
         public static UITranslator uiTranslator { get; set; } = new UITranslator();
 
