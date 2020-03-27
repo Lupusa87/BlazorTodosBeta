@@ -18,7 +18,7 @@ namespace TodosFunctionsApi
 
             cosmosClient.CreateDatabaseIfNotExistsAsync(CosmosAPI.databaseID, 400).Wait();
 
-            
+
             Database database = cosmosClient.GetDatabase(CosmosAPI.databaseID);
 
             if (database is null)
@@ -27,6 +27,8 @@ namespace TodosFunctionsApi
             }
 
             database.CreateContainerIfNotExistsAsync(new ContainerProperties { Id = CosmosAPI.collectionID, PartitionKeyPath = "/pk" }).Wait();
+           
+
 
             CosmosAPI.container = cosmosClient.GetContainer(CosmosAPI.databaseID, CosmosAPI.collectionID);
 
@@ -46,12 +48,10 @@ namespace TodosFunctionsApi
 
         public bool EnsureDemoUser()
         {
-
             try
             {
 
                 CosmosDocUser demoUser = CosmosAPI.cosmosDBClientUser.FindUserByUserName("demouser").Result;
-
 
                 if (demoUser is null)
                 {
@@ -75,23 +75,24 @@ namespace TodosFunctionsApi
                         throw new ArgumentException("demouser is null");
                     }
 
-
                 }
+              
 
 
                 CosmosAPI.DemoUserID = demoUser.ID;
 
-            }
+        }
             catch (CosmosException)
             {
 
-                throw;
-            }
-
+                throw new ArgumentException("Can't add/check demouser");
+    }
 
             return true;
 
         }
+
+
 
         public bool ReadDBSettings()
         {

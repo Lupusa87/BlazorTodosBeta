@@ -188,6 +188,7 @@ namespace TodosCosmos.ClientClasses
 
         public async Task<CosmosDocUser> FindUserByUserName(string UserName)
         {
+
             return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.User &&
             x.UserName.ToLower() == UserName.ToLower());
 

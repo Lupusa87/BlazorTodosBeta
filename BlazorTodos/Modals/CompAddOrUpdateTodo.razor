@@ -58,23 +58,36 @@
                 <select style="margin:5px;height:30px;width:450px" @onchange="@ComboCategorySelectionChanged">
                     @if (LocalData.TSCategoriesList.Any())
                     {
-                        <option value="0" selected>@LocalData.TSCategoriesList.First().Name</option>
-                        @for (int i = 1; i < LocalData.TSCategoriesList.Count; i++)
+                        @for (int i = 0; i < LocalData.TSCategoriesList.Count; i++)
                         {
-                            <option value="@i">@LocalData.TSCategoriesList[i].Name</option>
+                            @if (@LocalData.CurrTodo.CategoryID == @LocalData.TSCategoriesList[i].ID)
+                            {
+
+                                <option value="@i" selected>@LocalData.TSCategoriesList[i].Name</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@LocalData.TSCategoriesList[i].Name</option>
+                            }
                         }
                     }
-                    </select>
+                </select>
                 <button style="height:30px;margin:5px" class="btn btn-primary btn-sm" @onclick="@CmdAddCategory">@LocalData.uiTranslator.Translate("Add")</button>
             </div>
             <div style="display:flex">
                 <select style="margin:5px;height:30px;width:100px" @onchange="@ComboPrioritySelectionChanged">
+                    @for (int i = 1; i <= 10; i++)
+                    {
+                        @if (@LocalData.CurrTodo.Priority == i)
+                        {
+                         <option value="@i" selected>@i</option>
+                        }
+                        else
+                        {
+                            <option value="@i">@i</option>
+                        }
 
-                    <option value="1" selected>1</option>
-                    @for (int i = 2; i <= 10; i++)
-            {
-                        <option value="@i">@i</option>
-            }
+                    }
                 </select>
                 <input style="margin:5px;height:30px" type="checkbox" name="A" @bind="@LocalData.CurrTodo.IsDone" />
                 <label style="margin:5px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Is Done")</label>

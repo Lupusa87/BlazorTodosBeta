@@ -29,7 +29,7 @@ namespace TodosFunctionsApi
 
         public override void Configure(IFunctionsHostBuilder builder)
         {
-
+            
 
             string endpoint = configuration["MyEndPoint"];
             if (string.IsNullOrEmpty(endpoint))
@@ -44,16 +44,30 @@ namespace TodosFunctionsApi
             }
 
 
-
-            builder.Services.AddSingleton((s) =>
-            {
-                return new GoogleTranslator();
-            });
+            // delays startup about 3 sec, if will be used shoud move to another function app to be used on deman and not for each azure function execution
+            //3/27/2020
+            //builder.Services.AddSingleton((s) =>
+            //{
+            //    return new GoogleTranslator();
+            //});
 
 
             GlobalFunctions.CmdReadEncryptedSettings();
 
+
+            //Console.WriteLine("?.?>?>?>??????????????????????????????????????");
+
+
+            //DateTime dt1 = DateTime.Now;
+
+            //Console.WriteLine(dt1.ToString("MM/dd/yyyy HH:mm:ss.fff"));
+
             SeedData seed = new SeedData(new CosmosClient(endpoint, authKey));
+
+
+            //DateTime dt2 = DateTime.Now;
+            //Console.WriteLine(dt2.ToString("MM/dd/yyyy HH:mm:ss.fff"));
+            //Console.WriteLine((dt2 - dt1).Duration().ToString());
 
 
             //builder.Services.AddHttpClient();
