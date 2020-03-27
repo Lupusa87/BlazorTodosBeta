@@ -4,7 +4,9 @@
         <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
     </Found>
     <NotFound>
-        <br />
-        <h3 style="margin:20px">Sorry, there's nothing at this address. You can go to <a href="/" target="_self" class="ml-md-auto">Home Page</a></h3>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <br />
+            <h3 style="margin:20px">Sorry, there's nothing at this address. You can go to <a href="/" target="_self" class="ml-md-auto">Home Page</a></h3>
+        </LayoutView>
     </NotFound>
 </Router>

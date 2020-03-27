@@ -17,6 +17,7 @@ namespace TodosFunctionsApi.API
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "testapi")] HttpRequest req,
             ILogger log)
         {
+
             return new string[] { "API is live", "Azure Functions rocks" };
         }
 

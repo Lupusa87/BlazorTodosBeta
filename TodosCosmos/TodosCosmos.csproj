@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="2.5.2" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.7.0-preview2" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.7.0" />
   </ItemGroup>
 
   <ItemGroup>
