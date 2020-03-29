@@ -162,7 +162,7 @@ namespace TodosCosmos
             {
                 MimeMessage message = new MimeMessage();
                 message.From.Add(new MailboxAddress("Blazor Todos", GlobalData.GmailAccountName));
-                message.To.Add(new MailboxAddress(string.Empty, ParEmail));
+                message.To.Add(new MailboxAddress(ParEmail));
                 message.Subject = ParSubject;
 
                 message.Body = new TextPart("plain")

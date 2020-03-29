@@ -18,15 +18,16 @@ namespace BlazorTodos
         //};
 
 
-        static JsonDocumentOptions options = new JsonDocumentOptions
-        {
-            AllowTrailingCommas = true
-        };
+        //static JsonDocumentOptions options = new JsonDocumentOptions
+        //{
+        //    AllowTrailingCommas = true
+        //};
 
         static JsonSerializerOptions opt = new JsonSerializerOptions
         {
-           PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-           PropertyNameCaseInsensitive = true
+           
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true
 
         };
 
@@ -128,10 +129,10 @@ namespace BlazorTodos
 
         private static async Task<T> SendJsonGetJsonAsync<T>( HttpClient httpClient, HttpMethod method, string requestUri, object content)
         {
-            
             var response = await httpClient.SendAsync(new HttpRequestMessage(method, requestUri)
             {
                 Content = new StringContent(JsonSerializer.Serialize(content, opt), Encoding.UTF8, "application/json")
+
             });
 
 

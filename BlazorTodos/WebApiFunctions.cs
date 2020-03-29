@@ -16,7 +16,6 @@ using static TodosShared.TSEnums;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-
 namespace BlazorTodos
 {
     public static class WebApiFunctions

@@ -8,7 +8,7 @@ namespace TodosGlobal
 {
     public static class GlobalData
     {
-        public static bool WebOrLocalMode = false;
+        public static bool WebOrLocalMode = true;
 
 
         public static string NotAuthorizedUserName = string.Empty;

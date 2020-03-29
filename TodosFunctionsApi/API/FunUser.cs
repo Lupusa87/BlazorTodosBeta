@@ -15,6 +15,7 @@ using TodosCosmos;
 using static TodosGlobal.GlobalClasses;
 using TodosGlobal;
 using TodosCosmos.DocumentClasses;
+using System.IO;
 
 namespace TodosFunctionsApi.API
 {
@@ -105,6 +106,11 @@ namespace TodosFunctionsApi.API
         {
 
             TSEmail tsEmail = await MyFromBody<TSEmail>.FromBody(req);
+
+            if (tsEmail is null)
+            {
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, "tsEmail is null", MethodBase.GetCurrentMethod());
+            }
 
             List<WebApiUserTypesEnum> localAllowedRoles = new List<WebApiUserTypesEnum>
             {
@@ -242,8 +248,33 @@ namespace TodosFunctionsApi.API
 [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/checkemail")] HttpRequest req,
 ILogger log)
         {
+            TSEmail result = new TSEmail
+            {
+                To = string.Empty,
+                OperationCode = 0
+            };
 
             TSEmail tsEmail = await MyFromBody<TSEmail>.FromBody(req);
+
+
+            if (tsEmail is null)
+            {
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, "tsEmail is null", MethodBase.GetCurrentMethod());
+
+                result.Result = "Error";
+                return result;
+            }
+            else
+            {
+
+                if (string.IsNullOrEmpty(tsEmail.To))
+                {
+
+                    await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, "tsEmail to is empty!", MethodBase.GetCurrentMethod());
+                    result.Result = "Error";
+                    return result;
+                }
+            }
 
             List<WebApiUserTypesEnum> localAllowedRoles = new List<WebApiUserTypesEnum>
             {
@@ -264,11 +295,7 @@ ILogger log)
 
             CosmosDocUser user = await CosmosAPI.cosmosDBClientUser.FindUserByEmail(tsEmail.To);
 
-            TSEmail result = new TSEmail
-            {
-                To = string.Empty,
-                OperationCode = 0
-            };
+           
 
             if (user is null)
             {

@@ -73,6 +73,8 @@ namespace BlazorTodos.Modals
 
         public async Task CmdSendMail()
         {
+
+
             IsSendMailVisible = false;
             StateHasChanged();
 

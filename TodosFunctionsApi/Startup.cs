@@ -29,7 +29,10 @@ namespace TodosFunctionsApi
 
         public override void Configure(IFunctionsHostBuilder builder)
         {
+
+
             
+
 
             string endpoint = configuration["MyEndPoint"];
             if (string.IsNullOrEmpty(endpoint))
