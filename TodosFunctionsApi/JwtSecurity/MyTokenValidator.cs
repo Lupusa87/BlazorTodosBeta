@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using TodosGlobal;
@@ -14,10 +15,10 @@ namespace TodosFunctionsApi.JwtSecurity
 {
     public static class MyTokenValidator
     {
-        public static ClaimsPrincipal Authenticate(HttpRequest request,List<WebApiUserTypesEnum> AllowedRoles)
+        public static ClaimsPrincipal Authenticate(HttpRequest request,List<WebApiUserTypesEnum> AllowedRoles, List<string> CallTrace)
         {
             
-            string token = GetTokenFromRequest(request);
+            string token = GetTokenFromRequest(request, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
          
@@ -78,7 +79,7 @@ namespace TodosFunctionsApi.JwtSecurity
             if (AllowedRoles.Any())
             {
 
-                WebApiUserTypesEnum UserRole =(WebApiUserTypesEnum)int.Parse(LocalFunctions.CmdGetValueFromRoleClaim(principal.Claims, 10));
+                WebApiUserTypesEnum UserRole =(WebApiUserTypesEnum)int.Parse(LocalFunctions.CmdGetValueFromRoleClaim(principal.Claims, 10, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())));
 
 
 
@@ -101,7 +102,7 @@ namespace TodosFunctionsApi.JwtSecurity
         }
 
 
-        private static string GetTokenFromRequest(HttpRequest request)
+        private static string GetTokenFromRequest(HttpRequest request, List<string> CallTrace)
         {
             var authorizationHeader = request.Headers.SingleOrDefault(x => x.Key == "Authorization");
             var authenticationHeaderValue = AuthenticationHeaderValue.Parse(authorizationHeader.Value);

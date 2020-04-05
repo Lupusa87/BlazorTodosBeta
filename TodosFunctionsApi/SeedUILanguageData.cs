@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace TodosFunctionsApi
         private static Dictionary<string, Guid> UILangDict = new Dictionary<string, Guid>();
         private static Dictionary<string, Guid> UINativeWordsDict = new Dictionary<string, Guid>();
 
-        public static bool Seed()
+        public static bool Seed(List<string> CallTrace)
         {
             //Console.OutputEncoding = Encoding.Unicode;
 
@@ -55,16 +56,16 @@ namespace TodosFunctionsApi
             DeleteCosmosDBData.DeleteUIWordForeign();
 
 
-            SeedLanguages();
+            SeedLanguages(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
-            UILangDict = CosmosAPI.cosmosDBClientUILanguage.GetAll().Result.ToDictionary(x => x.Code, x => x.ID);
+            UILangDict = CosmosAPI.cosmosDBClientUILanguage.GetAll(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result.ToDictionary(x => x.Code, x => x.ID);
 
-            SeedFromFile();
+            SeedFromFile(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
-            foreach (var item in CosmosAPI.cosmosDBClientUILanguage.GetAll().Result)
+            foreach (var item in CosmosAPI.cosmosDBClientUILanguage.GetAll(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
             {
-                UpdateLanguageVersion(item);
+                UpdateLanguageVersion(item, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
 
 
@@ -73,10 +74,10 @@ namespace TodosFunctionsApi
 
 
 
-        private static void AzureTranlsateAllNativeWordsToLang(AzureTranslator azureTranslator, string to)
+        private static void AzureTranlsateAllNativeWordsToLang(AzureTranslator azureTranslator, string to, List<string> CallTrace)
         {
 
-            List<TSUIWordNative> listNatives = CosmosAPI.cosmosDBClientUIWordNative.GetAll().Result;
+            List<TSUIWordNative> listNatives = CosmosAPI.cosmosDBClientUIWordNative.GetAll(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
             foreach (var item in listNatives)
             {
@@ -85,10 +86,10 @@ namespace TodosFunctionsApi
 
         }
 
-        private static void GoogleTranlsateAllNativeWordsToLang(GoogleTranslator googleTranslator, string to)
+        private static void GoogleTranlsateAllNativeWordsToLang(GoogleTranslator googleTranslator, string to, List<string> CallTrace)
         {
 
-            List<TSUIWordNative> listNatives = CosmosAPI.cosmosDBClientUIWordNative.GetAll().Result;
+            List<TSUIWordNative> listNatives = CosmosAPI.cosmosDBClientUIWordNative.GetAll(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
             foreach (var item in listNatives)
             {
@@ -97,7 +98,7 @@ namespace TodosFunctionsApi
 
         }
 
-        private static string SeedFromFile()
+        private static string SeedFromFile(List<string> CallTrace)
         {
 
             List<string> NativeList = new List<string>();
@@ -133,28 +134,28 @@ namespace TodosFunctionsApi
 
             foreach (var item in NativeList)
             {
-                AddUIWordNative(item);
+                AddUIWordNative(item, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
 
-            UINativeWordsDict = CosmosAPI.cosmosDBClientUIWordNative.GetAll().Result.ToDictionary(x => x.Word, x => x.ID);
+            UINativeWordsDict = CosmosAPI.cosmosDBClientUIWordNative.GetAll(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result.ToDictionary(x => x.Word, x => x.ID);
 
 
             foreach (var item in GeorgianDict)
             {
-                AddUIWordForeign("ka", item.Key, item.Value, true);
+                AddUIWordForeign("ka", item.Key, item.Value, true, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
 
 
             foreach (var item in RussianDict)
             {
-                AddUIWordForeign("ru", item.Key, item.Value, true);
+                AddUIWordForeign("ru", item.Key, item.Value, true, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
 
             return string.Empty;
         }
 
 
-        private static bool SeedLanguages()
+        private static bool SeedLanguages(List<string> CallTrace)
         {
 
           
@@ -167,7 +168,7 @@ namespace TodosFunctionsApi
                 Version = DateTime.UtcNow,
             };
 
-            AddLanguage(lang_English);
+            AddLanguage(lang_English, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             TSUILanguage lang_Georgian = new TSUILanguage()
             {
@@ -177,7 +178,7 @@ namespace TodosFunctionsApi
                 Version = DateTime.UtcNow,
             };
 
-            AddLanguage(lang_Georgian);
+            AddLanguage(lang_Georgian, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             TSUILanguage lang_Russian = new TSUILanguage()
             {
@@ -187,7 +188,7 @@ namespace TodosFunctionsApi
                 Version = DateTime.UtcNow,
             };
 
-            AddLanguage(lang_Russian);
+            AddLanguage(lang_Russian, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
             return true;
@@ -195,13 +196,13 @@ namespace TodosFunctionsApi
 
 
 
-        private static bool AddLanguage(TSUILanguage lang)
+        private static bool AddLanguage(TSUILanguage lang, List<string> CallTrace)
         {
-            CosmosDocUILanguage UILanguage = CosmosAPI.cosmosDBClientUILanguage.FindByName(lang.Name).Result;
+            CosmosDocUILanguage UILanguage = CosmosAPI.cosmosDBClientUILanguage.FindByName(lang.Name, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
             if (UILanguage is null)
             {
-              return CosmosAPI.cosmosDBClientUILanguage.Add(lang).Result;
+              return CosmosAPI.cosmosDBClientUILanguage.Add(lang, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
             }
             else
@@ -210,21 +211,21 @@ namespace TodosFunctionsApi
             }
         }
 
-        private static bool UpdateLanguageVersion(TSUILanguage lang)
+        private static bool UpdateLanguageVersion(TSUILanguage lang, List<string> CallTrace)
         {
 
            lang.Version = DateTime.UtcNow;
 
-           return CosmosAPI.cosmosDBClientUILanguage.Update(lang).Result;
+           return CosmosAPI.cosmosDBClientUILanguage.Update(lang, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
         }
 
 
-        private static bool AddUIWordNative(string word)
+        private static bool AddUIWordNative(string word, List<string> CallTrace)
         {
             if (!string.IsNullOrEmpty(word))
             {
                 word = word.ToLower();
-                CosmosDocUIWordNative UIWordNative = CosmosAPI.cosmosDBClientUIWordNative.FindByWord(word).Result;
+                CosmosDocUIWordNative UIWordNative = CosmosAPI.cosmosDBClientUIWordNative.FindByWord(word, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
                 if (UIWordNative is null)
                 {
@@ -235,7 +236,7 @@ namespace TodosFunctionsApi
                         Word = word
                     };
 
-                    return CosmosAPI.cosmosDBClientUIWordNative.Add(uiWordNative).Result;
+                    return CosmosAPI.cosmosDBClientUIWordNative.Add(uiWordNative, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
                 }
                 else
@@ -250,7 +251,7 @@ namespace TodosFunctionsApi
         }
 
 
-        private static bool AddUIWordForeign(string Lang, string NativeWord, string ForeignWord, bool IsHuman)
+        private static bool AddUIWordForeign(string Lang, string NativeWord, string ForeignWord, bool IsHuman, List<string> CallTrace)
         {
 
             if (string.IsNullOrEmpty(NativeWord))
@@ -279,7 +280,7 @@ namespace TodosFunctionsApi
                 {
                     if (UILangDict.TryGetValue(Lang, out UILanguageID))
                     {
-                        CosmosDocUIWordForeign UIWordForeign = CosmosAPI.cosmosDBClientUIWordForeign.FindByWordAndNativeWordID(ForeignWord, UIWordNativeID).Result;
+                        CosmosDocUIWordForeign UIWordForeign = CosmosAPI.cosmosDBClientUIWordForeign.FindByWordAndNativeWordID(ForeignWord, UIWordNativeID, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
                         if (UIWordForeign is null)
                         {
@@ -295,7 +296,7 @@ namespace TodosFunctionsApi
                             };
 
 
-                            return CosmosAPI.cosmosDBClientUIWordForeign.Add(uiWordForeign).Result;
+                            return CosmosAPI.cosmosDBClientUIWordForeign.Add(uiWordForeign, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
                         }
                         else

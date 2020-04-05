@@ -144,7 +144,7 @@ namespace BlazorCSS
             c.Values.Add("user-select", "none");
             c.Values.Add("background-color", "#fff");
             c.Values.Add("-webkit-box-sizing", "border-box");
-            c.Values.Add("box- sizing", "order-box");
+            c.Values.Add("box-sizing", "border-box");
             c.Values.Add("-webkit-box-shadow", "0 10px 20px rgba(0,0,0,.3), 0 0 0 1px #eee");
             c.Values.Add("box-shadow", "0 10px 20px rgba(0,0,0,.3), 0 0 0 1px #eee");
             c.Values.Add("padding", "5px 0");

@@ -19,7 +19,7 @@ namespace TodosFunctionsApi.API
             PropertyNameCaseInsensitive = true,
         }; 
 
-        public static async Task<T> FromBody(HttpRequest req)
+        public static async Task<T> FromBody(HttpRequest req, List<string> CallTrace)
         {
 
             try
@@ -34,7 +34,7 @@ namespace TodosFunctionsApi.API
 
                 if (result is null)
                 {
-                    await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, "Deserialization failed!", MethodBase.GetCurrentMethod());
+                    await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, "Deserialization failed!", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                 }
 
                 return result;
@@ -42,7 +42,7 @@ namespace TodosFunctionsApi.API
             }
             catch (Exception ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, "FromBody parse error: " + ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, "FromBody parse error: " + ex.Message, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 //throw new ArgumentNullException("FromBody parse error: " + ex.Message);
                 return null;

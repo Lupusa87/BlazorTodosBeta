@@ -5,6 +5,8 @@ using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using TodosGlobal;
 
 [assembly: FunctionsStartup(typeof(TodosFunctionsApi.Startup))]
@@ -65,7 +67,7 @@ namespace TodosFunctionsApi
 
             //Console.WriteLine(dt1.ToString("MM/dd/yyyy HH:mm:ss.fff"));
 
-            SeedData seed = new SeedData(new CosmosClient(endpoint, authKey));
+            SeedData seed = new SeedData(new CosmosClient(endpoint, authKey), TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
             //DateTime dt2 = DateTime.Now;

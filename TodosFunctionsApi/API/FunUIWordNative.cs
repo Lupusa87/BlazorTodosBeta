@@ -41,9 +41,9 @@ namespace TodosFunctionsApi.API
             ILogger log)
         {
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            return await CosmosAPI.cosmosDBClientUIWordNative.GetAll();
+            return await CosmosAPI.cosmosDBClientUIWordNative.GetAll(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
         }
 
 
@@ -55,13 +55,13 @@ namespace TodosFunctionsApi.API
             ILogger log)
         {
 
-            TSUIWordNative tsUIWordNative = await MyFromBody<TSUIWordNative>.FromBody(req);
+            TSUIWordNative tsUIWordNative = await MyFromBody<TSUIWordNative>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-            TSUIWordNative result = await CosmosAPI.cosmosDBClientUIWordNative.Get(tsUIWordNative);
+            TSUIWordNative result = await CosmosAPI.cosmosDBClientUIWordNative.Get(tsUIWordNative, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
 
@@ -87,19 +87,19 @@ namespace TodosFunctionsApi.API
                 WebApiUserTypesEnum.Admin
             };
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, localAllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, localAllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            TSUIWordNative tsUIWordNative = await MyFromBody<TSUIWordNative>.FromBody(req);
+            TSUIWordNative tsUIWordNative = await MyFromBody<TSUIWordNative>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
 
-            CosmosDocUIWordNative l = await CosmosAPI.cosmosDBClientUIWordNative.FindByWord(tsUIWordNative.Word);
+            CosmosDocUIWordNative l = await CosmosAPI.cosmosDBClientUIWordNative.FindByWord(tsUIWordNative.Word, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
             if (l is null)
             {
 
-                bool b = await CosmosAPI.cosmosDBClientUIWordNative.Add(tsUIWordNative);
+                bool b = await CosmosAPI.cosmosDBClientUIWordNative.Add(tsUIWordNative, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                 if (b)
                 {
@@ -125,17 +125,17 @@ namespace TodosFunctionsApi.API
       ILogger log)
         {
 
-            TSUIWordNative tsUIWordNative = await MyFromBody<TSUIWordNative>.FromBody(req);
+            TSUIWordNative tsUIWordNative = await MyFromBody<TSUIWordNative>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             List<WebApiUserTypesEnum> localAllowedRoles = new List<WebApiUserTypesEnum>
             {
                 WebApiUserTypesEnum.Admin
             };
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, localAllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, localAllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-            bool b = await CosmosAPI.cosmosDBClientUIWordNative.Update(tsUIWordNative);
+            bool b = await CosmosAPI.cosmosDBClientUIWordNative.Update(tsUIWordNative, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (b)
             {
@@ -155,13 +155,13 @@ namespace TodosFunctionsApi.API
     ILogger log)
         {
 
-            TSUIWordNative tsUIWordNative = await MyFromBody<TSUIWordNative>.FromBody(req);
+            TSUIWordNative tsUIWordNative = await MyFromBody<TSUIWordNative>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
 
-            bool b = await CosmosAPI.cosmosDBClientUIWordNative.Delete(tsUIWordNative);
+            bool b = await CosmosAPI.cosmosDBClientUIWordNative.Delete(tsUIWordNative, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (b)
             {

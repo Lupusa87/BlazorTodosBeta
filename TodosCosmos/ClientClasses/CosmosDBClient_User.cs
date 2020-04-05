@@ -20,7 +20,7 @@ namespace TodosCosmos.ClientClasses
         private readonly string pkPrefix = ((int)DocTypeEnum.User).ToString();
 
 
-        public async Task<bool> AddUser(TSUser tsUser)
+        public async Task<bool> AddUser(TSUser tsUser, List<string> CallTrace)
         {
             try
             {
@@ -32,9 +32,9 @@ namespace TodosCosmos.ClientClasses
                 newUser.HashedPassword = GlobalFunctions.CmdHashPasswordBytes(tsUser.Password, newUser.Salt);
 
 
-                await cosmosDBClientBase.AddItemAsync(newUser);
+                await cosmosDBClientBase.AddItemAsync(newUser, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
-                await CosmosAPI.cosmosDBClientCategory.AddDefaultCategory(tsUser.ID);
+                await CosmosAPI.cosmosDBClientCategory.AddDefaultCategory(tsUser.ID, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return true;
 
@@ -44,17 +44,13 @@ namespace TodosCosmos.ClientClasses
             {
 
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(tsUser.ID, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(tsUser.ID, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
         }
 
-
-
-
-
-        public async Task<bool> AddUsersBath(List<TSUser> TsUsers)
+        public async Task<bool> AddUsersBath(List<TSUser> TsUsers, List<string> CallTrace)
         {
             try
             {
@@ -69,7 +65,7 @@ namespace TodosCosmos.ClientClasses
                     };
                     a.HashedPassword = GlobalFunctions.CmdHashPasswordBytes(item.Password, a.Salt);
 
-                    await cosmosDBClientBase.AddItemAsync(a);
+                    await cosmosDBClientBase.AddItemAsync(a, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                 }
 
                
@@ -81,19 +77,19 @@ namespace TodosCosmos.ClientClasses
             {
 
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
         }
 
-        public async Task<bool> UpdateUserDoc(CosmosDocUser tsUser)
+        public async Task<bool> UpdateUserDoc(CosmosDocUser tsUser, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.UpdateItemAsync(tsUser);
+            return await cosmosDBClientBase.UpdateItemAsync(tsUser, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }
 
-        public async Task<bool> UpdateUser(TSUser tsUser, bool KeepPassAndSalt)
+        public async Task<bool> UpdateUser(TSUser tsUser, bool KeepPassAndSalt, List<string> CallTrace)
         {
             try
             {
@@ -102,7 +98,7 @@ namespace TodosCosmos.ClientClasses
 
                 if (KeepPassAndSalt)
                 {
-                    CosmosDocUser oldUser = await GetUserDoc(tsUser);
+                    CosmosDocUser oldUser = await GetUserDoc(tsUser, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                     newUser.Salt = oldUser.Salt;
                     newUser.HashedPassword = oldUser.HashedPassword;
                 }
@@ -115,7 +111,7 @@ namespace TodosCosmos.ClientClasses
                
 
 
-                await cosmosDBClientBase.UpdateItemAsync(newUser);
+                await cosmosDBClientBase.UpdateItemAsync(newUser, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
                 return true;
@@ -125,101 +121,104 @@ namespace TodosCosmos.ClientClasses
             {
 
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(tsUser.ID, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(tsUser.ID, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
         }
 
 
-        public async Task<bool> DeleteUser(TSUser tsUser)
+        public async Task<bool> DeleteUser(TSUser tsUser, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocUser(tsUser), pkPrefix);
+            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocUser(tsUser), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<CosmosDocUser> GetUserDoc(TSUser tsUser)
+        public async Task<CosmosDocUser> GetUserDoc(TSUser tsUser, List<string> CallTrace)
         {
 
-            return await cosmosDBClientBase.GetItemAsync(new CosmosDocUser(tsUser), pkPrefix);
-        }
-
-
-        public async Task<TSUser> GetUser(TSUser tsUser)
-        {
-
-            return (await cosmosDBClientBase.GetItemAsync(new CosmosDocUser(tsUser), pkPrefix)).toTSUser();
-        }
-
-        public async Task<TSUser> GetUser(Guid id)
-        {
-
-            return (await cosmosDBClientBase.GetItemAsync(id, id, pkPrefix)).toTSUser();
+            return await cosmosDBClientBase.GetItemAsync(new CosmosDocUser(tsUser), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
 
-        public async Task<bool> UpdateUserTodosCount(TSUser tsUser, int change)
+        public async Task<TSUser> GetUser(TSUser tsUser, List<string> CallTrace)
         {
-            TSUser result = await GetUser(tsUser);
+
+            return (await cosmosDBClientBase.GetItemAsync(new CosmosDocUser(tsUser), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()))).toTSUser();
+        }
+
+        public async Task<TSUser> GetUser(Guid id, List<string> CallTrace)
+        {
+
+            return (await cosmosDBClientBase.GetItemAsync(id, id, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()))).toTSUser();
+        }
+
+
+        public async Task<bool> UpdateUserTodosCount(TSUser tsUser, int change, List<string> CallTrace)
+        {
+            TSUser result = await GetUser(tsUser, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             result.TodosCount += change;
 
-            await UpdateUser(result, true);
+            await UpdateUser(result, true, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             return true;
         }
 
 
-        public async Task<CosmosDocUser> FindUser(string SearchCrtiteria, string column)
+        public async Task<CosmosDocUser> FindUser(string SearchCrtiteria, string column, List<string> CallTrace)
         {
             try
             {
                 QueryDefinition sql = new QueryDefinition("SELECT * FROM c WHERE c.DocType = " + (int)DocTypeEnum.User + " and c." + column + "='" + SearchCrtiteria + "'");
 
-                return await cosmosDBRepo.FindFirstItemsAsync(sql);
+                return await cosmosDBRepo.FindFirstItemsAsync(sql, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
             catch (CosmosException ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return null;
             }
         }
 
 
-        public async Task<CosmosDocUser> FindUserByUserName(string UserName)
+        public async Task<CosmosDocUser> FindUserByUserName(string UserName, List<string> CallTrace)
         {
 
             return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.User &&
-            x.UserName.ToLower() == UserName.ToLower());
+            x.UserName.ToLower() == UserName.ToLower(),
+            LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }
 
 
 
 
-        public async Task<CosmosDocUser> FindUserByEmail(string Email)
+        public async Task<CosmosDocUser> FindUserByEmail(string Email, List<string> CallTrace)
         {
 
             return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.User &&
-            x.Email.ToLower() == Email.ToLower());
+            x.Email.ToLower() == Email.ToLower(),
+            LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }
 
 
-        public async Task<CosmosDocUser> FindUserByID(Guid id)
+        public async Task<CosmosDocUser> FindUserByID(Guid id, List<string> CallTrace)
         {
             string pkvalue = PartitionKeyGenerator.Create(pkPrefix, id.ToString());
             return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.User &&
-            x.ID == id && x.PK == pkvalue);
+            x.ID == id && x.PK == pkvalue,
+            LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }
 
-        public async Task<List<TSUser>> GetAllUsers()
+        public async Task<List<TSUser>> GetAllUsers(List<string> CallTrace)
         {
             List<TSUser> TsUsers = new List<TSUser>();
             try
             {
-                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User);
+                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
                 {
@@ -230,20 +229,20 @@ namespace TodosCosmos.ClientClasses
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
 
             return TsUsers;
         }
 
 
-        public async Task<List<TSUserOpen>> GetLiveUsers()
+        public async Task<List<TSUserOpen>> GetLiveUsers(List<string> CallTrace)
         {
             List<TSUserOpen> r = new List<TSUserOpen>();
 
             try
             {
-                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IsLive);
+                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IsLive, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
                 foreach (var item in result)
@@ -259,32 +258,33 @@ namespace TodosCosmos.ClientClasses
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return new List<TSUserOpen>();
             }
 
         }
 
-        public async Task<bool> UpdateOfflineUsers()
+        public async Task<bool> UpdateOfflineUsers(List<string> CallTrace)
         {
 
 
             try
             {
-                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IsLive && x.TimeStamp < GlobalFunctions.ToUnixEpochDate(DateTime.Now.AddSeconds(-30)));
+                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IsLive && x.TimeStamp < GlobalFunctions.ToUnixEpochDate(DateTime.Now.AddSeconds(-30)), 
+                    LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     foreach (var item in result)
                     {
                         item.IsLive = false;
-                        await CosmosAPI.cosmosDBClientUser.UpdateUserDoc(item);
+                        await CosmosAPI.cosmosDBClientUser.UpdateUserDoc(item, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                     }
  
             }
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
@@ -296,19 +296,19 @@ namespace TodosCosmos.ClientClasses
 
         }
 
-        public async Task<bool> UpdateOnlineUsersCount()
+        public async Task<bool> UpdateOnlineUsersCount(List<string> CallTrace)
         {
 
 
             try
             {
-                int count = (await cosmosDBRepo.GetItemsAsync(x=>x.DocType == (int)DocTypeEnum.User && x.IsLive)).Count();
-                await CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "LiveUsersCount", count.ToString());
+                int count = (await cosmosDBRepo.GetItemsAsync(x=>x.DocType == (int)DocTypeEnum.User && x.IsLive, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()))).Count();
+                await CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "LiveUsersCount", count.ToString(), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }

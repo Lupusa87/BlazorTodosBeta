@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
@@ -19,15 +20,15 @@ namespace TodosFunctionsApi.Timers
         public static async Task Timer1([TimerTrigger("*/30 * * * * *")]TimerInfo myTimer, ILogger log)
         {
 
-            CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "LatsStatRequest");
+            CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "LatsStatRequest", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (setting != null)
             {
 
                 if (GlobalFunctions.ToUnixEpochDate(DateTime.Now.AddMinutes(-1)) < setting.TimeStamp)
                 {
-                    await CosmosAPI.cosmosDBClientUser.UpdateOfflineUsers();
-                    await CosmosAPI.cosmosDBClientUser.UpdateOnlineUsersCount();
+                    await CosmosAPI.cosmosDBClientUser.UpdateOfflineUsers(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                    await CosmosAPI.cosmosDBClientUser.UpdateOnlineUsersCount(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                 }
 
             }
@@ -36,13 +37,17 @@ namespace TodosFunctionsApi.Timers
         }
 
         [FunctionName("FunTimer2")]
+        //public static async void Timer2([TimerTrigger("*/5 * * * * *")]TimerInfo myTimer, ILogger log)
         public static async void Timer2([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log)
         {
 
-            await CosmosAPI.cosmosDBClientEmailedCode.DeleteExpiredEmaiedCodes();
+
+            //await CosmosAPI.cosmosDBClientError.DeleteAllErrorLogs(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+
+            await CosmosAPI.cosmosDBClientEmailedCode.DeleteExpiredEmaiedCodes(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             bool b;
-            CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "DoActivityLog");
+            CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "DoActivityLog", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (setting != null)
             {
@@ -63,7 +68,7 @@ namespace TodosFunctionsApi.Timers
                 }
             }
 
-            await CosmosAPI.cosmosDBClientTodo.SendTodoReminders();
+            await CosmosAPI.cosmosDBClientTodo.SendTodoReminders(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
         }
     }
 }

@@ -41,14 +41,14 @@ namespace TodosFunctionsApi.API
         {
 
 
-            await CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "LatsStatRequest", "ts");
+            await CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "LatsStatRequest", "ts", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (User != null)
             {
-                Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
-                string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10);
+                Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
+                string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                 if (!userID.Equals(Guid.Empty))
                 {
@@ -56,14 +56,14 @@ namespace TodosFunctionsApi.API
                     {
                         
 
-                        TSUser tsUser = await CosmosAPI.cosmosDBClientUser.GetUser(new TSUser {  ID = userID});
+                        TSUser tsUser = await CosmosAPI.cosmosDBClientUser.GetUser(new TSUser {  ID = userID}, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                         if (tsUser != null)
                         {
                             if (!tsUser.IsLive)
                             {
                                 tsUser.IsLive = true;
-                                await CosmosAPI.cosmosDBClientUser.UpdateUser(tsUser, true);
+                                await CosmosAPI.cosmosDBClientUser.UpdateUser(tsUser, true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                             }
                         }
                     }
@@ -92,7 +92,7 @@ namespace TodosFunctionsApi.API
         private async Task<int> GetStat(string name)
         {
 
-            CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, name);
+            CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, name, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             
             if (setting != null)

@@ -20,37 +20,37 @@ namespace TodosCosmos.ClientClasses
 
 
 
-        public async Task<bool> AddEmailedCode(CosmosEmailedCode tsEmailedCode)
+        public async Task<bool> AddEmailedCode(CosmosEmailedCode tsEmailedCode, List<string> CallTrace)
         {
             try
             {
-                return await cosmosDBClientBase.AddItemAsync(tsEmailedCode);
+                return await cosmosDBClientBase.AddItemAsync(tsEmailedCode, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             }
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
         }
 
 
-        public async Task<bool> DeleteExpiredEmaiedCodes()
+        public async Task<bool> DeleteExpiredEmaiedCodes(List<string> CallTrace)
         {
 
             try
             {
 
-                IEnumerable<CosmosEmailedCode> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.EmailedCode && x.AddDate< DateTime.UtcNow.AddMinutes(-1));
+                IEnumerable<CosmosEmailedCode> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.EmailedCode && x.AddDate< DateTime.UtcNow.AddMinutes(-1), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
                 if (result.Any())
                 {
                     foreach (var item in result)
                     {
-                        await cosmosDBClientBase.DeleteItemAsync(item, pkPrefix);
+                        await cosmosDBClientBase.DeleteItemAsync(item, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                     }
                 }
 
@@ -58,7 +58,7 @@ namespace TodosCosmos.ClientClasses
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
@@ -72,18 +72,18 @@ namespace TodosCosmos.ClientClasses
 
 
 
-        public async Task<bool> DeleteEmailedCodes(string Email)
+        public async Task<bool> DeleteEmailedCodes(string Email, List<string> CallTrace)
         {
 
             try
             {
-                IEnumerable<CosmosEmailedCode> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.EmailedCode && x.Email.ToLower() == Email.ToLower());
+                IEnumerable<CosmosEmailedCode> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.EmailedCode && x.Email.ToLower() == Email.ToLower(), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 if (result.Any())
                 {
                     foreach (var item in result)
                     {
-                        await cosmosDBClientBase.DeleteItemAsync(item, pkPrefix);
+                        await cosmosDBClientBase.DeleteItemAsync(item, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                     }
                 }
 
@@ -91,7 +91,7 @@ namespace TodosCosmos.ClientClasses
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
@@ -104,22 +104,22 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<CosmosEmailedCode> FindEmaiedCode(string pEmail, string pIPAddress, string pMachineID)
+        public async Task<CosmosEmailedCode> FindEmaiedCode(string pEmail, string pIPAddress, string pMachineID, List<string> CallTrace)
         {
 
                return  await cosmosDBRepo.FindLastItemsAsync(x => x.DocType == (int)DocTypeEnum.EmailedCode &&
                 x.Email.ToLower() == pEmail.ToLower() &&
                 x.IPAddress.ToLower() == pIPAddress.ToLower() &&
-                x.MachineID.ToLower() == pMachineID.ToLower());
+                x.MachineID.ToLower() == pMachineID.ToLower(), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }
 
 
 
-        public async Task<CosmosEmailedCode> GetEmailedCode(CosmosEmailedCode tsEmailedCode)
+        public async Task<CosmosEmailedCode> GetEmailedCode(CosmosEmailedCode tsEmailedCode, List<string> CallTrace)
         {
 
-            return (await cosmosDBClientBase.GetItemAsync(tsEmailedCode, pkPrefix));
+            return (await cosmosDBClientBase.GetItemAsync(tsEmailedCode, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())));
 
         }
 

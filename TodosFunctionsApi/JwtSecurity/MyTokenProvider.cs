@@ -12,6 +12,7 @@ using TodosCosmos;
 using Google.Apis.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Collections.Generic;
 
 namespace TodosFunctionsApi.JwtSecurity
 {
@@ -20,21 +21,30 @@ namespace TodosFunctionsApi.JwtSecurity
 
         private readonly MyTokenProviderOptions _options;
 
-        public MyTokenProvider()
+        public MyTokenProvider(List<string> CallTrace)
         {
-           
 
-            _options = new MyTokenProviderOptions
+            try
             {
-                Audience = "ExampleAudience",
-                Issuer = "ExampleIssuer",
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(GlobalData.JWTSecret)), SecurityAlgorithms.HmacSha256),
+                _options = new MyTokenProviderOptions
+                {
+                    Audience = "ExampleAudience",
+                    Issuer = "ExampleIssuer",
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(GlobalData.JWTSecret)), SecurityAlgorithms.HmacSha256),
 
-            };
+                };
+            }
+
+            catch (Exception ex)
+            {
+                CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+
+            }
+
         }
 
 
-        public async Task<JwtResult> GenerateToken(HttpRequest request)
+        public async Task<JwtResult> GenerateToken(HttpRequest request, List<string> CallTrace)
         {
 
 
@@ -58,7 +68,7 @@ namespace TodosFunctionsApi.JwtSecurity
             string tmp_IPAddress = request.HttpContext.Connection.RemoteIpAddress.ToString();
 
 
-            var identity = await GetIdentity(UserName, UserPass, tmp_IPAddress, MachineID, tmpWebApiUserType, out Par_Out_Result);
+            var identity = await GetIdentity(UserName, UserPass, tmp_IPAddress, MachineID, tmpWebApiUserType, out Par_Out_Result, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             if (identity == null)
             {
@@ -134,7 +144,8 @@ namespace TodosFunctionsApi.JwtSecurity
                                                  string Par_IPAddress,
                                                  string Par_MachineID,
                                                  WebApiUserTypesEnum ParWebApiUserType,
-                                                 out string Par_Out_Result)
+                                                 out string Par_Out_Result,
+                                                 List<string> CallTrace)
         {
 
             Par_Out_Result = string.Empty;
@@ -157,10 +168,10 @@ namespace TodosFunctionsApi.JwtSecurity
                         }
                         break;
                     case WebApiUserTypesEnum.Authorized:
-                        CosmosDocUser cosmosDocUser = CosmosAPI.cosmosDBClientUser.FindUserByUserName(Par_Username).Result;
+                        CosmosDocUser cosmosDocUser = CosmosAPI.cosmosDBClientUser.FindUserByUserName(Par_Username, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
                         if (cosmosDocUser != null)
                         {
-                            if (LocalFunctions.CompareHash(Par_Password, cosmosDocUser))
+                            if (LocalFunctions.CompareHash(Par_Password, cosmosDocUser, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())))
                             {
                                
                                 Par_Out_Result = cosmosDocUser.ID.ToString() + GlobalFunctions.GetRandomAlphaNumeric(10);
@@ -217,7 +228,7 @@ namespace TodosFunctionsApi.JwtSecurity
             }
             catch (Exception ex)
             {
-                bool b = CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod()).Result;
+                bool b = CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
             }
 

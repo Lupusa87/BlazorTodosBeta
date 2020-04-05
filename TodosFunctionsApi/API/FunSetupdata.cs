@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 using TodosCosmos;
 using TodosGlobal;
+using System.Collections.Generic;
 
 namespace TodosFunctionsApi.API
 {
@@ -21,9 +22,9 @@ namespace TodosFunctionsApi.API
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Setupdata")] HttpRequest req,
             ILogger log)
         {
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(Guid.Empty, "Requested setup data", MethodBase.GetCurrentMethod());
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(Guid.Empty, "Requested setup data", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            await CosmosAPI.cosmosDBClientVisitor.AddVisitor(req.HttpContext.Connection.RemoteIpAddress.ToString());
+            await CosmosAPI.cosmosDBClientVisitor.AddVisitor(req.HttpContext.Connection.RemoteIpAddress.ToString(), TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
             return GlobalFunctions.CmdGetPublicData();

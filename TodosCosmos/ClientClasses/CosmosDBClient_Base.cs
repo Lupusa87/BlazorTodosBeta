@@ -13,13 +13,13 @@ namespace TodosCosmos.ClientClasses
 
         private readonly CosmosDBRepository<T> cosmosDBRepo = new CosmosDBRepository<T>();
 
-        public async Task<bool> AddItemAsync(T newItem)
+        public async Task<bool> AddItemAsync(T newItem, List<string> CallTrace)
         {
             try
             {
                
 
-                await cosmosDBRepo.CreateItemAsync(newItem);
+                await cosmosDBRepo.CreateItemAsync(newItem, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
                 return true;
@@ -29,14 +29,14 @@ namespace TodosCosmos.ClientClasses
             {
 
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(GetProperty(newItem, "UserID"), ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(GetProperty(newItem, "UserID", LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())), ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
         }
 
 
-        public async Task<bool> AddItemsBathAsync(List<T> Items)
+        public async Task<bool> AddItemsBathAsync(List<T> Items, List<string> CallTrace)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace TodosCosmos.ClientClasses
                 foreach (var item in Items)
                 {
 
-                    await cosmosDBRepo.CreateItemAsync(item);
+                    await cosmosDBRepo.CreateItemAsync(item, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                 }
 
 
@@ -56,40 +56,40 @@ namespace TodosCosmos.ClientClasses
             {
 
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
         }
 
-        public async Task<bool> UpdateItemAsync(T item)
+        public async Task<bool> UpdateItemAsync(T item, List<string> CallTrace)
         {
             try
             {
 
-                await cosmosDBRepo.UpdateItemAsync(item);
+                await cosmosDBRepo.UpdateItemAsync(item, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return true;
             }
             catch (CosmosException ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(GetProperty(item, "UserID"), ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(GetProperty(item, "UserID", LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())), ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
         }
 
 
-        public async Task<bool> DeleteItemAsync(T item, string pkPrefix)
+        public async Task<bool> DeleteItemAsync(T item, string pkPrefix, List<string> CallTrace)
         {
             try
             {
-                string id = GetProperty(item, "ID").ToString();
+                string id = GetProperty(item, "ID", LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).ToString();
 
 
                 string pkValue = PartitionKeyGenerator.Create(pkPrefix, id.ToString());
 
-                T deleteItem = await cosmosDBRepo.GetItemAsync(id,pkValue);
+                T deleteItem = await cosmosDBRepo.GetItemAsync(id,pkValue, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
                 if (deleteItem == null)
@@ -98,7 +98,7 @@ namespace TodosCosmos.ClientClasses
                 }
                 else
                 {
-                    await cosmosDBRepo.DeleteItemAsync(id, pkValue);
+                    await cosmosDBRepo.DeleteItemAsync(id, pkValue, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     return true;
                 }
@@ -108,7 +108,7 @@ namespace TodosCosmos.ClientClasses
             {
 
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(GetProperty(item, "UserID"), ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(GetProperty(item, "UserID", LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())), ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
@@ -117,13 +117,13 @@ namespace TodosCosmos.ClientClasses
 
 
 
-        public async Task<T> GetItemAsync(T item, string pkPrefix)
+        public async Task<T> GetItemAsync(T item, string pkPrefix, List<string> CallTrace)
         {
 
             try
             {
 
-                string id = GetProperty(item, "ID").ToString();
+                string id = GetProperty(item, "ID", LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).ToString();
 
                 try
                 {
@@ -144,19 +144,19 @@ namespace TodosCosmos.ClientClasses
 
                 string pkValue = PartitionKeyGenerator.Create(pkPrefix, id.ToString());
 
-                return await cosmosDBRepo.GetItemAsync(id, pkValue);
+                return await cosmosDBRepo.GetItemAsync(id, pkValue, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             }
             catch (CosmosException ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(GetProperty(item, "UserID"), ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(GetProperty(item, "UserID", LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())), ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return null;
             }
         }
 
 
-        public async Task<T> GetItemAsync(Guid id,Guid UserID, string pkPrefix)
+        public async Task<T> GetItemAsync(Guid id,Guid UserID, string pkPrefix, List<string> CallTrace)
         {
 
             try
@@ -164,19 +164,21 @@ namespace TodosCosmos.ClientClasses
 
                 string pkValue = PartitionKeyGenerator.Create(pkPrefix, id.ToString());
 
-                return await cosmosDBRepo.GetItemAsync(id.ToString(), pkValue);
+                return await cosmosDBRepo.GetItemAsync(id.ToString(), pkValue, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             }
             catch (CosmosException ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, MethodBase.GetCurrentMethod());
+                
+
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return null;
             }
         }
 
 
-        public Guid GetProperty(T item, string Prop)
+        public Guid GetProperty(T item, string Prop, List<string> CallTrace)
         {
 
             if (item is CosmosDocUser)

@@ -17,34 +17,34 @@ namespace TodosCosmos.ClientClasses
         private readonly CosmosDBClient_Base<CosmosDocCategory> cosmosDBClientBase = new CosmosDBClient_Base<CosmosDocCategory>();
         private readonly string pkPrefix = ((int)DocTypeEnum.Category).ToString();
 
-        public async Task<bool> AddCategory(TSCategory tsCategory)
+        public async Task<bool> AddCategory(TSCategory tsCategory, List<string> CallTrace)
         {
 
-            return await cosmosDBClientBase.AddItemAsync(new CosmosDocCategory(tsCategory));
+            return await cosmosDBClientBase.AddItemAsync(new CosmosDocCategory(tsCategory), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             
         }
 
 
 
-        public async Task<bool> UpdateCategory(TSCategory tsCategory)
+        public async Task<bool> UpdateCategory(TSCategory tsCategory, List<string> CallTrace)
         {
 
-            return await cosmosDBClientBase.UpdateItemAsync(new CosmosDocCategory(tsCategory));
+            return await cosmosDBClientBase.UpdateItemAsync(new CosmosDocCategory(tsCategory), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
 
-        public async Task<bool> DeleteCategory(TSCategory tsCategory)
+        public async Task<bool> DeleteCategory(TSCategory tsCategory, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocCategory(tsCategory), pkPrefix);
+            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocCategory(tsCategory), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<TSCategory> GetCategory(TSCategory tsCategory)
+        public async Task<TSCategory> GetCategory(TSCategory tsCategory, List<string> CallTrace)
         {
-            return (await cosmosDBClientBase.GetItemAsync(new CosmosDocCategory(tsCategory), pkPrefix)).toTSCategory();
+            return (await cosmosDBClientBase.GetItemAsync(new CosmosDocCategory(tsCategory), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()))).toTSCategory();
 
         }
 
-        public async Task<List<TSCategory>> GetAllCategories(Guid UserID)
+        public async Task<List<TSCategory>> GetAllCategories(Guid UserID, List<string> CallTrace)
         {
 
 
@@ -52,7 +52,7 @@ namespace TodosCosmos.ClientClasses
             List<TSCategory> TsCategorys = new List<TSCategory>();
             try
             {
-                IEnumerable<CosmosDocCategory> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Category && x.UserID == UserID);
+                IEnumerable<CosmosDocCategory> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Category && x.UserID == UserID, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
                 {
@@ -63,7 +63,7 @@ namespace TodosCosmos.ClientClasses
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             }
 
@@ -71,14 +71,14 @@ namespace TodosCosmos.ClientClasses
 
         }
 
-        public async Task<bool> AddDefaultCategory(Guid UserID)
+        public async Task<bool> AddDefaultCategory(Guid UserID, List<string> CallTrace)
         {
             TSCategory tsCategory = new TSCategory();
             tsCategory.ID = Guid.NewGuid();
             tsCategory.UserID = UserID;
             tsCategory.Name = "default";
 
-            return await AddCategory(tsCategory);
+            return await AddCategory(tsCategory, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
       
     }

@@ -41,20 +41,20 @@ namespace TodosFunctionsApi.API
             ILogger log)
         {
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
       
-            Guid userID =Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
+            Guid userID =Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
 
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "Requested Feedbacks", MethodBase.GetCurrentMethod());
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "Requested Feedbacks", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
 
-                List<TSFeedback> list = await CosmosAPI.cosmosDBClientFeedback.GetAllFeedback();
+                List<TSFeedback> list = await CosmosAPI.cosmosDBClientFeedback.GetAllFeedback(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                 foreach (var item in list)
                 {
-                    item.UserName = CosmosAPI.cosmosDBClientUser.FindUserByID(item.UserID).Result.FullName;
+                    item.UserName = CosmosAPI.cosmosDBClientUser.FindUserByID(item.UserID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())).Result.FullName;
                   
                 }
 
@@ -70,16 +70,16 @@ namespace TodosFunctionsApi.API
             ILogger log)
         {
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-            Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
+            Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
 
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "Requested Feedback", MethodBase.GetCurrentMethod());
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "Requested Feedback", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
 
-                CosmosDocFeedback feedbackDoc = await CosmosAPI.cosmosDBClientFeedback.FindFeedback(userID);
+                CosmosDocFeedback feedbackDoc = await CosmosAPI.cosmosDBClientFeedback.FindFeedback(userID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
                 if (feedbackDoc != null)
@@ -106,16 +106,16 @@ namespace TodosFunctionsApi.API
                 WebApiUserTypesEnum.Admin
             };
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, localAllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, localAllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            TSFeedback tsFeedback = await MyFromBody<TSFeedback>.FromBody(req);
+            TSFeedback tsFeedback = await MyFromBody<TSFeedback>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
           
 
-            tsFeedback.UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(tsFeedback.UserID, "Add or update Feedback", MethodBase.GetCurrentMethod());
+            tsFeedback.UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(tsFeedback.UserID, "Add or update Feedback", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10);
+            string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (!tsFeedback.UserID.Equals(Guid.Empty))
             {
@@ -125,20 +125,20 @@ namespace TodosFunctionsApi.API
                 }
             }
 
-            CosmosDocFeedback oldFeedback = await CosmosAPI.cosmosDBClientFeedback.FindFeedback(tsFeedback.UserID);
+            CosmosDocFeedback oldFeedback = await CosmosAPI.cosmosDBClientFeedback.FindFeedback(tsFeedback.UserID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (oldFeedback is null)
             {
 
                 tsFeedback.ID = Guid.NewGuid();
                 tsFeedback.AddDate = DateTime.UtcNow;
-                bool b = await CosmosAPI.cosmosDBClientFeedback.AddFeedback(tsFeedback);
+                bool b = await CosmosAPI.cosmosDBClientFeedback.AddFeedback(tsFeedback, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                 if (b)
                 {
 
-                    await TodosCosmos.LocalFunctions.NotifyAdmin("New Feedback " + userName + " " + tsFeedback.Text);
-                    await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "FeedbackCount", true);
+                    await TodosCosmos.LocalFunctions.NotifyAdmin("New Feedback " + userName + " " + tsFeedback.Text, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                    await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "FeedbackCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                 }
 
@@ -149,18 +149,18 @@ namespace TodosFunctionsApi.API
                 if (oldFeedback.Text != tsFeedback.Text)
                 {
 
-                    bool b = await CosmosAPI.cosmosDBClientFeedback.UpdateFeedback(tsFeedback);
+                    bool b = await CosmosAPI.cosmosDBClientFeedback.UpdateFeedback(tsFeedback, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                     if (b)
                     {
 
-                        await TodosCosmos.LocalFunctions.NotifyAdmin("Feedback update to " + tsFeedback.Text + " " + userName);
+                        await TodosCosmos.LocalFunctions.NotifyAdmin("Feedback update to " + tsFeedback.Text + " " + userName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                     }
                 }
             }
 
 
-                CosmosDocFeedback feedbackDoc = await CosmosAPI.cosmosDBClientFeedback.FindFeedback(tsFeedback.UserID);
+                CosmosDocFeedback feedbackDoc = await CosmosAPI.cosmosDBClientFeedback.FindFeedback(tsFeedback.UserID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                 if (feedbackDoc != null)
                 {

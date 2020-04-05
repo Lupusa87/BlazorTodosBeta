@@ -17,41 +17,42 @@ namespace TodosCosmos.ClientClasses
         private readonly string pkPrefix = ((int)DocTypeEnum.UILanguage).ToString();
 
 
-        public async Task<bool> Add(TSUILanguage tsUILanguage)
+        public async Task<bool> Add(TSUILanguage tsUILanguage, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.AddItemAsync(new CosmosDocUILanguage(tsUILanguage));
+            return await cosmosDBClientBase.AddItemAsync(new CosmosDocUILanguage(tsUILanguage), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
 
-        public async Task<bool> Update(TSUILanguage tsUILanguage)
+        public async Task<bool> Update(TSUILanguage tsUILanguage, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.UpdateItemAsync(new CosmosDocUILanguage(tsUILanguage));
+            return await cosmosDBClientBase.UpdateItemAsync(new CosmosDocUILanguage(tsUILanguage), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<bool> Update(CosmosDocUILanguage tsUILanguage)
+        public async Task<bool> Update(CosmosDocUILanguage tsUILanguage, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.UpdateItemAsync(tsUILanguage);
+            return await cosmosDBClientBase.UpdateItemAsync(tsUILanguage, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
 
-        public async Task<bool> Delete(TSUILanguage tsUILanguage)
+        public async Task<bool> Delete(TSUILanguage tsUILanguage, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocUILanguage(tsUILanguage), pkPrefix);
+            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocUILanguage(tsUILanguage), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<TSUILanguage> Get(TSUILanguage tsUILanguage)
+        public async Task<TSUILanguage> Get(TSUILanguage tsUILanguage, List<string> CallTrace)
         {
-            return (await cosmosDBClientBase.GetItemAsync(new CosmosDocUILanguage(tsUILanguage), pkPrefix)).toTSUILanguage();
+            return (await cosmosDBClientBase.GetItemAsync(new CosmosDocUILanguage(tsUILanguage), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()))).toTSUILanguage();
 
         }
 
-        public async Task<List<TSUILanguage>> GetAll()
+        public async Task<List<TSUILanguage>> GetAll(List<string> CallTrace)
         {
             List<TSUILanguage> TsUILanguages = new List<TSUILanguage>();
 
             try
             {
-                IEnumerable<CosmosDocUILanguage> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.UILanguage);
+                IEnumerable<CosmosDocUILanguage> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.UILanguage,
+                    LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
                 {
@@ -62,7 +63,7 @@ namespace TodosCosmos.ClientClasses
             }
             catch (CosmosException ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
 
 
@@ -72,7 +73,7 @@ namespace TodosCosmos.ClientClasses
 
         }
 
-        public async Task<CosmosDocUILanguage> Find(string SearchCrtiteria, string column)
+        public async Task<CosmosDocUILanguage> Find(string SearchCrtiteria, string column, List<string> CallTrace)
         {
 
 
@@ -80,11 +81,11 @@ namespace TodosCosmos.ClientClasses
             {
                 QueryDefinition sql = new QueryDefinition("SELECT * FROM c WHERE c.DocType = " + (int)DocTypeEnum.UILanguage + " and c." + column + "='" + SearchCrtiteria + "'");
 
-                return await cosmosDBRepo.FindFirstItemsAsync(sql);
+                return await cosmosDBRepo.FindFirstItemsAsync(sql, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
             catch (CosmosException ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return null;
             }
@@ -93,10 +94,11 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<CosmosDocUILanguage> FindByName(string Name)
+        public async Task<CosmosDocUILanguage> FindByName(string Name, List<string> CallTrace)
         {
             return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.UILanguage &&
-            x.Name.ToLower() == Name.ToLower());
+            x.Name.ToLower() == Name.ToLower(),
+            LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }
     }

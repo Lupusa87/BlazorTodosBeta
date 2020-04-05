@@ -15,7 +15,7 @@ namespace TodosCosmos.ClientClasses
         private readonly CosmosDBClient_Base<CosmosDocActivityLog> cosmosDBClientBase = new CosmosDBClient_Base<CosmosDocActivityLog>();
         private readonly string pkPrefix = ((int)DocTypeEnum.Activity).ToString();
 
-        public async Task<bool> AddActivityLog(Guid UserID, string Description, MethodBase MB)
+        public async Task<bool> AddActivityLog(Guid UserID, string Description, List<string> CallTrace)
         {
 
             if (CosmosAPI.DoActivityLog)
@@ -23,9 +23,9 @@ namespace TodosCosmos.ClientClasses
 
                 try
                 {
-                    CosmosDocActivityLog newActivityLog = new CosmosDocActivityLog(UserID, Description, LocalFunctions.GetMethodName(MB));
+                    CosmosDocActivityLog newActivityLog = new CosmosDocActivityLog(UserID, Description, LocalFunctions.GetCallTraceString(CallTrace));
 
-                    await cosmosDBRepoActivityLog.CreateItemAsync(newActivityLog);
+                    await cosmosDBRepoActivityLog.CreateItemAsync(newActivityLog, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     return true;
 
@@ -33,7 +33,7 @@ namespace TodosCosmos.ClientClasses
                 catch (CosmosException ex)
                 {
 
-                    await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, MethodBase.GetCurrentMethod());
+                    await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     return false;
                 }
@@ -45,18 +45,18 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<IEnumerable<CosmosDocActivityLog>> GetAll()
+        public async Task<IEnumerable<CosmosDocActivityLog>> GetAll(List<string> CallTrace)
         {
             
             try
             {
-                return await cosmosDBRepoActivityLog.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Activity);
+                return await cosmosDBRepoActivityLog.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Activity, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             }
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                 return null;
             }
 
@@ -65,9 +65,9 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> Delete(CosmosDocActivityLog tsActivity)
+        public async Task<bool> Delete(CosmosDocActivityLog tsActivity, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(tsActivity, pkPrefix);
+            return await cosmosDBClientBase.DeleteItemAsync(tsActivity, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
     }
 }

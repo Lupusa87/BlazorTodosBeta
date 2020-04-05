@@ -14,12 +14,12 @@ namespace TodosCosmos.ClientClasses
     public class CosmosDBRepository<T> where T : class
     {
 
-        public async Task<T> GetItemAsync(string id, string pk)
+        public async Task<T> GetItemAsync(string id, string pk, List<string> CallTrace)
         {
             return await CosmosAPI.container.ReadItemAsync<T>(id, new PartitionKey(pk));
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync()
+        public async Task<IEnumerable<T>> GetItemsAsync(List<string> CallTrace)
         {
             List<T> result = new List<T>();
 
@@ -35,7 +35,7 @@ namespace TodosCosmos.ClientClasses
             return result.AsEnumerable();
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate, List<string> CallTrace)
         {
             List<T> result = new List<T>();
 
@@ -52,7 +52,7 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<T> FindFirstItemsAsync(Expression<Func<T, bool>> predicate)
+        public async Task<T> FindFirstItemsAsync(Expression<Func<T, bool>> predicate, List<string> CallTrace)
         {
             List<T> result = new List<T>();
 
@@ -71,7 +71,7 @@ namespace TodosCosmos.ClientClasses
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             }
 
@@ -91,7 +91,7 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<T> FindLastItemsAsync(Expression<Func<T, bool>> predicate)
+        public async Task<T> FindLastItemsAsync(Expression<Func<T, bool>> predicate, List<string> CallTrace)
         {
             List<T> result = new List<T>();
 
@@ -110,7 +110,7 @@ namespace TodosCosmos.ClientClasses
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             }
 
@@ -130,7 +130,7 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<T> FindFirstItemsAsync(QueryDefinition sqlQuery)
+        public async Task<T> FindFirstItemsAsync(QueryDefinition sqlQuery, List<string> CallTrace)
         {
             List<T> result = new List<T>();
 
@@ -155,7 +155,7 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<IEnumerable<T>> GetItemsAsync(QueryDefinition sqlQuery)
+        public async Task<IEnumerable<T>> GetItemsAsync(QueryDefinition sqlQuery, List<string> CallTrace)
         {
 
             List<T> result = new List<T>();
@@ -180,26 +180,27 @@ namespace TodosCosmos.ClientClasses
 
         
 
-        public async Task<T> CreateItemAsync(T item)
+        public async Task<T> CreateItemAsync(T item, List<string> CallTrace)
         {
 
             return await CosmosAPI.container.CreateItemAsync(item);
 
         }
 
-        public async Task<T> UpdateItemAsync(T item)
+        public async Task<T> UpdateItemAsync(T item, List<string> CallTrace)
         {
             return await CosmosAPI.container.UpsertItemAsync(item);
         }
 
 
-        public async Task DeleteItemAsync(string id, string pk)
+
+        public async Task DeleteItemAsync(string id, string pk, List<string> CallTrace)
         {
             await CosmosAPI.container.DeleteItemAsync<T>(id, new PartitionKey(pk));
         }
 
 
-        public int GetCount(Expression<Func<T, bool>> predicate)
+        public int GetCount(Expression<Func<T, bool>> predicate, List<string> CallTrace)
         {
 
             return CosmosAPI.container.GetItemLinqQueryable<T>().Where(predicate).AsEnumerable().Count();

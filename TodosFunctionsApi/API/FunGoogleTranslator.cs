@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,7 +47,7 @@ namespace TodosFunctionsApi.API
            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "googletranslator/getalllanguages")] HttpRequest req)
         {
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             
             IEnumerable<Language> list = await _googleTranslator.GetLanguagesAsync();

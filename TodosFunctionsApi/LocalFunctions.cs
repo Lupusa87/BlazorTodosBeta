@@ -35,21 +35,18 @@ namespace TodosFunctionsApi
         //    return name;
         //}
 
-        public static bool CompareHash(string Par_password, CosmosDocUser currCosmosDocUser)
+        public static bool CompareHash(string Par_password, CosmosDocUser currCosmosDocUser, List<string> CallTrace)
         {
             return StructuralComparisons.StructuralEqualityComparer.Equals(GlobalFunctions.CmdHashPasswordBytes(Par_password, currCosmosDocUser.Salt), currCosmosDocUser.HashedPassword);
         }
 
-
-        
-
-        public static string CmdGetValueFromClaim(IEnumerable<Claim> UserClaims, string ClaimName, int SaltLength)
+        public static string CmdGetValueFromClaim(IEnumerable<Claim> UserClaims, string ClaimName, int SaltLength, List<string> CallTrace)
         {
             Claim c1 = UserClaims.Single(x => x.Type.Equals(ClaimName));
            
             if (c1 != null)
             {
-                return CmdParseClaimValue(c1.Value, SaltLength);
+                return CmdParseClaimValue(c1.Value, SaltLength, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
             else
             {
@@ -57,13 +54,13 @@ namespace TodosFunctionsApi
             }
         }
 
-        public static string CmdGetValueFromRoleClaim(IEnumerable<Claim> UserClaims, int SaltLength)
+        public static string CmdGetValueFromRoleClaim(IEnumerable<Claim> UserClaims, int SaltLength, List<string> CallTrace)
         {
             Claim c1 = UserClaims.Single(x => x.Type == ClaimTypes.Role);
 
             if (c1 != null)
             {
-                return CmdParseClaimValue(c1.Value, SaltLength);
+                return CmdParseClaimValue(c1.Value, SaltLength, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
             else
             {
@@ -71,8 +68,7 @@ namespace TodosFunctionsApi
             }
         }
 
-
-        public static string CmdParseClaimValue(string ParInput,int SaltLength)
+        public static string CmdParseClaimValue(string ParInput,int SaltLength, List<string> CallTrace)
         {
             try
             {
@@ -81,20 +77,19 @@ namespace TodosFunctionsApi
             }
             catch (Exception ex)
             {
-                CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod()).Wait();
+                CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Wait();
                 return string.Empty;
             }
         }
 
-
-        public static string GetRandomPassword(int Par_Lenght)
+        public static string GetRandomPassword(int Par_Lenght, List<string> CallTrace)
         {
             // lupusa - 01.02.2015
             string result = string.Empty;
 
             if (Par_Lenght > 9)
             {
-                CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, "Unique password max lenght is 9", MethodBase.GetCurrentMethod()).Wait();
+                CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, "Unique password max lenght is 9", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Wait();
                 return result;
             }
 

@@ -40,6 +40,7 @@ namespace BlazorTodos.Shared
             if (BTodosJsInterop.jsRuntime is null)
             {
                 BTodosJsInterop.jsRuntime = jsRuntime;
+
             }
 
             if (LocalData.UsingIndexedDb)

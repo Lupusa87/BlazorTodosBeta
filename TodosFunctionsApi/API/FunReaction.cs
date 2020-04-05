@@ -38,16 +38,16 @@ namespace TodosFunctionsApi.API
     ILogger log)
         {
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-            Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
+            Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
 
        
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "Requested Reaction", MethodBase.GetCurrentMethod());
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "Requested Reaction", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-                CosmosDocReaction reactionDoc = await CosmosAPI.cosmosDBClientReaction.FindReaction(userID);
+                CosmosDocReaction reactionDoc = await CosmosAPI.cosmosDBClientReaction.FindReaction(userID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
                 if (reactionDoc != null)
@@ -77,17 +77,17 @@ namespace TodosFunctionsApi.API
                 WebApiUserTypesEnum.Admin
             };
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, localAllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, localAllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
+            Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
 
-            TSReaction tsReaction = await MyFromBody<TSReaction>.FromBody(req);
+            TSReaction tsReaction = await MyFromBody<TSReaction>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             tsReaction.UserID = userID;
 
 
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "Add or update Reaction", MethodBase.GetCurrentMethod());
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "Add or update Reaction", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10);
+            string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (!tsReaction.UserID.Equals(Guid.Empty))
             {
@@ -97,25 +97,25 @@ namespace TodosFunctionsApi.API
                 }
             }
 
-            CosmosDocReaction oldReaction = await CosmosAPI.cosmosDBClientReaction.FindReaction(tsReaction.UserID);
+            CosmosDocReaction oldReaction = await CosmosAPI.cosmosDBClientReaction.FindReaction(tsReaction.UserID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             if (oldReaction is null)
             {
 
                 tsReaction.ID = Guid.NewGuid();
-                bool b = await CosmosAPI.cosmosDBClientReaction.AddReaction(tsReaction);
+                bool b = await CosmosAPI.cosmosDBClientReaction.AddReaction(tsReaction, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                 if (b)
                 {
 
-                    await TodosCosmos.LocalFunctions.NotifyAdmin("New Reaction " + userName + " " + tsReaction.LikeOrDislike);
+                    await TodosCosmos.LocalFunctions.NotifyAdmin("New Reaction " + userName + " " + tsReaction.LikeOrDislike, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                     if (tsReaction.LikeOrDislike)
                     {
-                        await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "LikesCount", true);
+                        await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "LikesCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                     }
                     else
                     {
-                        await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "DislikesCount", true);
+                        await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "DislikesCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                     }
                 }
 
@@ -127,29 +127,29 @@ namespace TodosFunctionsApi.API
                 {
                     if (oldReaction.LikeOrDislike)
                     {
-                        await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "LikesCount", false);
+                        await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "LikesCount", false, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                     }
                     else
                     {
-                        await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "DislikesCount", false);
+                        await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "DislikesCount", false, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                     }
 
 
 
-                    bool b = await CosmosAPI.cosmosDBClientReaction.UpdateReaction(tsReaction);
+                    bool b = await CosmosAPI.cosmosDBClientReaction.UpdateReaction(tsReaction, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                     if (b)
                     {
 
-                        await TodosCosmos.LocalFunctions.NotifyAdmin("Reaction update to " + tsReaction.LikeOrDislike + " " + userName);
+                        await TodosCosmos.LocalFunctions.NotifyAdmin("Reaction update to " + tsReaction.LikeOrDislike + " " + userName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                         if (tsReaction.LikeOrDislike)
                         {
-                            await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "LikesCount", true);
+                            await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "LikesCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                         }
                         else
                         {
-                            await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "DislikesCount", true);
+                            await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "DislikesCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                         }
 
 
@@ -159,7 +159,7 @@ namespace TodosFunctionsApi.API
 
 
 
-                CosmosDocReaction reactionEntity = await CosmosAPI.cosmosDBClientReaction.FindReaction(tsReaction.UserID);
+                CosmosDocReaction reactionEntity = await CosmosAPI.cosmosDBClientReaction.FindReaction(tsReaction.UserID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                 if (reactionEntity != null)
                 {

@@ -12,6 +12,7 @@ using TodosCosmos;
 using System.Text;
 using TodosGlobal;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 
 namespace TodosFunctionsApi.API
 {
@@ -24,7 +25,7 @@ namespace TodosFunctionsApi.API
             ILogger log)
         {
 
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(Guid.Empty, "Requested token", MethodBase.GetCurrentMethod());
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(Guid.Empty, "Requested token", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
             try
@@ -57,10 +58,10 @@ namespace TodosFunctionsApi.API
             //};
 
 
-            MyTokenProvider tp = new MyTokenProvider();
+            MyTokenProvider tp = new MyTokenProvider(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-            JwtResult result = await tp.GenerateToken(req);
+            JwtResult result = await tp.GenerateToken(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             return result;
             //return new OkObjectResult(JsonSerializer.ToString(result));

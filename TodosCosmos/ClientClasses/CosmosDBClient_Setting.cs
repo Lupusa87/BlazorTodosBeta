@@ -19,25 +19,25 @@ namespace TodosCosmos.ClientClasses
         private readonly string pkPrefix = ((int)DocTypeEnum.Setting).ToString();
 
 
-        public async Task<bool> SetSetting(Guid UserID, string Key, string Value)
+        public async Task<bool> SetSetting(Guid UserID, string Key, string Value, List<string> CallTrace)
         {
 
-            CosmosDocSetting tsSetting = await GetSetting(UserID, Key);
+            CosmosDocSetting tsSetting = await GetSetting(UserID, Key, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             tsSetting.Value = Value;
            
-            return await cosmosDBClientBase.UpdateItemAsync(tsSetting);
+            return await cosmosDBClientBase.UpdateItemAsync(tsSetting, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }
 
-        public async Task<CosmosDocSetting> GetSetting(Guid UserID, string Key)
+        public async Task<CosmosDocSetting> GetSetting(Guid UserID, string Key, List<string> CallTrace)
         {
             try
             {
 
                 IEnumerable<CosmosDocSetting> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Setting &&
                 x.UserID==UserID &&
-                x.Key.ToLower() == Key.ToLower());
+                x.Key.ToLower() == Key.ToLower(), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
                 if (result.Count()>0)
@@ -49,7 +49,7 @@ namespace TodosCosmos.ClientClasses
                     
                     CosmosDocSetting newSetting = new CosmosDocSetting(UserID, Key, string.Empty);
 
-                    await cosmosDBClientBase.AddItemAsync(newSetting);
+                    await cosmosDBClientBase.AddItemAsync(newSetting, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     return newSetting;
                 }
@@ -60,20 +60,20 @@ namespace TodosCosmos.ClientClasses
             {
 
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return null;
             }
         }
 
 
-        public async Task<bool> UpdateSettingCounter(Guid UserID, string KeyName, bool IncreaseOrDecrease)
+        public async Task<bool> UpdateSettingCounter(Guid UserID, string KeyName, bool IncreaseOrDecrease, List<string> CallTrace)
         {
             try
             {
 
 
-                CosmosDocSetting tsSetting = await GetSetting(UserID, KeyName);
+                CosmosDocSetting tsSetting = await GetSetting(UserID, KeyName, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 if (tsSetting != null)
                 {
@@ -83,11 +83,11 @@ namespace TodosCosmos.ClientClasses
 
                         if (IncreaseOrDecrease)
                         {
-                            await SetSetting(UserID, KeyName, "1");
+                            await SetSetting(UserID, KeyName, "1", LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                         }
                         else
                         {
-                            await SetSetting(UserID, KeyName, "-1");
+                            await SetSetting(UserID, KeyName, "-1", LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                         }
                     }
                     else
@@ -97,11 +97,11 @@ namespace TodosCosmos.ClientClasses
 
                         if (IncreaseOrDecrease)
                         {
-                            await SetSetting(UserID, KeyName, (NewID + 1).ToString());
+                            await SetSetting(UserID, KeyName, (NewID + 1).ToString(), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                         }
                         else
                         {
-                            await SetSetting(UserID, KeyName, (NewID - 1).ToString());
+                            await SetSetting(UserID, KeyName, (NewID - 1).ToString(), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                         }
 
                     }
@@ -116,7 +116,7 @@ namespace TodosCosmos.ClientClasses
             {
 
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }

@@ -17,29 +17,29 @@ namespace TodosCosmos.ClientClasses
 
         private readonly string pkPrefix = ((int)DocTypeEnum.Todo).ToString();
 
-        public async Task<bool> AddVisitor(string IPAddress)
+        public async Task<bool> AddVisitor(string IPAddress, List<string> CallTrace)
         {
             try
             {
 
-                CosmosDocVisitorsStat visitor = await GetVisitor(IPAddress);
+                CosmosDocVisitorsStat visitor = await GetVisitor(IPAddress, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
              
                 if (visitor is null)
                 {
                    
                     visitor = new CosmosDocVisitorsStat(IPAddress, 0, Guid.Empty);
 
-                    await cosmosDBClientBase.AddItemAsync(visitor);
+                    await cosmosDBClientBase.AddItemAsync(visitor, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                
-                    await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "IPAddressesCount", true);
+                    await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "IPAddressesCount", true, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         
                 }
 
-                await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "VisitsCount", true);
+                await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "VisitsCount", true, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                 visitor.Count += 1;
            
 
-                await cosmosDBClientBase.UpdateItemAsync(visitor);
+                await cosmosDBClientBase.UpdateItemAsync(visitor, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         
 
                 return true;
@@ -47,18 +47,20 @@ namespace TodosCosmos.ClientClasses
             }
             catch (CosmosException ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, 
+                    LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }
         }
 
 
-        public async Task<CosmosDocVisitorsStat> GetVisitor(string IPAddress)
+        public async Task<CosmosDocVisitorsStat> GetVisitor(string IPAddress, List<string> CallTrace)
         {
 
             return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.VisitorStat &&
-                             x.IPAddress == IPAddress);
+                             x.IPAddress == IPAddress,
+                             LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
         }

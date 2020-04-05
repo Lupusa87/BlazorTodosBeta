@@ -39,16 +39,16 @@ namespace TodosFunctionsApi.API
             ILogger log)
         {
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-            Guid UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "Requested todos", MethodBase.GetCurrentMethod());
+            Guid UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "Requested todos", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
 
 
-                return await CosmosAPI.cosmosDBClientTodo.GetAllTodos(UserID);
+            return await CosmosAPI.cosmosDBClientTodo.GetAllTodos(UserID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
            
 
@@ -61,18 +61,18 @@ namespace TodosFunctionsApi.API
          ILogger log)
         {
 
-            TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req);
+            TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
-
-
-            Guid UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
-
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "Requested todo", MethodBase.GetCurrentMethod());
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
+            Guid UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
 
-                return await CosmosAPI.cosmosDBClientTodo.GetTodo(tsTodo);
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "Requested todo", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+
+
+
+                return await CosmosAPI.cosmosDBClientTodo.GetTodo(tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             
         }
 
@@ -83,26 +83,26 @@ namespace TodosFunctionsApi.API
         ILogger log)
         {
 
-            TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req);
+            TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
-            string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10);
+            Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
+            string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "post todo", MethodBase.GetCurrentMethod());
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "post todo", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
          
             tsTodo.ID = Guid.NewGuid();
             tsTodo.CreateDate = DateTime.Now;
 
 
-            bool b = await CosmosAPI.cosmosDBClientTodo.AddTodo(tsTodo);
+            bool b = await CosmosAPI.cosmosDBClientTodo.AddTodo(tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (b)
             {
 
-                await TodosCosmos.LocalFunctions.NotifyAdmin("New todo " + userName);
+                await TodosCosmos.LocalFunctions.NotifyAdmin("New todo " + userName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
                 TSUser currUser = new TSUser()
@@ -111,8 +111,8 @@ namespace TodosFunctionsApi.API
                     UserName = userName,
                 };
 
-                await CosmosAPI.cosmosDBClientUser.UpdateUserTodosCount(currUser, 1);
-                await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "TodosCount", true);
+                await CosmosAPI.cosmosDBClientUser.UpdateUserTodosCount(currUser, 1, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "TodosCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                 return new OkObjectResult("OK");
             }
             else
@@ -129,18 +129,18 @@ namespace TodosFunctionsApi.API
        ILogger log)
         {
 
-            TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req);
+            TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-            Guid UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
+            Guid UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
 
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "put todo", MethodBase.GetCurrentMethod());
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "put todo", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
           
 
-            bool b = await CosmosAPI.cosmosDBClientTodo.UpdateTodo(tsTodo);
+            bool b = await CosmosAPI.cosmosDBClientTodo.UpdateTodo(tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (b)
             {
@@ -160,18 +160,18 @@ namespace TodosFunctionsApi.API
      ILogger log)
         {
 
-            TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req);
+            TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles);
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10));
-            string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10);
+            Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
+            string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "delete todo", MethodBase.GetCurrentMethod());
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "delete todo", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
          
 
-            bool b = await CosmosAPI.cosmosDBClientTodo.DeleteTodo(tsTodo);
+            bool b = await CosmosAPI.cosmosDBClientTodo.DeleteTodo(tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (b)
             {
@@ -181,9 +181,9 @@ namespace TodosFunctionsApi.API
                     UserName = userName,
                 };
 
-                await CosmosAPI.cosmosDBClientUser.UpdateUserTodosCount(currUser, -1);
+                await CosmosAPI.cosmosDBClientUser.UpdateUserTodosCount(currUser, -1, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-                await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "TodosCount", false);
+                await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "TodosCount", false, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                 return new OkObjectResult("OK");
             }
             else

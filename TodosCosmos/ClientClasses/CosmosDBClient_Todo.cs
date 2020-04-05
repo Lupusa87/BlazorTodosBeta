@@ -19,13 +19,13 @@ namespace TodosCosmos.ClientClasses
         private readonly string pkPrefix = ((int)DocTypeEnum.Todo).ToString();
 
 
-        public async Task<bool> AddTodo(TSTodo tsTodo)
+        public async Task<bool> AddTodo(TSTodo tsTodo, List<string> CallTrace)
         {
 
-            return await cosmosDBClientBase.AddItemAsync(new CosmosDocTodo(tsTodo));
+            return await cosmosDBClientBase.AddItemAsync(new CosmosDocTodo(tsTodo), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<bool> AddTodosBath(List<TSTodo> TsTodos)
+        public async Task<bool> AddTodosBath(List<TSTodo> TsTodos, List<string> CallTrace)
         {
 
             if (TsTodos.Any())
@@ -35,7 +35,7 @@ namespace TodosCosmos.ClientClasses
                 {
                     items.Add(new CosmosDocTodo(item));
                 }
-                return await cosmosDBClientBase.AddItemsBathAsync(items);
+                return await cosmosDBClientBase.AddItemsBathAsync(items, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
             else
             {
@@ -43,37 +43,38 @@ namespace TodosCosmos.ClientClasses
             }
         }
 
-        public async Task<bool> UpdateTodo(TSTodo tsTodo)
+        public async Task<bool> UpdateTodo(TSTodo tsTodo, List<string> CallTrace)
         {
 
-                return await cosmosDBClientBase.UpdateItemAsync(new CosmosDocTodo(tsTodo));
+                return await cosmosDBClientBase.UpdateItemAsync(new CosmosDocTodo(tsTodo), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }
 
-        public async Task<bool> UpdateTodoEntity(CosmosDocTodo tsTodo)
+        public async Task<bool> UpdateTodoEntity(CosmosDocTodo tsTodo, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.UpdateItemAsync(tsTodo);
+            return await cosmosDBClientBase.UpdateItemAsync(tsTodo, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
 
-        public async Task<bool> DeleteTodo(TSTodo tsTodo)
+        public async Task<bool> DeleteTodo(TSTodo tsTodo, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocTodo(tsTodo), pkPrefix);
+            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocTodo(tsTodo), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<TSTodo> GetTodo(TSTodo tsTodo)
+        public async Task<TSTodo> GetTodo(TSTodo tsTodo, List<string> CallTrace)
         {
 
-            return (await cosmosDBClientBase.GetItemAsync(new CosmosDocTodo(tsTodo), pkPrefix)).toTSTodo();
+            return (await cosmosDBClientBase.GetItemAsync(new CosmosDocTodo(tsTodo), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()))).toTSTodo();
 
         }
 
-        public async Task<List<TSTodo>> GetAllTodos(Guid UserID)
+        public async Task<List<TSTodo>> GetAllTodos(Guid UserID, List<string> CallTrace)
         {
             List<TSTodo> TsTodos = new List<TSTodo>();
             try
             {
-                IEnumerable<CosmosDocTodo> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Todo && x.UserID==UserID);
+                IEnumerable<CosmosDocTodo> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Todo && x.UserID==UserID,
+                    LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
                 {
@@ -84,7 +85,7 @@ namespace TodosCosmos.ClientClasses
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(UserID, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             }
 
@@ -94,7 +95,7 @@ namespace TodosCosmos.ClientClasses
 
 
 
-        public async Task<bool> SendTodoReminders()
+        public async Task<bool> SendTodoReminders(List<string> CallTrace)
         {
 
             try
@@ -103,7 +104,8 @@ namespace TodosCosmos.ClientClasses
 
                 IEnumerable<CosmosDocTodo> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Todo &&
                 x.UserID != CosmosAPI.DemoUserID && !x.IsReminderEmailed &&
-                x.HasRemindDate && x.RemindDate<DateTime.Now);
+                x.HasRemindDate && x.RemindDate<DateTime.Now,
+                LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
 
@@ -116,7 +118,7 @@ namespace TodosCosmos.ClientClasses
 
 
 
-                        TSUser currUser = await CosmosAPI.cosmosDBClientUser.GetUser(item.ID);
+                        TSUser currUser = await CosmosAPI.cosmosDBClientUser.GetUser(item.UserID, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                         if (currUser != null)
                         {
@@ -130,10 +132,11 @@ namespace TodosCosmos.ClientClasses
                             };
 
                             body = "Name - " + item.Name + "\n\nDescription - " + item.Description + "\n\nDuedate - " + item.DueDate.ToString("MM/dd/yyyy HH:mm:ss.fff") + ".";
-                            tmpEmail = LocalFunctions.SendEmail(tmpEmail, string.Empty, body).Result;
+                            tmpEmail = LocalFunctions.SendEmail(tmpEmail, string.Empty, body,
+                                LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
 
-                            b = UpdateTodoEntity(item).Result;
+                            b = UpdateTodoEntity(item, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
                         }
 
 
@@ -144,7 +147,7 @@ namespace TodosCosmos.ClientClasses
             catch (CosmosException ex)
             {
 
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return false;
             }

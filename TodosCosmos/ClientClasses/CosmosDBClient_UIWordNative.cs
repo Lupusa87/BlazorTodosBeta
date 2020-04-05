@@ -17,41 +17,42 @@ namespace TodosCosmos.ClientClasses
         private readonly string pkPrefix = ((int)DocTypeEnum.UIWordNative).ToString();
 
 
-        public async Task<bool> Add(TSUIWordNative tsUIWordNative)
+        public async Task<bool> Add(TSUIWordNative tsUIWordNative, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.AddItemAsync(new CosmosDocUIWordNative(tsUIWordNative));
+            return await cosmosDBClientBase.AddItemAsync(new CosmosDocUIWordNative(tsUIWordNative), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
 
-        public async Task<bool> Update(TSUIWordNative tsUIWordNative)
+        public async Task<bool> Update(TSUIWordNative tsUIWordNative, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.UpdateItemAsync(new CosmosDocUIWordNative(tsUIWordNative));
+            return await cosmosDBClientBase.UpdateItemAsync(new CosmosDocUIWordNative(tsUIWordNative), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<bool> UpdateEntity(CosmosDocUIWordNative tsUIWordNative)
+        public async Task<bool> UpdateEntity(CosmosDocUIWordNative tsUIWordNative, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.UpdateItemAsync(tsUIWordNative);
+            return await cosmosDBClientBase.UpdateItemAsync(tsUIWordNative, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
 
-        public async Task<bool> Delete(TSUIWordNative tsUIWordNative)
+        public async Task<bool> Delete(TSUIWordNative tsUIWordNative, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocUIWordNative(tsUIWordNative), pkPrefix);
+            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocUIWordNative(tsUIWordNative), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<TSUIWordNative> Get(TSUIWordNative tsUIWordNative)
+        public async Task<TSUIWordNative> Get(TSUIWordNative tsUIWordNative, List<string> CallTrace)
         {
-            return (await cosmosDBClientBase.GetItemAsync(new CosmosDocUIWordNative(tsUIWordNative), pkPrefix)).toTSUIWordNative();
+            return (await cosmosDBClientBase.GetItemAsync(new CosmosDocUIWordNative(tsUIWordNative), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()))).toTSUIWordNative();
 
         }
 
-        public async Task<List<TSUIWordNative>> GetAll()
+        public async Task<List<TSUIWordNative>> GetAll(List<string> CallTrace)
         {
             List<TSUIWordNative> TsUIWordNatives = new List<TSUIWordNative>();
 
             try
             {
-                IEnumerable<CosmosDocUIWordNative> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.UIWordNative);
+                IEnumerable<CosmosDocUIWordNative> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.UIWordNative,
+                    LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
                 {
@@ -62,7 +63,7 @@ namespace TodosCosmos.ClientClasses
             }
             catch (CosmosException ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
 
 
@@ -72,7 +73,7 @@ namespace TodosCosmos.ClientClasses
 
         }
 
-        public async Task<CosmosDocUIWordNative> Find(string SearchCrtiteria, string column)
+        public async Task<CosmosDocUIWordNative> Find(string SearchCrtiteria, string column, List<string> CallTrace)
         {
 
 
@@ -80,11 +81,11 @@ namespace TodosCosmos.ClientClasses
             {
                 QueryDefinition sql = new QueryDefinition("SELECT * FROM c WHERE c.DocType = " + (int)DocTypeEnum.UIWordNative + " and c." + column + "='" + SearchCrtiteria + "'");
 
-                return await cosmosDBRepo.FindFirstItemsAsync(sql);
+                return await cosmosDBRepo.FindFirstItemsAsync(sql, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
             catch (CosmosException ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, MethodBase.GetCurrentMethod());
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 return null;
             }
@@ -93,10 +94,11 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<CosmosDocUIWordNative> FindByWord(string Word)
+        public async Task<CosmosDocUIWordNative> FindByWord(string Word, List<string> CallTrace)
         {
             return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.UIWordNative &&
-            x.Word.ToLower() == Word.ToLower());
+            x.Word.ToLower() == Word.ToLower(),
+            LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }
 
