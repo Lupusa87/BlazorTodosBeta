@@ -27,7 +27,9 @@ namespace TodosFunctionsApi
                 throw new ArgumentException("database is null");
             }
 
-            database.CreateContainerIfNotExistsAsync(new ContainerProperties { Id = CosmosAPI.collectionID, PartitionKeyPath = "/pk" }).Wait();
+            database.CreateContainerIfNotExistsAsync(new ContainerProperties { Id = CosmosAPI.collectionID,
+                PartitionKeyPath = "/pk",
+                DefaultTimeToLive = -1}).Wait();
            
 
 

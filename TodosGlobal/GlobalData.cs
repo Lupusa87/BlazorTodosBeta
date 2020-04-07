@@ -8,8 +8,8 @@ namespace TodosGlobal
 {
     public static class GlobalData
     {
-        public static bool WebOrLocalMode = true;
-
+        public static bool WebOrLocalMode = true; //determines where is cosmosDB
+        public static bool ProductionOrDevelopmentMode; //coming from settings
 
         public static string NotAuthorizedUserName = string.Empty;
         public static string NotAuthorizedUserPass = string.Empty;

@@ -189,6 +189,18 @@ namespace TodosCosmos.ClientClasses
 
         public async Task<T> UpdateItemAsync(T item, List<string> CallTrace)
         {
+            PropertyInfo pi = item.GetType().GetProperty("IUD");
+
+            if (pi is object)
+            {
+                byte iud = (byte)pi.GetValue(item);
+
+                if (iud == 0)
+                {
+                    pi.SetValue(item, (byte)1);
+                }
+            }
+
             return await CosmosAPI.container.UpsertItemAsync(item);
         }
 

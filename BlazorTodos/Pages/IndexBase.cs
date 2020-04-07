@@ -34,7 +34,7 @@ namespace BlazorTodos.Pages
       
         public void TranslatorOnNotFoundWord(string word)
         {
-            BTodosJsInterop.Log("Could not translate word - " + word + ", not found!");
+            LocalFunctions.ConsolePrint("Could not translate word - " + word + ", not found!");
         }
 
 

@@ -106,9 +106,6 @@ namespace TodosFunctionsApi.API
 
                 if (b)
                 {
-
-                    await TodosCosmos.LocalFunctions.NotifyAdmin("New Reaction " + userName + " " + tsReaction.LikeOrDislike, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
                     if (tsReaction.LikeOrDislike)
                     {
                         await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "LikesCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -140,9 +137,6 @@ namespace TodosFunctionsApi.API
 
                     if (b)
                     {
-
-                        await TodosCosmos.LocalFunctions.NotifyAdmin("Reaction update to " + tsReaction.LikeOrDislike + " " + userName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
                         if (tsReaction.LikeOrDislike)
                         {
                             await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "LikesCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));

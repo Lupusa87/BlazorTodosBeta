@@ -32,21 +32,35 @@ namespace TodosFunctionsApi
         public override void Configure(IFunctionsHostBuilder builder)
         {
 
+           
+            GlobalData.ProductionOrDevelopmentMode = configuration["ProdOrDevMode"].Equals("1");
 
-            
 
-
-            string endpoint = configuration["MyEndPoint"];
+            string endpoint = configuration["CosmosDbEndPoint"];
             if (string.IsNullOrEmpty(endpoint))
             {
                 throw new ArgumentNullException("Please specify a valid endpoint in the appSettings.json file or your Azure Functions Settings.");
             }
 
-            string authKey = configuration["MyKey"];
+            string authKey = configuration["CosmosDbKey"];
             if (string.IsNullOrEmpty(authKey))
             {
                 throw new ArgumentException("Please specify a valid AuthorizationKey in the appSettings.json file or your Azure Functions Settings.");
             }
+
+            TodosCosmos.CosmosAPI.databaseID = configuration["CosmosDbDatabaseName"];
+            if (string.IsNullOrEmpty(TodosCosmos.CosmosAPI.databaseID))
+            {
+                throw new ArgumentException("Please specify a valid DbName in the appSettings.json file or your Azure Functions Settings.");
+            }
+
+            TodosCosmos.CosmosAPI.collectionID = configuration["CosmosDbCollectionName"];
+            if (string.IsNullOrEmpty(TodosCosmos.CosmosAPI.collectionID))
+            {
+                throw new ArgumentException("Please specify a valid CollectionName in the appSettings.json file or your Azure Functions Settings.");
+            }
+
+
 
 
             // delays startup about 3 sec, if will be used shoud move to another function app to be used on deman and not for each azure function execution

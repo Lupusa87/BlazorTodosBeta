@@ -38,16 +38,13 @@ namespace TodosFunctionsApi.API
 
             ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-
-
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(Guid.Empty, "Requested public data", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             Guid UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
+          
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "Requested Categories", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-
-
-                return await CosmosAPI.cosmosDBClientCategory.GetAllCategories(UserID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            return await CosmosAPI.cosmosDBClientCategory.GetAllCategories(UserID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
         }
@@ -85,7 +82,7 @@ namespace TodosFunctionsApi.API
             ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             Guid userID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
-            string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            //string userName = LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserName", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "post Category", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
            
@@ -95,9 +92,6 @@ namespace TodosFunctionsApi.API
 
             if (b)
             {
-
-                await TodosCosmos.LocalFunctions.NotifyAdmin("New category " + userName + " " + tsCategory.Name, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
                 return new OkObjectResult("OK");
             }
             else

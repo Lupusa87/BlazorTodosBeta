@@ -16,6 +16,8 @@ using static TodosGlobal.GlobalClasses;
 using TodosGlobal;
 using TodosCosmos.DocumentClasses;
 using System.IO;
+using TodosCosmos.Diagnostics;
+using static TodosCosmos.Enums;
 
 namespace TodosFunctionsApi.API
 {
@@ -62,38 +64,44 @@ namespace TodosFunctionsApi.API
           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/authorize")] HttpRequest req,
           ILogger log)
         {
+
           
+
             TSUser tsUser = await MyFromBody<TSUser>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+           
 
             ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
             Guid UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
+
+
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "Requested authentication", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             TSUser result = new TSUser();
 
-           
-                tsUser.ID = UserID;
 
-                result = CosmosAPI.cosmosDBClientUser.GetUser(tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())).Result;
+            tsUser.ID = UserID;
 
-                if (!result.ID.Equals(Guid.Empty))
-                {
-                    await TodosCosmos.LocalFunctions.NotifyAdmin("New login " + result.UserName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            result = CosmosAPI.cosmosDBClientUser.GetUser(tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())).Result;
+         
 
-                    await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "LiveUsersCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            if (!result.ID.Equals(Guid.Empty))
+            {
 
-                }
-                else
-                {
+                await CosmosAPI.cosmosDBClientFeedMessage.AddFeedMessage(RequestedActionEnum.NotifyAdmin, "New Login " + result.UserName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "LiveUsersCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-                    result.UserName = "Error!";
-                    result.FullName = "Can't find user!";
-                  
-                }
+            }
+            else
+            {
 
-           
+                result.UserName = "Error!";
+                result.FullName = "Can't find user!";
+
+            }
+
+            TimeAnalyzer.LogAll();
 
             return result;
         }
@@ -355,12 +363,6 @@ ILogger log)
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "post user", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-           
-
-
-            await CosmosAPI.cosmosDBClientEmailedCode.DeleteExpiredEmaiedCodes(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
-
             string MachineID = LocalFunctions.CmdGetValueFromClaim(User.Claims, "MachineID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             string IPAddress = req.HttpContext.Connection.RemoteIpAddress.ToString();
@@ -383,9 +385,6 @@ ILogger log)
                     if (await CosmosAPI.cosmosDBClientUser.AddUser(tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())))
                     {
                         await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "UsersCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
-
-                        await TodosCosmos.LocalFunctions.NotifyAdmin("New user", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                         return new OkObjectResult("OK");
                     }
@@ -422,12 +421,6 @@ ILogger log)
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "change password", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-           
-
-
-            await CosmosAPI.cosmosDBClientEmailedCode.DeleteExpiredEmaiedCodes(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
-
             string MachineID = LocalFunctions.CmdGetValueFromClaim(User.Claims, "MachineID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             string IPAddress = req.HttpContext.Connection.RemoteIpAddress.ToString();
@@ -451,7 +444,6 @@ ILogger log)
 
                     if (await CosmosAPI.cosmosDBClientUser.UpdateUser(currUser, false, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())))
                     {
-                        await TodosCosmos.LocalFunctions.NotifyAdmin("password change", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                         return new OkObjectResult("OK");
                     }

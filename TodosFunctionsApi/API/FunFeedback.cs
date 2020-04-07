@@ -136,10 +136,7 @@ namespace TodosFunctionsApi.API
 
                 if (b)
                 {
-
-                    await TodosCosmos.LocalFunctions.NotifyAdmin("New Feedback " + userName + " " + tsFeedback.Text, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                     await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "FeedbackCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
                 }
 
             }
@@ -149,13 +146,7 @@ namespace TodosFunctionsApi.API
                 if (oldFeedback.Text != tsFeedback.Text)
                 {
 
-                    bool b = await CosmosAPI.cosmosDBClientFeedback.UpdateFeedback(tsFeedback, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
-                    if (b)
-                    {
-
-                        await TodosCosmos.LocalFunctions.NotifyAdmin("Feedback update to " + tsFeedback.Text + " " + userName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    }
+                    await CosmosAPI.cosmosDBClientFeedback.UpdateFeedback(tsFeedback, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
                 }
             }
 

@@ -27,6 +27,17 @@ namespace BlazorTodos.Shared
 
         protected override void OnInitialized()
         {
+            if (!LocalData.ProductionOrDevelopmentMode)
+            {
+                if (!BlazorWindowHelper.BWHJsInterop.IsReady)
+                {
+                    BlazorWindowHelper.BWHJsInterop.jsRuntime = jsRuntime;
+                    BlazorWindowHelper.BWHJsInterop.IsReady = true;
+                }
+
+            }
+
+
             if (WebApiFunctions.httpClient is null)
             {
                 WebApiFunctions.httpClient = httpClient;

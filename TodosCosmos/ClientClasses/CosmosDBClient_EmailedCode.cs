@@ -37,41 +37,6 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> DeleteExpiredEmaiedCodes(List<string> CallTrace)
-        {
-
-            try
-            {
-
-                IEnumerable<CosmosEmailedCode> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.EmailedCode && x.AddDate< DateTime.UtcNow.AddMinutes(-1), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-
-
-                if (result.Any())
-                {
-                    foreach (var item in result)
-                    {
-                        await cosmosDBClientBase.DeleteItemAsync(item, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-                    }
-                }
-
-            }
-            catch (CosmosException ex)
-            {
-
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-
-                return false;
-            }
-
-
-            return true;
-
-
-
-        }
-
-
-
         public async Task<bool> DeleteEmailedCodes(string Email, List<string> CallTrace)
         {
 

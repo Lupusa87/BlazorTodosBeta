@@ -2,11 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <!--<OutputType>Exe</OutputType>
-    <LangVersion>7.3</LangVersion>-->
-    <RazorLangVersion>3.0</RazorLangVersion>
-    <!--<BlazorLinkOnBuild>false</BlazorLinkOnBuild>-->
-   
+    <RazorLangVersion>3.0</RazorLangVersion>   
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +15,7 @@
   </ItemGroup>
  
   <ItemGroup>
+    <ProjectReference Include="..\..\BlazorWindowHelper\BlazorWindowHelper.csproj" />
     <ProjectReference Include="..\BlazorContextMenu\BlazorContextMenu.csproj" />
     <ProjectReference Include="..\BlazorCSS\BlazorCSS.csproj" />
     <ProjectReference Include="..\TodosShared\TodosShared.csproj" />
@@ -26,8 +23,8 @@
   </ItemGroup>
 
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <BlazorLinkerDescriptor Include="Linker.xml" />
-  </ItemGroup>
+  </ItemGroup>-->
 
 </Project>

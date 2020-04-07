@@ -23,11 +23,7 @@ namespace TodosCosmos.ClientClasses
 
             CosmosDocErrorLog newErrorLog = new CosmosDocErrorLog(UserID, Description, LocalFunctions.GetCallTraceString(CallTrace));
 
-
             await cosmosDBRepoErrorLog.CreateItemAsync(newErrorLog, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-
-
-            await LocalFunctions.NotifyAdmin("Error: " + Description, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             return true;
         }

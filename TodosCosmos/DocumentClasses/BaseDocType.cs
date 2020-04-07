@@ -13,11 +13,14 @@ namespace TodosCosmos.DocumentClasses
         public Guid ID { get; set; } = Guid.Empty;
 
         [JsonProperty(PropertyName = "doctype")]
-        public int DocType { get; set; } = -1;
+        public sbyte DocType { get; set; } = -1;
 
         [JsonProperty(PropertyName = "pk")]
         public string PK { get; set; }
 
+        //for feed purposes 0 is intert, 1 is update 2 is delete
+        [JsonProperty(PropertyName = "iud")]
+        public byte IUD { get; set; } = 0;
 
         public bool GeneratePK()
         {

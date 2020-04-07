@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TodosCosmos.Diagnostics;
 using TodosCosmos.DocumentClasses;
 using TodosGlobal;
 using TodosShared;
@@ -18,13 +19,11 @@ namespace TodosCosmos
     public static class LocalFunctions
     {
 
-
-
         public static async Task NotifyAdmin(string ActivityDescription, List<string> CallTrace)
         {
             if (GlobalData.WebOrLocalMode)
             {
-                await CmdSendEmail(GlobalData.AdminNotifyEmail.Trim(), "Blazor Todo new Activity", ActivityDescription, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                await CmdSendEmailAsync(GlobalData.AdminNotifyEmail.Trim(), "Blazor Todo new Activity", ActivityDescription, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
             else
             {
@@ -63,7 +62,7 @@ namespace TodosCosmos
                 case EmailOperationsEnum.Registration:
 
                     tmp_Code = GlobalFunctions.GetSalt();
-                    if (CmdSendEmail(ParTSEmail.To.Trim(), "Registration", "Hello,\n\nYour code is " + tmp_Code + "\nThank you for registration.\n\nBest Regards,\nSite Administration", AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
+                    if (CmdSendEmailAsync(ParTSEmail.To.Trim(), "Registration", "Hello,\n\nYour code is " + tmp_Code + "\nThank you for registration.\n\nBest Regards,\nSite Administration", AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
                     {
                         ParTSEmail.Result = "OK";
                         MustSaveEmailedCode = true;
@@ -76,7 +75,7 @@ namespace TodosCosmos
                     break;
                 case EmailOperationsEnum.EmailChange:
                     tmp_Code = GlobalFunctions.GetSalt();
-                    if (CmdSendEmail(ParTSEmail.To.Trim(), "Email change", "Hello,\n\nYour code is " + tmp_Code + "\n\nBest Regards,\nSite Administration", AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
+                    if (CmdSendEmailAsync(ParTSEmail.To.Trim(), "Email change", "Hello,\n\nYour code is " + tmp_Code + "\n\nBest Regards,\nSite Administration", AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
                     {
                         ParTSEmail.Result = "OK";
                         MustSaveEmailedCode = true;
@@ -89,7 +88,7 @@ namespace TodosCosmos
                     break;
                 case EmailOperationsEnum.PasswordChange:
                     tmp_Code = GlobalFunctions.GetSalt();
-                    if (CmdSendEmail(ParTSEmail.To.Trim(), "Password change", "Hello,\n\nYour code is " + tmp_Code + "\n\nBest Regards,\nSite Administration", AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
+                    if (CmdSendEmailAsync(ParTSEmail.To.Trim(), "Password change", "Hello,\n\nYour code is " + tmp_Code + "\n\nBest Regards,\nSite Administration", AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
                     {
                         ParTSEmail.Result = "OK";
                         MustSaveEmailedCode = true;
@@ -102,7 +101,7 @@ namespace TodosCosmos
                     break;
                 case EmailOperationsEnum.PasswordRecovery:
                     MustSaveEmailedCode = false;
-                    if (CmdSendEmail(ParTSEmail.To.Trim(), "Password Recovery", "Hello,\n\nYour new password is " + ParMachineID + "\n\nPlease change password after login.\n\nBest Regards,\nSite Administration", AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
+                    if (CmdSendEmailAsync(ParTSEmail.To.Trim(), "Password Recovery", "Hello,\n\nYour new password is " + ParMachineID + "\n\nPlease change password after login.\n\nBest Regards,\nSite Administration", AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
                     {
                         ParTSEmail.Result = "OK";
                     }
@@ -113,7 +112,7 @@ namespace TodosCosmos
                     break;
                 case EmailOperationsEnum.TodoReminder:
                     MustSaveEmailedCode = false;
-                    if (CmdSendEmail(ParTSEmail.To.Trim(), "Todo Reminder", "Hello,\n\nYour requested todo remind is here.\n\n" + ParMachineID + "\n\nBest Regards,\nSite Administration", AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
+                    if (CmdSendEmailAsync(ParTSEmail.To.Trim(), "Todo Reminder", "Hello,\n\nYour requested todo remind is here.\n\n" + ParMachineID + "\n\nBest Regards,\nSite Administration", AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result)
                     {
                         ParTSEmail.Result = "OK";
                     }
@@ -135,7 +134,6 @@ namespace TodosCosmos
                     IPAddress = ParIPAddress,
                     OperationType = ParTSEmail.OperationCode,
                     MachineID = ParMachineID,
-                    AddDate = DateTime.UtcNow,
                 };
 
                 await CmdSaveEmailedCode(tsEmailedCode, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
@@ -144,7 +142,7 @@ namespace TodosCosmos
             return ParTSEmail;
         }
 
-        private static async Task<bool> CmdSendEmail(string ParEmail, string ParSubject, string ParMessage, List<string> CallTrace)
+        private static async Task<bool> CmdSendEmailAsync(string ParEmail, string ParSubject, string ParMessage, List<string> CallTrace)
         {
 
 
@@ -162,6 +160,7 @@ namespace TodosCosmos
 
             try
             {
+
                 MimeMessage message = new MimeMessage();
                 message.From.Add(new MailboxAddress("Blazor Todos", GlobalData.GmailAccountName));
                 message.To.Add(new MailboxAddress(ParEmail));
@@ -172,17 +171,28 @@ namespace TodosCosmos
                     Text = ParMessage
                 };
 
-                using (SmtpClient client = new SmtpClient())
-                {
-                    client.Connect("smtp.gmail.com", 587, false);
+                using SmtpClient client = new SmtpClient();
 
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                await client.ConnectAsync("smtp.gmail.com", 587, false);
 
-                    client.Authenticate(GlobalData.GmailAccountName, GlobalData.GmailAccountPass);
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                    client.Send(message);
-                    client.Disconnect(true);
-                }
+                await client.AuthenticateAsync(GlobalData.GmailAccountName, GlobalData.GmailAccountPass);
+
+                await client.SendAsync(message);
+
+                await client.DisconnectAsync(true);
+
+                //client.Connect("smtp.gmail.com", 587, false);
+
+                //client.AuthenticationMechanisms.Remove("XOAUTH2");
+
+                //client.Authenticate(GlobalData.GmailAccountName, GlobalData.GmailAccountPass);
+
+                //client.Send(message);
+
+                //client.Disconnect(true);
+
 
             }
             catch (Exception ex)
@@ -196,12 +206,16 @@ namespace TodosCosmos
             return result;
         }
 
+
+
+     
+
+
         private static async Task<bool> CmdSaveEmailedCode(CosmosEmailedCode ParEmailedCode, List<string> CallTrace)
         {
             bool result = true;
             try
             {
-                await CosmosAPI.cosmosDBClientEmailedCode.DeleteExpiredEmaiedCodes(LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 await CosmosAPI.cosmosDBClientEmailedCode.DeleteEmailedCodes(ParEmailedCode.Email, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
@@ -282,5 +296,24 @@ namespace TodosCosmos
             a = a.Replace("funtimer.", null);
             return a;
         }
+
+
+
+        public static void ConsolePrint(string text, bool BeforeLine=false, bool AfterLine = false)
+        {
+            if (GlobalData.ProductionOrDevelopmentMode) return;
+
+
+            if (BeforeLine) Console.WriteLine();
+
+
+            Console.WriteLine(text);
+
+            if (AfterLine) Console.WriteLine();
+
+        }
+
+
+       
     }
 }

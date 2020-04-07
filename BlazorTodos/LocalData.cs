@@ -19,7 +19,7 @@ namespace BlazorTodos
 {
     public class LocalData
     {
-        public static bool WebOrLocalMode = true;
+        public static bool WebOrLocalMode = false; // determines where is azure functions backend
         public static bool ProductionOrDevelopmentMode = false;
 
         public static Uri WebApi_Uri

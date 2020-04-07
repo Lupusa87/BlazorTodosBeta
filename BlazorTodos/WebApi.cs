@@ -127,7 +127,7 @@ namespace BlazorTodos
 
             if (tsEmail.Result.Equals("OK"))
             {
-                LocalFunctions.AddMessage("Email was sent successfully, please check mail", true, false);
+                LocalFunctions.AddMessage("Email was sent successfully, please check inbox, code is valid for 2 minutes", true, false);
                 return true;
             }
             else

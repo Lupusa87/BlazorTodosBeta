@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using static TodosCosmos.Enums;
 
 namespace TodosCosmos.DocumentClasses
@@ -25,6 +26,9 @@ namespace TodosCosmos.DocumentClasses
 
         public string MachineID { get; set; }
 
-        public DateTime AddDate { get; set; }
+
+        [JsonProperty(PropertyName = "ttl")]
+        public byte TTL { get; set; } = 200;   //120 knows user + 80 for processing
+
     }
 }

@@ -2,6 +2,7 @@
 using MailKit.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Documents;
 using MimeKit;
 //using SmartDictionaryWeb.Models;
 using System;
@@ -20,6 +21,7 @@ using TodosCosmos;
 using TodosCosmos.DocumentClasses;
 using TodosGlobal;
 using TodosShared;
+using static TodosCosmos.Enums;
 using static TodosGlobal.GlobalClasses;
 using static TodosShared.TSEnums;
 
@@ -110,6 +112,14 @@ namespace TodosFunctionsApi
             return result;
         }
 
+        public static async void SoftDeleteDoc(Document d, byte TTL=1)
+        {
+           
+            d.SetPropertyValue("iud", (byte)DocStateMarkEnum.Processing);  //this update will call feed again but it will be ignored because 9 is not checked nowhere
+
+            d.TimeToLive = TTL;
+            await CosmosAPI.container.UpsertItemAsync(d);
+        }
 
 
     }

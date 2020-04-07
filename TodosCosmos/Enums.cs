@@ -21,6 +21,24 @@ namespace TodosCosmos
             UILanguage = 10,
             UIWordNative = 11,
             UIWordForeign = 12,
+            FeedMessage = 13,
         }
+
+        public enum RequestedActionEnum
+        {
+            SendEmail = 0,
+            SendSMS = 1,
+            NotifyAdmin = 2,
+            UpdateStat = 3,
+        }
+
+        public enum DocStateMarkEnum
+        {
+            Insert = 0,
+            Update = 1,
+            Delete = 2,
+            Processing = 9,
+        }
+
     }
 }

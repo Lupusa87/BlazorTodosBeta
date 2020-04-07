@@ -114,7 +114,7 @@ namespace BlazorTodos.Pages
         protected void CmdViewWordsList(string LangName)
         {
             LocalFunctions.CmdNavigate(@"UIWordsListPage\" + LangName);
-            BTodosJsInterop.Log(LangName);
+            LocalFunctions.ConsolePrint(LangName);
         }
 
     }

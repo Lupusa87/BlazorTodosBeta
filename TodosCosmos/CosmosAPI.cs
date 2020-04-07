@@ -10,8 +10,8 @@ namespace TodosCosmos
     {
         public static bool DoActivityLog = true;
 
-        public static string databaseID = "MyDB";
-        public static string collectionID = "ContainerBlazorTodos";
+        public static string databaseID = string.Empty;
+        public static string collectionID = string.Empty;
         public static Container container;
 
         public static Guid DemoUserID;
@@ -30,5 +30,7 @@ namespace TodosCosmos
         public static readonly CosmosDBClient_UILanguage cosmosDBClientUILanguage = new CosmosDBClient_UILanguage();
         public static readonly CosmosDBClient_UIWordNative cosmosDBClientUIWordNative = new CosmosDBClient_UIWordNative();
         public static readonly CosmosDBClient_UIWordForeign cosmosDBClientUIWordForeign = new CosmosDBClient_UIWordForeign();
+
+        public static readonly CosmosDBClient_FeedMessage cosmosDBClientFeedMessage = new CosmosDBClient_FeedMessage();
     }
 }

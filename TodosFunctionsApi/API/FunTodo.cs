@@ -102,7 +102,6 @@ namespace TodosFunctionsApi.API
             if (b)
             {
 
-                await TodosCosmos.LocalFunctions.NotifyAdmin("New todo " + userName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
                 TSUser currUser = new TSUser()
