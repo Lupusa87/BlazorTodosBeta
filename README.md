@@ -1,4 +1,4 @@
 # Blazor Todos Beta
 
 
-## Blazor webassembly Todos demo app, backed azure functions + cosmosDB
+## Blazor webassembly Todos demo app, backed with azure functions + cosmosDB
