@@ -197,27 +197,21 @@ namespace BlazorTodos
         {
             LocalData.CurrJWT = string.Empty;
 
-            BlazorTimeAnalyzer.DevelopmentMode = !LocalData.ProductionOrDevelopmentMode;
-            BlazorTimeAnalyzer.Reset();
-            BlazorTimeAnalyzer.LogAllAddition = true;
-
-            BlazorTimeAnalyzer.Add("A1", MethodBase.GetCurrentMethod());
-
             timerHelper.Stop();
 
             if (await WebApi.CmdGetJWT(GlobalFunctions.ConvertToSecureString(ParUserName), GlobalFunctions.ConvertToSecureString(ParPassword), WebApiUserTypesEnum.Authorized))
             {
 
-                BlazorTimeAnalyzer.Add("A2", MethodBase.GetCurrentMethod());
+             
                 TSUser tmpTSUser = new TSUser
                 {
                     UserName = ParUserName,
                     Password = ParPassword,
                 };
 
-                BlazorTimeAnalyzer.Add("A2", MethodBase.GetCurrentMethod());
+            
                 LocalData.CurrTSUser = await WebApiFunctions.CmdTSUserAuthorize(tmpTSUser);
-                BlazorTimeAnalyzer.Add("A3", MethodBase.GetCurrentMethod());
+        
 
                 if (LocalData.CurrTSUser.UserName.ToLower().Equals("error!"))
                 {
@@ -233,12 +227,12 @@ namespace BlazorTodos
                         timerHelper.OnTick = TimerTick;
                         timerHelper.Start(1, 10000);
 
-                        BlazorTimeAnalyzer.Add("A4", MethodBase.GetCurrentMethod());
+                       
                         await WebApiFunctions.CmdGetFeedback();
 
-                        BlazorTimeAnalyzer.Add("A5", MethodBase.GetCurrentMethod());
+                        
                         await WebApiFunctions.CmdGetReaction();
-                        BlazorTimeAnalyzer.Add("A6", MethodBase.GetCurrentMethod());
+  
 
                         LocalData.LoginLogout = LocalData.CurrTSUser.UserName;
 
@@ -252,7 +246,7 @@ namespace BlazorTodos
                         LocalData.compHeader.Refresh();
 
                         LocalData.AppHasGlobalError = false;
-                        BlazorTimeAnalyzer.Add("A7", MethodBase.GetCurrentMethod());
+                  
                     }
                     else
                     {
@@ -269,8 +263,7 @@ namespace BlazorTodos
                 }
             }
 
-            BlazorTimeAnalyzer.LogAll();
-
+          
         }
 
 
@@ -636,9 +629,9 @@ namespace BlazorTodos
                     item.DueDate = new DateTime();
                 }
 
-                foreach (var item in LocalData.TsTodosList.Where(x => x.HasRemindDate == false))
+                foreach (var item in LocalData.TsTodosList.Where(x => !x.Reminders.Any()))
                 {
-                    item.RemindDate = new DateTime();
+                    item.Reminders = new List<DateTime>();
                 }
 
 

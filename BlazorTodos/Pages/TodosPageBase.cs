@@ -111,7 +111,6 @@ namespace BlazorTodos.Pages
 
                 TodosListCount = LocalData.uiTranslator.Translate("Todos list") + " (" + LocalData.TsTodosList.Count + ")";
 
-
                 StateHasChanged();
 
 
@@ -145,7 +144,6 @@ namespace BlazorTodos.Pages
             LocalData.CurrTodo = new TSTodo
             {
                 DueDate = LocalFunctions.ToLocalDate(DateTime.Now).AddDays(7),
-                RemindDate = LocalFunctions.ToLocalDate(DateTime.Now),
                 Priority = 1,
                 CategoryID = Guid.Empty
             };
@@ -165,7 +163,11 @@ namespace BlazorTodos.Pages
                 if (!CurrID.Equals(Guid.Empty))
                 {
                     LocalData.AddOrUpdateMode = false;
+                    LocalData.CurrTodo = new TSTodo();
                     LocalData.CurrTodo = LocalData.TsTodosList.Single(x => x.ID == CurrID);
+
+
+    
 
                     if (!LocalData.CurrTodo.HasDueDate)
                     {
@@ -173,14 +175,12 @@ namespace BlazorTodos.Pages
 
                     }
 
-                    if (!LocalData.CurrTodo.HasRemindDate)
-                    {
-                        LocalData.CurrTodo.RemindDate = LocalFunctions.ToLocalDate(DateTime.Now);
-                    }
 
                     LocalData.BeforeUpdateTodo = GlobalFunctions.CopyObject<TSTodo>(LocalData.CurrTodo);
                     LocalData.compAddOrUpdateTodo.Bootstrap();
                     LocalFunctions.DisplayModal(ModalForm.AddOrUpdateTodo);
+
+                   
                 }
                 else
                 {
@@ -220,6 +220,9 @@ namespace BlazorTodos.Pages
         public void CmdRowClick(MouseEventArgs e, Guid id)
         {
             CurrID = id;
+
+
+           
 
             if (e.Detail > 1)
             {

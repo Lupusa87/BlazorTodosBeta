@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using TodosShared;
 using static TodosCosmos.Enums;
 
@@ -28,12 +29,18 @@ namespace TodosCosmos.DocumentClasses
             GeneratePK();
         }
 
+
+        [JsonProperty(PropertyName = "n")]
         public string Name { get; set; }
 
+
+        [JsonProperty(PropertyName = "c")]
         public string Code { get; set; }
 
+        [JsonProperty(PropertyName = "fl")]
         public string FlagLink { get; set; }
 
+        [JsonProperty(PropertyName = "v")]
         public DateTime Version { get; set; }
 
         public TSUILanguage toTSUILanguage()

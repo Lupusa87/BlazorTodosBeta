@@ -22,6 +22,7 @@ namespace TodosCosmos
             UIWordNative = 11,
             UIWordForeign = 12,
             FeedMessage = 13,
+            Reminder = 14,
         }
 
         public enum RequestedActionEnum

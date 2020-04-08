@@ -25,9 +25,9 @@ namespace TodosFunctionsApi.FeedProcessor
             CreateLeaseCollectionIfNotExists = true)]IReadOnlyList<Document> input, ILogger log)
         {
 
-            TodosCosmos.LocalFunctions.ConsolePrint("============== feed =================",true);
+            //TodosCosmos.LocalFunctions.ConsolePrint("============== feed =================",true);
 
-            ILookup<DocTypeEnum, Document> dict = input.ToLookup(x => (DocTypeEnum)x.GetPropertyValue<byte>("doctype"), x => x);
+            ILookup<DocTypeEnum, Document> dict = input.ToLookup(x => (DocTypeEnum)x.GetPropertyValue<byte>("dt"), x => x);
 
 
             //process errors

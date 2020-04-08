@@ -8,7 +8,7 @@ namespace TodosCosmos
 {
     public static class CosmosAPI
     {
-        public static bool DoActivityLog = true;
+        public static bool DoActivityLog = false; // this value will be set when creating db, so default is false
 
         public static string databaseID = string.Empty;
         public static string collectionID = string.Empty;
@@ -32,5 +32,7 @@ namespace TodosCosmos
         public static readonly CosmosDBClient_UIWordForeign cosmosDBClientUIWordForeign = new CosmosDBClient_UIWordForeign();
 
         public static readonly CosmosDBClient_FeedMessage cosmosDBClientFeedMessage = new CosmosDBClient_FeedMessage();
+
+        public static readonly CosmosDBClient_Reminder cosmosDBClientReminder = new CosmosDBClient_Reminder();
     }
 }

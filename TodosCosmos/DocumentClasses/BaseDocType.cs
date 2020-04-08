@@ -9,10 +9,11 @@ namespace TodosCosmos.DocumentClasses
 {
     public class BaseDocType
     {
+      
         [JsonProperty(PropertyName = "id")]
         public Guid ID { get; set; } = Guid.Empty;
 
-        [JsonProperty(PropertyName = "doctype")]
+        [JsonProperty(PropertyName = "dt")]
         public sbyte DocType { get; set; } = -1;
 
         [JsonProperty(PropertyName = "pk")]
@@ -21,6 +22,10 @@ namespace TodosCosmos.DocumentClasses
         //for feed purposes 0 is intert, 1 is update 2 is delete
         [JsonProperty(PropertyName = "iud")]
         public byte IUD { get; set; } = 0;
+
+        [JsonProperty(PropertyName = "ttl")]
+        public short TTL { get; set; } = -1;   
+
 
         public bool GeneratePK()
         {

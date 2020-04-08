@@ -7,13 +7,13 @@
         display: grid;
         position: relative;
         width: 670px;
-        height: 320px;
+        height: 350px;
         grid-template-columns: 150px 500px;
-        grid-template-rows: 260px 60px;
+        grid-template-rows: 300px 60px;
         overflow: hidden;
         align-self: center;
-        margin: 20px;
-        margin-top: 30px;
+        margin: 10px;
+        margin-top: 20px;
     }
     .MyFlexCnt {
         display: flex;
@@ -37,92 +37,129 @@
         <div>
             <label style="margin:5px;line-height:30px;color:darkblue;font-size:1.1rem">@LocalData.uiTranslator.Translate("Priority")</label>
         </div>
-        <div>
-            <label style="margin:5px;line-height:30px;color:darkblue;font-size:1.1rem">@LocalData.uiTranslator.Translate("Due Date")</label>
-        </div>
-        <div>
-            <label style="margin:5px;line-height:30px;color:darkblue;font-size:1.1rem">@LocalData.uiTranslator.Translate("Remind Date")</label>
-        </div>
-    </div>
-        <div class="MyFlexCnt" style="vertical-align:top;grid-column:2/2;grid-row:1/1;">
-
-            @if (LocalData.IsAuthenticated)
+        @if (@LocalData.CurrTodo.IsDone == false)
+        {
+            <div>
+                <label style="margin:5px;margin-top:10px;line-height:30px;color:darkblue;font-size:1.1rem">@LocalData.uiTranslator.Translate("Due Date")</label>
+            </div>
+        }
+            @if (@LocalData.CurrTodo.IsDone == false)
             {
-            <div>
-                <input style="margin:5px;line-height:30px;width:450px" type="text" @bind="@LocalData.CurrTodo.Name" minlength="3" maxlength="1000" required />
-            </div>
-            <div>
-                <input style="margin:5px;line-height:30px;width:450px" type="text" @bind="@LocalData.CurrTodo.Description" maxlength="1000" />
-            </div>
-            <div style="display:flex">
-                <select style="margin:5px;height:30px;width:450px" @onchange="@ComboCategorySelectionChanged">
-                    @if (LocalData.TSCategoriesList.Any())
-                    {
-                        @for (int i = 0; i < LocalData.TSCategoriesList.Count; i++)
-                        {
-                            @if (@LocalData.CurrTodo.CategoryID == @LocalData.TSCategoriesList[i].ID)
-                            {
+                @if (@LocalData.CurrTodo.HasDueDate)
+                {
+                    <div>
+                        <label style="margin:5px;margin-top:12px;line-height:30px;color:darkblue;font-size:1.1rem">@LocalData.uiTranslator.Translate("Remind Dates")</label>
+                    </div>
+                }
+            }
+        </div>
+    <div class="MyFlexCnt" style="vertical-align:top;grid-column:2/2;grid-row:1/1;">
 
-                                <option value="@i" selected>@LocalData.TSCategoriesList[i].Name</option>
-                            }
-                            else
-                            {
-                                <option value="@i">@LocalData.TSCategoriesList[i].Name</option>
-                            }
-                        }
-                    }
-                </select>
-                <button style="height:30px;margin:5px" class="btn btn-primary btn-sm" @onclick="@CmdAddCategory">@LocalData.uiTranslator.Translate("Add")</button>
-            </div>
-            <div style="display:flex">
-                <select style="margin:5px;height:30px;width:100px" @onchange="@ComboPrioritySelectionChanged">
-                    @for (int i = 1; i <= 10; i++)
+        @if (LocalData.IsAuthenticated)
+        {
+        <div>
+            <input style="margin:5px;line-height:30px;width:450px" type="text" @bind="@LocalData.CurrTodo.Name" minlength="3" maxlength="1000" required />
+        </div>
+        <div>
+            <input style="margin:5px;line-height:30px;width:450px" type="text" @bind="@LocalData.CurrTodo.Description" maxlength="1000" />
+        </div>
+        <div style="display:flex">
+            <select style="margin:5px;height:30px;width:450px" @onchange="@ComboCategorySelectionChanged">
+                @if (LocalData.TSCategoriesList.Any())
+                {
+                @for (int i = 0; i < LocalData.TSCategoriesList.Count; i++)
+                {
+                @if (@LocalData.CurrTodo.CategoryID == @LocalData.TSCategoriesList[i].ID)
+                {
+
+                <option value="@i" selected>@LocalData.TSCategoriesList[i].Name</option>
+                }
+                else
+                {
+                <option value="@i">@LocalData.TSCategoriesList[i].Name</option>
+                }
+                }
+                }
+            </select>
+            <button style="height:30px;margin:5px" class="btn btn-primary btn-sm" @onclick="@CmdAddCategory">@LocalData.uiTranslator.Translate("Add")</button>
+        </div>
+        <div style="display:flex">
+            <select style="margin:5px;height:30px;width:100px" @onchange="@ComboPrioritySelectionChanged">
+                @for (int i = 1; i <= 10; i++)
+                {
+                @if (@LocalData.CurrTodo.Priority == i)
+                {
+                <option value="@i" selected>@i</option>
+                }
+                else
+                {
+                <option value="@i">@i</option>
+                }
+
+                }
+            </select>
+            <input style="margin:5px;height:30px" type="checkbox" name="A" @bind="@LocalData.CurrTodo.IsDone" />
+            <label style="margin:5px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Is Done")</label>
+        </div>
+        @if (@LocalData.CurrTodo.IsDone==false)
+        {
+        <div style="display:flex">
+            <input style="margin:5px;line-height:30px" type="datetime-local" min="@DateTime.Now" disabled="@(!LocalData.CurrTodo.HasDueDate)" @bind="@LocalData.CurrTodo.DueDate" @oninput="@CmdDueDateOnChange" />
+            <input style="margin:5px;height:30px" type="checkbox" name="B" @bind="@LocalData.CurrTodo.HasDueDate" />
+        </div>
+        @if (@LocalData.CurrTodo.HasDueDate)
+        {
+        <div style="display:flex">
+            <select style="margin:5px;height:30px;width:300px" @onchange="@ComboReminderSelectionChanged">
+                @if (@LocalData.CurrTodo.Reminders.Any())
+                {
+                    @for (int i = 0; i < LocalData.CurrTodo.Reminders.Count; i++)
                     {
-                        @if (@LocalData.CurrTodo.Priority == i)
+                        @if (@i == @CurrComboReminderIndex)
                         {
-                         <option value="@i" selected>@i</option>
+                            <option value="@i" selected>@GetReminderDateString(LocalData.CurrTodo.Reminders[i])</option>
                         }
                         else
+
                         {
-                            <option value="@i">@i</option>
+                            <option value="@i">@GetReminderDateString(LocalData.CurrTodo.Reminders[i])</option>
                         }
-
                     }
-                </select>
-                <input style="margin:5px;height:30px" type="checkbox" name="A" @bind="@LocalData.CurrTodo.IsDone" />
-                <label style="margin:5px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Is Done")</label>
-            </div>
-            <div style="display:flex">
-                <input style="margin:5px;line-height:30px" type="datetime" disabled="@(!LocalData.CurrTodo.HasDueDate)" @bind="@LocalData.CurrTodo.DueDate" @oninput="@CmdDueDateOnChange" />
-                <input style="margin:5px;height:30px" type="checkbox" name="B" @bind="@LocalData.CurrTodo.HasDueDate" />
-            </div>
-            <div style="display:flex">
-                <input style="margin:5px;line-height:30px" type="datetime" disabled @bind="@LocalData.CurrTodo.RemindDate" />
-                <input style="margin:5px;height:30px" type="checkbox" disabled="@(!LocalData.CurrTodo.HasDueDate)" name="B" @bind="@LocalData.CurrTodo.HasRemindDate" />
-                <select style="width:100px;height:30px;margin:5px" disabled="@(!LocalData.CurrTodo.HasRemindDate)" @onchange="@ComboOptionsSelectionChanged">
-                    @if (OptionsList.Any())
-            {
-                        <option value="0" selected>@OptionsList.First()</option>
-                        @for (int i = 1; i < OptionsList.Count; i++)
-            {
-                            <option value="@i">@OptionsList[i]</option>
-            }
-            }
-                </select>
-                <select style="width:50px;height:30px;margin:5px" disabled="@(!LocalData.CurrTodo.HasRemindDate)" @onchange="@ComboNumbersSelectionChanged">
-                    @if (NumbersList.Any())
-            {
-                        <option value="0" selected>@NumbersList.First()</option>
-                        @for (int i = 1; i < NumbersList.Count; i++)
-            {
-                            <option value="@i">@NumbersList[i]</option>
-            }
-            }
-                </select>
-            </div>
+                }
+            </select>
 
-            }
+
+            <button style="width:150px;height:30px;margin:5px" disabled="@(!@LocalData.CurrTodo.Reminders.Any())" class="btn btn-primary btn-sm" @onclick="@CmdRemoveReminder">@LocalData.uiTranslator.Translate("Remove")</button>
         </div>
+        <div style="display:flex">
+            <input style="margin:5px;line-height:30px" type="datetime-local" disabled @bind="@CurrRemindInputDate" />
+            <select style="width:100px;height:30px;margin:5px" @onchange="@ComboOptionsSelectionChanged">
+                @if (OptionsList.Any())
+                    {
+                <option value="0" selected>@OptionsList.First()</option>
+                @for (int i = 1; i < OptionsList.Count; i++)
+                        {
+                <option value="@i">@OptionsList[i]</option>
+                }
+                }
+            </select>
+            <select style="width:50px;height:30px;margin:5px" @onchange="@ComboNumbersSelectionChanged">
+                @if (NumbersList.Any())
+                    {
+                <option value="0" selected>@NumbersList.First()</option>
+                @for (int i = 1; i < NumbersList.Count; i++)
+                        {
+                <option value="@i">@NumbersList[i]</option>
+                }
+                }
+            </select>
+
+            <button style="height:30px;margin:5px" class="btn btn-primary btn-sm" @onclick="@CmdAddReminder">@LocalData.uiTranslator.Translate("Add")</button>
+        </div>
+        }
+        }
+        }
+    </div>
 
 
 

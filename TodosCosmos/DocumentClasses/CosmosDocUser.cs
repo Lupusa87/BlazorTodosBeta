@@ -35,25 +35,32 @@ namespace TodosCosmos.DocumentClasses
         }
 
 
-
+        [JsonProperty(PropertyName = "un")]
         public string UserName { get; set; }
 
-
+        [JsonProperty(PropertyName = "e")]
         public string Email { get; set; }
 
+
+        [JsonProperty(PropertyName = "fn")]
         public string FullName { get; set; }
 
+        [JsonProperty(PropertyName = "hp")]
         public byte[] HashedPassword { get; set; }
 
+        [JsonProperty(PropertyName = "s")]
         public string Salt { get; set; }
 
+        [JsonProperty(PropertyName = "il")]
         public bool IsLive { get; set; }
 
+        [JsonProperty(PropertyName = "tc")]
         public int TodosCount { get; set; }
 
+        [JsonProperty(PropertyName = "cd")]
         public DateTime CreateDate { get; set; }
 
-
+        [JsonProperty(PropertyName = "lid")]
         public Guid LangID { get; set; }
 
 

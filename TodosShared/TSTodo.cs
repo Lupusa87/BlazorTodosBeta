@@ -38,11 +38,6 @@ namespace TodosShared
 
         public Guid CategoryID { get; set; }
 
-
-        public bool HasRemindDate { get; set; }
-
-        public bool IsReminderEmailed { get; set; }
-
-        public DateTime RemindDate { get; set; }
+        public List<DateTime> Reminders { get; set; } = new List<DateTime>();
     }
 }

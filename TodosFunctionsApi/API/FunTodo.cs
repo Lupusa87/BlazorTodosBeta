@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -72,7 +73,7 @@ namespace TodosFunctionsApi.API
 
 
 
-                return await CosmosAPI.cosmosDBClientTodo.GetTodo(tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            return await CosmosAPI.cosmosDBClientTodo.GetTodo(tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             
         }
 
@@ -101,8 +102,6 @@ namespace TodosFunctionsApi.API
 
             if (b)
             {
-
-
 
                 TSUser currUser = new TSUser()
                 {
@@ -137,6 +136,7 @@ namespace TodosFunctionsApi.API
 
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "put todo", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
+
           
 
             bool b = await CosmosAPI.cosmosDBClientTodo.UpdateTodo(tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -169,11 +169,13 @@ namespace TodosFunctionsApi.API
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(userID, "delete todo", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
          
+           
 
             bool b = await CosmosAPI.cosmosDBClientTodo.DeleteTodo(tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (b)
             {
+
                 TSUser currUser = new TSUser()
                 {
                     ID = userID,

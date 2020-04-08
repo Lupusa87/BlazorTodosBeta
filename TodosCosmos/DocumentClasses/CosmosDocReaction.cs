@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using TodosShared;
 using static TodosCosmos.Enums;
 
@@ -26,11 +27,11 @@ namespace TodosCosmos.DocumentClasses
 
 
 
-       
 
+        [JsonProperty(PropertyName = "uid")]
         public Guid UserID { get; set; }
 
-       
+        [JsonProperty(PropertyName = "lod")]
         public bool LikeOrDislike { get; set; }
 
         public TSReaction toTSReaction()

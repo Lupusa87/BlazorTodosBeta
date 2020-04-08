@@ -99,7 +99,6 @@ namespace TodosFunctionsApi
 
         public bool ReadDBSettings(List<string> CallTrace)
         {
-            CosmosAPI.DoActivityLog = true;
 
             CosmosDocSetting setting = CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "DoActivityLog", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
@@ -107,7 +106,7 @@ namespace TodosFunctionsApi
             {
                 if (string.IsNullOrEmpty(setting.Value))
                 {
-                    CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "DoActivityLog", "true", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                    CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "DoActivityLog", CosmosAPI.DoActivityLog.ToString().ToLower(), TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     if (!CosmosAPI.DoActivityLog)
                     {

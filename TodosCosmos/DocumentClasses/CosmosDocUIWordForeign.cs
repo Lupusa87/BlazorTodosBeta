@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using TodosShared;
 using static TodosCosmos.Enums;
 
@@ -27,12 +28,16 @@ namespace TodosCosmos.DocumentClasses
             GeneratePK();
         }
 
+        [JsonProperty(PropertyName = "w")]
         public string Word { get; set; }
 
+        [JsonProperty(PropertyName = "uiwnid")]
         public Guid UIWordNativeID { get; set; }
 
+        [JsonProperty(PropertyName = "uilid")]
         public Guid UILanguageID { get; set; }
 
+        [JsonProperty(PropertyName = "h")]
         public bool Human { get; set; }
 
 

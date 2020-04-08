@@ -1,6 +1,8 @@
 ﻿using System;
 using TodosShared;
 using static TodosCosmos.Enums;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace TodosCosmos.DocumentClasses
 {
@@ -25,42 +27,47 @@ namespace TodosCosmos.DocumentClasses
             Priority = tsTodo.Priority;
             IsDone = tsTodo.IsDone;
             CategoryID = tsTodo.CategoryID;
-            HasRemindDate = tsTodo.HasRemindDate;
-            RemindDate = tsTodo.RemindDate;
-            IsReminderEmailed = tsTodo.IsReminderEmailed;
-
-
+            Reminders = tsTodo.Reminders;
             DocType = (int)DocTypeEnum.Todo;
             GeneratePK();
         }
 
-       
 
 
+        [JsonProperty(PropertyName = "uid")]
         public Guid UserID { get; set; }
 
-
+        [JsonProperty(PropertyName = "n")]
         public string Name { get; set; }
 
+        [JsonProperty(PropertyName = "d")]
         public string Description { get; set; }
 
+
+        [JsonProperty(PropertyName = "p")]
         public int Priority { get; set; }
 
+        [JsonProperty(PropertyName = "isd")]
         public bool IsDone { get; set; }
 
+
+        [JsonProperty(PropertyName = "hdd")]
         public bool HasDueDate { get; set; }
 
+        [JsonProperty(PropertyName = "dd")]
         public DateTime DueDate { get; set; }
 
+        [JsonProperty(PropertyName = "cd")]
         public DateTime CreateDate { get; set; }
 
+
+        [JsonProperty(PropertyName = "cid")]
         public Guid CategoryID { get; set; }
 
-        public bool HasRemindDate { get; set; }
+        [JsonIgnore]
+        [JsonProperty(PropertyName = "rs")]
+        public List<DateTime> Reminders { get; set; } = new List<DateTime>();
 
-        public bool IsReminderEmailed { get; set; }
-
-        public DateTime RemindDate { get; set; }
 
         public TSTodo toTSTodo()
         {
@@ -78,9 +85,7 @@ namespace TodosCosmos.DocumentClasses
                 Priority = Priority,
                 CreateDate = CreateDate,
                 CategoryID = CategoryID,
-                HasRemindDate = HasRemindDate,
-                RemindDate = RemindDate,
-                IsReminderEmailed = IsReminderEmailed,
+                Reminders = Reminders,
             };
         }
     }

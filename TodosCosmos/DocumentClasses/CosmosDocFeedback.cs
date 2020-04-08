@@ -1,6 +1,7 @@
 ﻿using System;
 using TodosShared;
 using static TodosCosmos.Enums;
+using Newtonsoft.Json;
 
 namespace TodosCosmos.DocumentClasses
 {
@@ -25,14 +26,15 @@ namespace TodosCosmos.DocumentClasses
             GeneratePK();
         }
 
-      
 
 
+        [JsonProperty(PropertyName = "uid")]
         public Guid UserID { get; set; }
 
-      
+        [JsonProperty(PropertyName = "t")]
         public string Text { get; set; }
 
+        [JsonProperty(PropertyName = "ad")]
         public DateTime AddDate { get; set; }
 
         public TSFeedback toTSFeedback()

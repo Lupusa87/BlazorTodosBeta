@@ -25,7 +25,7 @@ namespace BlazorTodos.Modals
         protected List<int> NumbersList { get; set; } = new List<int>();
 
 
-        protected byte OptionsSelectedIndex { get; set; } = 0;
+        protected sbyte OptionsSelectedIndex { get; set; } = 0;
 
         protected int MinutesEnd { get; set; } = 60;
 
@@ -33,6 +33,11 @@ namespace BlazorTodos.Modals
 
         protected int DaysEnd { get; set; } = 30;
 
+
+
+        protected int CurrComboReminderIndex = 0;
+
+        protected DateTime CurrRemindInputDate = LocalFunctions.ToLocalDate(DateTime.Now).AddDays(7).AddMinutes(-5);
 
         protected override void OnInitialized()
         {
@@ -42,6 +47,16 @@ namespace BlazorTodos.Modals
             base.OnInitialized();
         }
 
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                AdjustOptions();
+            }
+
+            base.OnAfterRender(firstRender);
+        }
 
         public void Bootstrap()
         {
@@ -54,9 +69,6 @@ namespace BlazorTodos.Modals
             {
                 ButtonName = "Update todo";
             }
-
-            AdjustReminder(LocalData.CurrTodo.DueDate);
-
         }
 
 
@@ -66,12 +78,23 @@ namespace BlazorTodos.Modals
             IsButtonDisabled = true;
             StateHasChanged();
 
+
+            if (LocalData.CurrTodo.IsDone)
+            {
+                LocalData.CurrTodo.HasDueDate = false;
+                LocalData.CurrTodo.Reminders = new List<DateTime>();
+            }
+
             if (LocalData.CurrTodo.HasDueDate)
             {
                 if (LocalData.CurrTodo.DueDate <= LocalFunctions.ToLocalDate(DateTime.Now).AddMinutes(3))
                 {
                   LocalFunctions.AddError("Due date should be minimum after 3 minute from now", MethodBase.GetCurrentMethod(), false, false);
                 }
+            }
+            else
+            {
+                LocalData.CurrTodo.Reminders = new List<DateTime>();
             }
 
 
@@ -96,22 +119,32 @@ namespace BlazorTodos.Modals
                 else
                 {
 
-                   
-
+                
                     if (!GlobalFunctions.AreEqualTwoObjects(LocalData.CurrTodo, LocalData.BeforeUpdateTodo))
                     {
-                        a = await WebApiFunctions.CmdUpdateTodo(LocalData.CurrTodo);
-
+                            a = await WebApiFunctions.CmdUpdateTodo(LocalData.CurrTodo);
                     }
                     else
                     {
-                        LocalFunctions.AddMessage("Todo properties not updated", true, false);
-                        return;
+                        if (!GlobalFunctions.AreEqualTwoLists(LocalData.CurrTodo.Reminders, LocalData.BeforeUpdateTodo.Reminders))
+                        {
+                            a = await WebApiFunctions.CmdUpdateTodo(LocalData.CurrTodo);
+                        }
+                        else
+                        { 
+                            LocalFunctions.AddMessage("Todo properties not updated", true, false);
+                            IsButtonDisabled = false;
+                            StateHasChanged();
+                            return;
+                        }
                     }
                 }
 
                 if (a.Equals("OK"))
                 {
+
+                    LocalData.CurrTodo = new TSTodo();
+
                     LocalData.TsTodosList = new List<TSTodoEx>();
 
                     LocalData.btModal.Close();
@@ -152,16 +185,74 @@ namespace BlazorTodos.Modals
 
         }
 
-
-        public void Refresh()
+        public void ComboReminderSelectionChanged(ChangeEventArgs e)
         {
-            StateHasChanged();
+            if (int.TryParse(e.Value.ToString(), out int val))
+            {
+                CurrComboReminderIndex = val;
+            }
+
         }
 
-        protected void AdjustReminder(DateTime dueDate)
+        public void CmdRemoveReminder()
+        {
+            if (LocalData.CurrTodo.Reminders.Count() > CurrComboReminderIndex)
+            {
+                LocalData.CurrTodo.Reminders.RemoveAt(CurrComboReminderIndex);
+                CurrComboReminderIndex = 0;
+            }
+        }
+
+
+        public void CmdAddReminder()
+        {
+            if (LocalData.CurrTodo.Reminders.Count == 12)
+            {
+                LocalFunctions.AddError("You can set maximum 12 reminders!", MethodBase.GetCurrentMethod(), true, false);
+            }
+
+
+            if (LocalData.CurrTodo.Reminders.Any(x => x.Equals(CurrRemindInputDate)))
+            {
+                LocalFunctions.AddError("There is already reminder for same datetime!", MethodBase.GetCurrentMethod(), true, false);
+            }
+
+
+            if (CurrRemindInputDate < LocalFunctions.ToLocalDate(DateTime.Now).AddMinutes(3))
+            {
+                LocalFunctions.AddError("Remainder date should be future date minimum 3 minutes from now!", MethodBase.GetCurrentMethod(), true, false);
+            }
+
+
+            if (CurrRemindInputDate > LocalData.CurrTodo.DueDate.AddMinutes(-3))
+            {
+                LocalFunctions.AddError("Remainder date should be before Due datetime minimum 3 minute!", MethodBase.GetCurrentMethod(), true, false);
+            }
+
+            if (LocalFunctions.HasError())
+            {
+                LocalFunctions.DisplayErrors();
+            }
+            else
+            {
+
+                LocalData.CurrTodo.Reminders.Add(CurrRemindInputDate);
+
+                LocalData.CurrTodo.Reminders = LocalData.CurrTodo.Reminders.OrderBy(x => x).ToList();
+
+                CurrComboReminderIndex = LocalData.CurrTodo.Reminders.IndexOf(CurrRemindInputDate);
+
+                StateHasChanged();
+            }
+
+        }
+
+
+
+        protected void AdjustOptions()
         {
  
-            TimeSpan ts = dueDate - LocalFunctions.ToLocalDate(DateTime.Now);
+            TimeSpan ts = LocalData.CurrTodo.DueDate - LocalFunctions.ToLocalDate(DateTime.Now);
             MinutesEnd = 60;
             HoursEnd = 12;
             DaysEnd = 30;
@@ -205,25 +296,40 @@ namespace BlazorTodos.Modals
             }
 
 
-
+            if (OptionsList.Any())
+            {
+                AdjustNumbers(0);
+            }
         }
+       
 
-
+        public string GetReminderDateString(DateTime dt)
+        {
+            TimeSpan ts = LocalData.CurrTodo.DueDate - dt;
+            return dt.ToString("MM/dd/yyyy HH:mm:ss") + " before " + ts.ToString(@"dd\.hh\:mm\:ss");
+        }
 
         public void ComboOptionsSelectionChanged(ChangeEventArgs e)
         {
             NumbersList = new List<int>();
 
-            if (byte.TryParse(e.Value.ToString(), out byte index))
+            if (sbyte.TryParse(e.Value.ToString(), out sbyte index))
+            {
+                AdjustNumbers(index);
+            }
+
+        }
+
+        public void AdjustNumbers(sbyte index)
+        {
+            NumbersList = new List<int>();
+
+            if (index>-1)
             {
                 OptionsSelectedIndex = index;
                 switch (OptionsSelectedIndex)
                 {
                     case 0: //minute
-                        AddNumber(1, MinutesEnd);
-                        AddNumber(2, MinutesEnd);
-                        AddNumber(3, MinutesEnd);
-                        AddNumber(4, MinutesEnd);
                         for (int i = 5; i <= MinutesEnd; i += 5)
                         {
                             NumbersList.Add(i);
@@ -248,12 +354,16 @@ namespace BlazorTodos.Modals
                     default:
                         break;
                 }
+
+
+                if (NumbersList.Any())
+                {
+                    ApplyToReminderDate(0);
+                    StateHasChanged();
+                }
+
             }
-
-            LocalData.CurrTodo.RemindDate = LocalFunctions.ToLocalDate(DateTime.Now);
-
-
-            StateHasChanged();
+            
         }
 
         private void AddNumber(int val, int limiter)
@@ -267,36 +377,44 @@ namespace BlazorTodos.Modals
         public void ComboNumbersSelectionChanged(ChangeEventArgs e)
         {
             
-            if (byte.TryParse(e.Value.ToString(), out byte val))
+            if (sbyte.TryParse(e.Value.ToString(), out sbyte val))
+            {
+                ApplyToReminderDate(val);
+            }
+
+        }
+
+
+        public void ApplyToReminderDate(sbyte index)
+        {
+
+            if (index>-1)
             {
                 switch (OptionsSelectedIndex)
                 {
                     case 0: //minute
-                        LocalData.CurrTodo.RemindDate = LocalData.CurrTodo.DueDate.AddMinutes(-NumbersList[val]);
+                        CurrRemindInputDate = LocalData.CurrTodo.DueDate.AddMinutes(-NumbersList[index]);
                         break;
                     case 1: //hour
-                        LocalData.CurrTodo.RemindDate = LocalData.CurrTodo.DueDate.AddHours(-NumbersList[val]);
+                        CurrRemindInputDate = LocalData.CurrTodo.DueDate.AddHours(-NumbersList[index]);
                         break;
                     case 2: //day
-                        LocalData.CurrTodo.RemindDate = LocalData.CurrTodo.DueDate.AddDays(-NumbersList[val]);
+                        CurrRemindInputDate = LocalData.CurrTodo.DueDate.AddDays(-NumbersList[index]);
                         break;
                     default:
                         break;
                 }
             }
 
-
-            StateHasChanged();
         }
 
-      
 
         public void CmdDueDateOnChange(ChangeEventArgs e)
         {
             DateTime d;
             if (DateTime.TryParse(e.Value.ToString(), out d))
             {
-                AdjustReminder(d);
+                AdjustOptions();
             }
 
         }

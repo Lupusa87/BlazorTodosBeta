@@ -72,7 +72,7 @@ namespace BlazorTodos
 
             object propobj1;
             object propobj2;
-            foreach (PropertyInfo item in typeof(T).GetProperties())
+            foreach (PropertyInfo item in typeof(T).GetProperties().Where(x=>x.Name!= "Reminders"))
             {
                 
                 propobj1 = item.GetValue(Obj1);
@@ -91,20 +91,34 @@ namespace BlazorTodos
                 }
                 else
                 {
-
-                    if (!propobj1.Equals(propobj2))
-                    {
-                        return false;
-                    }
+                        if (!propobj1.Equals(propobj2))
+                        {
+                            return false;
+                        }
+             
                 }
             }
 
             return true;
         }
 
+        public static bool AreEqualTwoLists(List<DateTime> l1, List<DateTime> l2)
+        {
+
+            if (l1.Count!=l2.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < l1.Count; i++)
+            {
+                if (l1[i] != l2[i]) return false;
+            }
+
+            return true;
+        }
 
 
-       
 
         public static string ConvertToPlainString(SecureString secureStr)
         {

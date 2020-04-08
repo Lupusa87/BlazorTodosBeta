@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using static TodosCosmos.Enums;
 
 namespace TodosCosmos.DocumentClasses
@@ -26,11 +27,13 @@ namespace TodosCosmos.DocumentClasses
 
         }
 
-
+        [JsonProperty(PropertyName = "ia")]
         public string IPAddress { get; set; }
 
+        [JsonProperty(PropertyName = "c")]
         public int Count { get; set; }
 
+        [JsonProperty(PropertyName = "lid")]
         public Guid LangID { get; set; }
 
 

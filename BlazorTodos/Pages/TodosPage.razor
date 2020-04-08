@@ -44,9 +44,6 @@
                     <th>@LocalData.uiTranslator.Translate("Description")</th>
                     <th>@LocalData.uiTranslator.Translate("Category")</th>
                     <th>@LocalData.uiTranslator.Translate("Done")</th>
-                    <th>@LocalData.uiTranslator.Translate("HasRemidner")</th>
-                    <th>@LocalData.uiTranslator.Translate("RemidnDate")</th>
-                    <th>@LocalData.uiTranslator.Translate("IsRemidned")</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,27 +71,6 @@
                             <td>@todo.Category</td>
                             <td>
                                 @if (@todo.IsDone)
-                                {
-                                    <input type="checkbox" checked />
-                                }
-                                else
-                                {
-                                    <input type="checkbox" />
-                                }
-                            </td>
-                            <td>
-                                @if (@todo.HasRemindDate)
-                                {
-                                    <input type="checkbox" checked />
-                                }
-                                else
-                                {
-                                    <input type="checkbox" />
-                                }
-                            </td>
-                            <td>@todo.RemindDate.ToString("MM/dd/yyyy HH:mm:ss.fff")</td>
-                            <td>
-                                @if (@todo.IsReminderEmailed)
                                 {
                                     <input type="checkbox" checked />
                                 }

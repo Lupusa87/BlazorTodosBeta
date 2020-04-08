@@ -39,9 +39,6 @@ namespace TodosFunctionsApi.Timers
         [FunctionName("FunTimer2")]
         public static async void Timer2([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log)
         {
-
-            //await CosmosAPI.cosmosDBClientError.DeleteAllErrorLogs(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
            
             bool b;
             CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "DoActivityLog", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -65,7 +62,7 @@ namespace TodosFunctionsApi.Timers
                 }
             }
 
-            await CosmosAPI.cosmosDBClientTodo.SendTodoReminders(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            await CosmosAPI.cosmosDBClientReminder.SendTodoReminders(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
         }
     }
 }

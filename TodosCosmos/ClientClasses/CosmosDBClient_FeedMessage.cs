@@ -12,16 +12,16 @@ namespace TodosCosmos.ClientClasses
 {
     public class CosmosDBClient_FeedMessage
     {
-        private readonly CosmosDBRepository<CosmosDocFeedMessage> cosmosDBRepoFeedMessage = new CosmosDBRepository<CosmosDocFeedMessage>();
+        private readonly CosmosDBRepository<CosmosDocFeedMessage> cosmosDBRepo = new CosmosDBRepository<CosmosDocFeedMessage>();
         private readonly CosmosDBClient_Base<CosmosDocFeedMessage> cosmosDBClientBase = new CosmosDBClient_Base<CosmosDocFeedMessage>();
-        private readonly string pkPrefix = ((int)DocTypeEnum.Error).ToString();
+        private readonly string pkPrefix = ((int)DocTypeEnum.FeedMessage).ToString();
 
         public async Task<bool> AddFeedMessage(RequestedActionEnum requestedAction, string bag, List<string> CallTrace)
         {
 
             CosmosDocFeedMessage newFeedMessage = new CosmosDocFeedMessage(requestedAction, bag);
 
-            await cosmosDBRepoFeedMessage.CreateItemAsync(newFeedMessage, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            await cosmosDBRepo.CreateItemAsync(newFeedMessage, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             return true;
         }
@@ -38,7 +38,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocFeedMessage> result = await cosmosDBRepoFeedMessage.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Error, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                IEnumerable<CosmosDocFeedMessage> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.FeedMessage, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 if (result.Any())
                 {

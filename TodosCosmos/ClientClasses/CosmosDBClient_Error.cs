@@ -14,7 +14,7 @@ namespace TodosCosmos.ClientClasses
     {
 
 
-        private readonly CosmosDBRepository<CosmosDocErrorLog> cosmosDBRepoErrorLog = new CosmosDBRepository<CosmosDocErrorLog>();
+        private readonly CosmosDBRepository<CosmosDocErrorLog> cosmosDBRepo = new CosmosDBRepository<CosmosDocErrorLog>();
         private readonly CosmosDBClient_Base<CosmosDocErrorLog> cosmosDBClientBase = new CosmosDBClient_Base<CosmosDocErrorLog>();
         private readonly string pkPrefix = ((int)DocTypeEnum.Error).ToString();
 
@@ -23,7 +23,7 @@ namespace TodosCosmos.ClientClasses
 
             CosmosDocErrorLog newErrorLog = new CosmosDocErrorLog(UserID, Description, LocalFunctions.GetCallTraceString(CallTrace));
 
-            await cosmosDBRepoErrorLog.CreateItemAsync(newErrorLog, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            await cosmosDBRepo.CreateItemAsync(newErrorLog, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             return true;
         }
@@ -40,7 +40,7 @@ namespace TodosCosmos.ClientClasses
      
             try
             {
-                IEnumerable<CosmosDocErrorLog> result = await cosmosDBRepoErrorLog.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Error, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                IEnumerable<CosmosDocErrorLog> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Error, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 if (result.Any())
                 {

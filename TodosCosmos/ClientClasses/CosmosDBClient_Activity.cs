@@ -11,7 +11,7 @@ namespace TodosCosmos.ClientClasses
 {
     public class CosmosDBClient_Activity
     {
-        private readonly CosmosDBRepository<CosmosDocActivityLog> cosmosDBRepoActivityLog = new CosmosDBRepository<CosmosDocActivityLog>();
+        private readonly CosmosDBRepository<CosmosDocActivityLog> cosmosDBRepo = new CosmosDBRepository<CosmosDocActivityLog>();
         private readonly CosmosDBClient_Base<CosmosDocActivityLog> cosmosDBClientBase = new CosmosDBClient_Base<CosmosDocActivityLog>();
         private readonly string pkPrefix = ((int)DocTypeEnum.Activity).ToString();
 
@@ -25,7 +25,7 @@ namespace TodosCosmos.ClientClasses
                 {
                     CosmosDocActivityLog newActivityLog = new CosmosDocActivityLog(UserID, Description, LocalFunctions.GetCallTraceString(CallTrace));
 
-                    await cosmosDBRepoActivityLog.CreateItemAsync(newActivityLog, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                    await cosmosDBRepo.CreateItemAsync(newActivityLog, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     return true;
 
@@ -50,7 +50,7 @@ namespace TodosCosmos.ClientClasses
             
             try
             {
-                return await cosmosDBRepoActivityLog.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Activity, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                return await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Activity, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             }
             catch (CosmosException ex)

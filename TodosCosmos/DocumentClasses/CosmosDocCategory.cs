@@ -1,6 +1,7 @@
 ﻿using System;
 using TodosShared;
 using static TodosCosmos.Enums;
+using Newtonsoft.Json;
 
 namespace TodosCosmos.DocumentClasses
 {
@@ -24,8 +25,10 @@ namespace TodosCosmos.DocumentClasses
             GeneratePK();
         }
 
+        [JsonProperty(PropertyName = "uid")]
         public Guid UserID { get; set; }
-        
+
+        [JsonProperty(PropertyName = "n")]
         public string Name { get; set; }
 
         public TSCategory toTSCategory()
