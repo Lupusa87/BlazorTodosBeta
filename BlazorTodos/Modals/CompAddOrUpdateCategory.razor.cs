@@ -10,7 +10,7 @@ using TodosShared;
 namespace BlazorTodos.Modals
 {
 
-    public class CompAddOrUpdateCategoryBase : ComponentBase
+    public partial class CompAddOrUpdateCategory
     {
 
         [Parameter] public string UniqueID { get; set; }

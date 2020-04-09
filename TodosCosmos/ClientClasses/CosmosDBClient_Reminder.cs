@@ -32,9 +32,7 @@ namespace TodosCosmos.ClientClasses
 
         public async Task<bool> DeleteReminder(CosmosDocReminder reminder, List<string> CallTrace)
         {
-            reminder.TTL = 1;
-            return await cosmosDBClientBase.UpdateItemAsync(reminder, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-
+            return await cosmosDBClientBase.DeleteItemAsync(reminder, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
         public async Task<bool> DeleteTodosAllReminders(Guid todoID, List<string> CallTrace)
@@ -42,7 +40,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocReminder> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Reminder && x.TodoID == todoID, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                IEnumerable<CosmosDocReminder> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Reminder && x.IUD < 2 && x.TodoID == todoID, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 if (result.Any())
                 {
@@ -76,7 +74,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                cosmosDocReminders = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Reminder && x.TTL==-1 && x.TodoID == todoID,
+                cosmosDocReminders = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Reminder && x.IUD < 2 && x.TodoID == todoID,
                     LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             }
@@ -98,8 +96,8 @@ namespace TodosCosmos.ClientClasses
             {
 
 
-                IEnumerable<CosmosDocReminder> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Reminder
-                && x.IUD!=(byte)DocStateMarkEnum.Delete && x.RemindDate < DateTime.Now,
+                IEnumerable<CosmosDocReminder> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Reminder && x.IUD < 2
+                && x.IUD!=(byte)DocStateMarkEnum.PreDelete && x.IUD != (byte)DocStateMarkEnum.PostDelete && x.RemindDate < DateTime.Now,
                 LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 

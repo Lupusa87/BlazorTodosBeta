@@ -68,7 +68,7 @@ namespace TodosCosmos.ClientClasses
 
         public async Task<bool> DeleteTodo(TSTodo tsTodo, List<string> CallTrace)
         {
-            await CosmosAPI.cosmosDBClientReminder.DeleteTodosAllReminders(tsTodo.ID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            await CosmosAPI.cosmosDBClientReminder.DeleteTodosAllReminders(tsTodo.ID, LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocTodo(tsTodo), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
@@ -97,7 +97,7 @@ namespace TodosCosmos.ClientClasses
             List<TSTodo> TsTodos = new List<TSTodo>();
             try
             {
-                IEnumerable<CosmosDocTodo> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Todo && x.UserID==UserID,
+                IEnumerable<CosmosDocTodo> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Todo && x.IUD < 2 && x.UserID==UserID,
                     LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
@@ -133,7 +133,7 @@ namespace TodosCosmos.ClientClasses
         public async Task<CosmosDocTodo> FindTodoByID(Guid id, List<string> CallTrace)
         {
             string pkvalue = PartitionKeyGenerator.Create(pkPrefix, id.ToString());
-            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.Todo &&
+            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.Todo && x.IUD < 2 &&
             x.ID == id && x.PK == pkvalue,
             LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 

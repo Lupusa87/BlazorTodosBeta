@@ -1,5 +1,4 @@
-@inherits MainLayoutBase
-
+@inherits LayoutComponentBase
 
 @using BlazorCSS
 @using BlazorContextMenu
@@ -28,12 +27,12 @@
         <CompModal btModal="@LocalData.btModalError"></CompModal>
         <CompModal btModal="@LocalData.btModalConfirm"></CompModal>
         <CompContextMenu @ref="@LocalData.compContextMenu" bcMenu="@LocalData.bcMenu"></CompContextMenu>
-        <CompHeader @ref="@LocalData.compHeader" ></CompHeader>
+        <CompHeader @ref="@LocalData.compHeader"></CompHeader>
     </div>
     <div style="background-color:#f2f2f2;padding:10px;vertical-align:top;grid-row:2/2;">
         @Body
     </div>
     <div style="vertical-align:top;grid-row:3/3;">
-        <CompFooter @ref="@LocalData.compFooter" ></CompFooter>
+        <CompFooter @ref="@LocalData.compFooter"></CompFooter>
     </div>
 </div>

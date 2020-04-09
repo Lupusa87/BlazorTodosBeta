@@ -13,7 +13,7 @@ using static BlazorTodos.Classes.Enums;
 
 namespace BlazorTodos.Pages
 {
-    public class TodosPageBase : ComponentBase
+    public partial class TodosPage
     {
 
        

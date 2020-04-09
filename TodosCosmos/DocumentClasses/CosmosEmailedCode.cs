@@ -15,21 +15,21 @@ namespace TodosCosmos.DocumentClasses
             GeneratePK();
         }
 
-        [JsonProperty(PropertyName = "e")]
+        [JsonProperty(PropertyName = "q")]
         public string Email { get; set; }
 
-        [JsonProperty(PropertyName = "c")]
+        [JsonProperty(PropertyName = "w")]
         public string Code { get; set; }
 
 
-        [JsonProperty(PropertyName = "ot")]
+        [JsonProperty(PropertyName = "e")]
         public int OperationType { get; set; }
 
 
-        [JsonProperty(PropertyName = "ia")]
+        [JsonProperty(PropertyName = "r")]
         public string IPAddress { get; set; }
 
-        [JsonProperty(PropertyName = "mid")]
+        [JsonProperty(PropertyName = "t")]
         public string MachineID { get; set; }
 
 

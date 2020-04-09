@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlazorTodos.Modals
 {
-    public class CompConfirmBase:ComponentBase
+    public partial class CompConfirm
     {
         public void CmdConfirm()
         {

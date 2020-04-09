@@ -9,7 +9,7 @@ using static TodosShared.TSEnums;
 
 namespace BlazorTodos.Modals
 {
-    public class CompRegistrationBase : ComponentBase
+    public partial class CompRegistration
     {
 
         public TSUser tsUser { get; set; } = new TSUser();

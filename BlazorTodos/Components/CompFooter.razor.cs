@@ -7,9 +7,8 @@ using TodosShared;
 
 namespace BlazorTodos.Components
 {
-    public class CompFooterBase : ComponentBase
+    public partial class CompFooter
     {
-
 
         public int ComboSelectedIndex
         {

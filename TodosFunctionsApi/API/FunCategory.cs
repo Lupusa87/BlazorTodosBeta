@@ -65,7 +65,7 @@ namespace TodosFunctionsApi.API
 
 
 
-                return await CosmosAPI.cosmosDBClientCategory.GetCategory(tsCategory, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            return await CosmosAPI.cosmosDBClientCategory.GetCategory(tsCategory, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
         }

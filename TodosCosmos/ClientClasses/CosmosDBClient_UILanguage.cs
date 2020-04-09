@@ -51,7 +51,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocUILanguage> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.UILanguage,
+                IEnumerable<CosmosDocUILanguage> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.UILanguage && x.IUD < 2,
                     LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
@@ -96,7 +96,7 @@ namespace TodosCosmos.ClientClasses
 
         public async Task<CosmosDocUILanguage> FindByName(string Name, List<string> CallTrace)
         {
-            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.UILanguage &&
+            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.UILanguage && x.IUD < 2 && 
             x.Name.ToLower() == Name.ToLower(),
             LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 

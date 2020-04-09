@@ -10,7 +10,7 @@ namespace BlazorTodos.Modals
 {
 
 
-    public class CompAddOrUpdateFeedbackBase : ComponentBase
+    public partial class CompAddOrUpdateFeedback
     {
 
         [Parameter] public string UniqueID { get; set; }

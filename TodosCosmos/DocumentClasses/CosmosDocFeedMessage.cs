@@ -18,10 +18,10 @@ namespace TodosCosmos.DocumentClasses
             GeneratePK();
         }
 
-        [JsonProperty(PropertyName = "b")]
+        [JsonProperty(PropertyName = "q")]
         public string Bag { get; set; }
 
-        [JsonProperty(PropertyName = "ra")]
+        [JsonProperty(PropertyName = "w")]
         public byte RequestedAction { get; set; }
     }
 }

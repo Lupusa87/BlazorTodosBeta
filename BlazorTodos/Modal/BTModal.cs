@@ -15,9 +15,14 @@ namespace BlazorTodos.Modal
         public Action OnClose;
         public Action OnRefresh;
 
-        public void Show(ModalForm _modalForm)
+        public bool CanCloseModal { get; set; } = true;
+
+
+
+        public void Show(ModalForm _modalForm, bool canCloseModal=true)
         {
             modalForm = _modalForm;
+            CanCloseModal = canCloseModal;
             OnShow?.Invoke();
         }
 

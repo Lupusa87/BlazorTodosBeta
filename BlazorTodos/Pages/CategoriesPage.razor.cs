@@ -12,7 +12,7 @@ using static BlazorTodos.Classes.Enums;
 
 namespace BlazorTodos.Pages
 {
-    public class CategoriesPageBase : ComponentBase
+    public partial class CategoriesPage
     {
        
 

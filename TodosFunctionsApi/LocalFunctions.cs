@@ -115,10 +115,58 @@ namespace TodosFunctionsApi
         public static async void SoftDeleteDoc(Document d, byte TTL=1)
         {
            
-            d.SetPropertyValue("iud", (byte)DocStateMarkEnum.Processing);  //this update will call feed again but it will be ignored because 9 is not checked nowhere
+            d.SetPropertyValue("iud", (byte)DocStateMarkEnum.PostDelete);  //this update will call feed again but it will be ignored because 9 is not checked nowhere
 
             d.TimeToLive = TTL;
             await CosmosAPI.container.UpsertItemAsync(d);
+        }
+
+
+
+        public static async Task<TSAppVersion> ParseAppVersion(string input, List<string> CallTrace)
+        {
+            TSAppVersion appVersion = new TSAppVersion
+            {
+                VersionDate = new DateTime(),
+                VersionNumber = "0.0.0"
+            };
+
+
+            try
+            {
+                if (string.IsNullOrEmpty(input))
+                {
+                    return appVersion;
+                }
+                else
+                {
+
+                    string[] a = input.Split(',');
+
+
+
+                    if (a.Length != 4)
+                    {
+                        return appVersion;
+                    }
+                    else
+                    {
+                        appVersion.VersionNumber = a[0];
+                        appVersion.VersionDate = new DateTime(int.Parse(a[1]), int.Parse(a[2]), int.Parse(a[3]));
+                    }
+                }
+
+
+            }
+            catch (CosmosException ex)
+            {
+
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message,TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            }
+
+
+
+            return appVersion;
         }
 
 

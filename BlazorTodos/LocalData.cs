@@ -21,6 +21,14 @@ namespace BlazorTodos
     {
         public static bool WebOrLocalMode = true; // determines where is azure functions backend
         public static bool ProductionOrDevelopmentMode = false;
+        public static TSAppVersion AppVersion = new TSAppVersion
+        {
+            VersionNumber = "1.0.1",
+            VersionDate = new DateTime(2020, 4, 8)
+        };
+
+
+
 
         public static Uri WebApi_Uri
         {
@@ -28,15 +36,11 @@ namespace BlazorTodos
             {
                 if (WebOrLocalMode)
                 {
-                    return new Uri("https://blazortodosfunctionsapi.azurewebsites.net/api/");
-                    //return new Uri("https://lupusablazortodosapi.azurewebsites.net/api/");
-            
+                    return new Uri("https://blazortodosfunctionsapi.azurewebsites.net/api/");            
                 }
                 else
                 {
                     return new Uri("http://localhost:7071/api/");
-                    //return new Uri("https://localhost:5001/api/");
-                    //return new Uri("https://localhost:44359/api/");
                 }
             }
         }
@@ -93,7 +97,7 @@ namespace BlazorTodos
 
 
 
-        public static MainLayoutBase mainLayout { get; set; } = new MainLayoutBase();
+        public static MainLayout mainLayout { get; set; } = new MainLayout();
         public static CompHeader compHeader { get; set; } = new CompHeader();
         public static CompFooter compFooter { get; set; } = new CompFooter();
         public static TSStat tsStat { get; set; } = new TSStat() { IPsCount = 0, LiveUsersCount = 0, TodosCount = 0, UsersCount = 0, VisitsCount = 0 };

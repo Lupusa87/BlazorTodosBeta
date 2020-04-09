@@ -28,16 +28,16 @@ namespace TodosCosmos.DocumentClasses
             GeneratePK();
         }
 
-        [JsonProperty(PropertyName = "w")]
+        [JsonProperty(PropertyName = "q")]
         public string Word { get; set; }
 
-        [JsonProperty(PropertyName = "uiwnid")]
+        [JsonProperty(PropertyName = "w")]
         public Guid UIWordNativeID { get; set; }
 
-        [JsonProperty(PropertyName = "uilid")]
+        [JsonProperty(PropertyName = "e")]
         public Guid UILanguageID { get; set; }
 
-        [JsonProperty(PropertyName = "h")]
+        [JsonProperty(PropertyName = "r")]
         public bool Human { get; set; }
 
 

@@ -42,7 +42,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosEmailedCode> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.EmailedCode && x.Email.ToLower() == Email.ToLower(), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                IEnumerable<CosmosEmailedCode> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.EmailedCode && x.IUD < 2 && x.Email.ToLower() == Email.ToLower(), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 if (result.Any())
                 {
@@ -72,7 +72,7 @@ namespace TodosCosmos.ClientClasses
         public async Task<CosmosEmailedCode> FindEmaiedCode(string pEmail, string pIPAddress, string pMachineID, List<string> CallTrace)
         {
 
-               return  await cosmosDBRepo.FindLastItemsAsync(x => x.DocType == (int)DocTypeEnum.EmailedCode &&
+               return  await cosmosDBRepo.FindLastItemsAsync(x => x.DocType == (int)DocTypeEnum.EmailedCode && x.IUD < 2 &&
                 x.Email.ToLower() == pEmail.ToLower() &&
                 x.IPAddress.ToLower() == pIPAddress.ToLower() &&
                 x.MachineID.ToLower() == pMachineID.ToLower(), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));

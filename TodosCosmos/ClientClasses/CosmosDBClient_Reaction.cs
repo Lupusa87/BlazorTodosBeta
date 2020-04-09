@@ -63,7 +63,7 @@ namespace TodosCosmos.ClientClasses
         public async Task<CosmosDocReaction> FindReaction(Guid UserID, List<string> CallTrace)
         {
 
-            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.Reaction &&
+            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.Reaction && x.IUD < 2 &&
             x.UserID == UserID, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }

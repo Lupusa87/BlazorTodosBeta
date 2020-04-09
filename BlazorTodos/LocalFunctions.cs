@@ -92,6 +92,16 @@ namespace BlazorTodos
                     LocalData.IsReady = b;
 
 
+
+                    bool IsAppVersionLatest = await WebApiFunctions.CmdGetAppVersion();
+
+                    if (!IsAppVersionLatest)
+                    {
+                        LocalData.IsReady = false;
+                        return;
+                    }
+
+
                     if (LocalData.UsingUITranslator)
                     {
                         await GetUILanguages();
@@ -296,7 +306,7 @@ namespace BlazorTodos
             }
         }
 
-        public static void AddError(string ParMessage, MethodBase Source, bool Display, bool ClearPreviousErrors)
+        public static void AddError(string ParMessage, MethodBase Source, bool Display, bool ClearPreviousErrors, bool canCloseModal = true)
         {
 
             if (ClearPreviousErrors)
@@ -323,7 +333,7 @@ namespace BlazorTodos
             if (Display)
             {
 
-                DisplayErrors();
+                DisplayErrors(canCloseModal);
             }            
         }
 
@@ -345,11 +355,11 @@ namespace BlazorTodos
 
         }
 
-        public static void DisplayErrors()
+        public static void DisplayErrors(bool canCloseModal = true)
         {
             if (HasError())
             {
-                LocalData.btModalError.Show(ModalForm.Error);
+                LocalData.btModalError.Show(ModalForm.Error, canCloseModal);
             }
         }
 

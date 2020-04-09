@@ -28,10 +28,10 @@ namespace TodosCosmos.DocumentClasses
 
 
 
-        [JsonProperty(PropertyName = "uid")]
+        [JsonProperty(PropertyName = "q")]
         public Guid UserID { get; set; }
 
-        [JsonProperty(PropertyName = "lod")]
+        [JsonProperty(PropertyName = "w")]
         public bool LikeOrDislike { get; set; }
 
         public TSReaction toTSReaction()

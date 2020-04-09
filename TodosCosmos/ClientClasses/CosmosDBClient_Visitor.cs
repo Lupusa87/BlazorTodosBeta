@@ -58,7 +58,7 @@ namespace TodosCosmos.ClientClasses
         public async Task<CosmosDocVisitorsStat> GetVisitor(string IPAddress, List<string> CallTrace)
         {
 
-            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.VisitorStat &&
+            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.VisitorStat && x.IUD < 2 &&
                              x.IPAddress == IPAddress,
                              LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 

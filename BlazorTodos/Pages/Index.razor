@@ -1,7 +1,5 @@
 ﻿@page "/"
 
-@inherits IndexBase
-
     <div style="margin:20px;">
         <br />
         <h2>
@@ -24,7 +22,6 @@
         </div>
         <br />
         <br />
-        <br />
         <h6 style="color:red;font-weight:bold">@LocalData.uiTranslator.Translate("Warnings:")</h6>
         <br />
         <h6 style="color:red">@LocalData.uiTranslator.Translate("This app has only demonstration purposes, please don't keep any actual data.")</h6>
@@ -38,8 +35,13 @@
 
         <br />
         <h6 style="color:red">@LocalData.uiTranslator.Translate("User can't have any complain about app functional.")</h6>
-
-
+        <br />
+        <br />
+        <br />
+        <div style="font-size:20px;color:green">
+            <span>@LocalData.uiTranslator.Translate("App Version ") @LocalData.AppVersion.VersionNumber released @LocalData.AppVersion.VersionDate.ToShortDateString()</span>
+        </div>
+        <br />
 
 
     </div>

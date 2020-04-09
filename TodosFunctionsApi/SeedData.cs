@@ -123,6 +123,18 @@ namespace TodosFunctionsApi
                 }
             }
 
+
+            CosmosDocSetting settingAppVersion = CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "AppVersion", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
+
+            if (settingAppVersion != null)
+            {
+                if (string.IsNullOrEmpty(settingAppVersion.Value))
+                {
+                    CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "AppVersion", "0.0.0,2000,1,1", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                }
+            }
+
+
             return true;
 
         }

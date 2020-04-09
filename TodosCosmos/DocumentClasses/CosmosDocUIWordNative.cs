@@ -26,7 +26,7 @@ namespace TodosCosmos.DocumentClasses
             GeneratePK();
         }
 
-        [JsonProperty(PropertyName = "w")]
+        [JsonProperty(PropertyName = "q")]
         public string Word { get; set; }
 
     

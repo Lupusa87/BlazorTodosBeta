@@ -52,7 +52,7 @@ namespace TodosCosmos.ClientClasses
             List<TSCategory> TsCategorys = new List<TSCategory>();
             try
             {
-                IEnumerable<CosmosDocCategory> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Category && x.UserID == UserID, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                IEnumerable<CosmosDocCategory> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Category && x.IUD < 2 && x.UserID == UserID, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
                 {

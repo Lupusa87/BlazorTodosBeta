@@ -25,10 +25,10 @@ namespace TodosCosmos.DocumentClasses
             GeneratePK();
         }
 
-        [JsonProperty(PropertyName = "uid")]
+        [JsonProperty(PropertyName = "q")]
         public Guid UserID { get; set; }
 
-        [JsonProperty(PropertyName = "n")]
+        [JsonProperty(PropertyName = "w")]
         public string Name { get; set; }
 
         public TSCategory toTSCategory()

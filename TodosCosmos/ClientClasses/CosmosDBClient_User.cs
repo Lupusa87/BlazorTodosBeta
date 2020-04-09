@@ -185,7 +185,7 @@ namespace TodosCosmos.ClientClasses
         public async Task<CosmosDocUser> FindUserByUserName(string UserName, List<string> CallTrace)
         {
 
-            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.User &&
+            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IUD < 2 &&
             x.UserName.ToLower() == UserName.ToLower(),
             LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
@@ -197,7 +197,7 @@ namespace TodosCosmos.ClientClasses
         public async Task<CosmosDocUser> FindUserByEmail(string Email, List<string> CallTrace)
         {
 
-            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.User &&
+            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IUD < 2 &&
             x.Email.ToLower() == Email.ToLower(),
             LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
@@ -207,7 +207,7 @@ namespace TodosCosmos.ClientClasses
         public async Task<CosmosDocUser> FindUserByID(Guid id, List<string> CallTrace)
         {
             string pkvalue = PartitionKeyGenerator.Create(pkPrefix, id.ToString());
-            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.User &&
+            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IUD < 2 &&
             x.ID == id && x.PK == pkvalue,
             LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
@@ -218,7 +218,7 @@ namespace TodosCosmos.ClientClasses
             List<TSUser> TsUsers = new List<TSUser>();
             try
             {
-                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IUD < 2, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
                 {
@@ -242,7 +242,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IsLive, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IUD < 2 && x.IsLive, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
 
                 foreach (var item in result)
@@ -271,7 +271,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IsLive && x.TimeStamp < GlobalFunctions.ToUnixEpochDate(DateTime.Now.AddSeconds(-30)), 
+                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IUD < 2 && x.IsLive && x.TimeStamp < GlobalFunctions.ToUnixEpochDate(DateTime.Now.AddSeconds(-30)), 
                     LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     foreach (var item in result)

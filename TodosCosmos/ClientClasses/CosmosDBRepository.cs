@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using TodosCosmos.DocumentClasses;
+using static TodosCosmos.Enums;
 
 namespace TodosCosmos.ClientClasses
 {
@@ -204,7 +206,24 @@ namespace TodosCosmos.ClientClasses
             return await CosmosAPI.container.UpsertItemAsync(item);
         }
 
+      
 
+
+        public async Task SoftDeleteItemAsync(string id, string pk, List<string> CallTrace)
+        {
+
+            T d = await CosmosAPI.container.ReadItemAsync<T>(id, new PartitionKey(pk));
+
+
+            PropertyInfo pi_IUD = d.GetType().GetProperty("IUD");
+
+            if (pi_IUD is object)
+            {
+                pi_IUD.SetValue(d, (byte)DocStateMarkEnum.PreDelete);
+            }
+
+            await CosmosAPI.container.UpsertItemAsync(d);
+        }
 
         public async Task DeleteItemAsync(string id, string pk, List<string> CallTrace)
         {

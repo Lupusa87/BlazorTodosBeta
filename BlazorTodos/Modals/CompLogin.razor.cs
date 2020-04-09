@@ -11,7 +11,7 @@ using static TodosShared.TSEnums;
 namespace BlazorTodos.Modals
 {
 
-    public class CompLoginBase : ComponentBase
+    public partial class CompLogin
     {
       
         public string UserName { get; set; }

@@ -15,7 +15,7 @@ using static BlazorTodos.Classes.Enums;
 
 namespace BlazorTodos.Pages
 {
-    public class IndexBase:ComponentBase
+    public partial class Index
     {
 
 

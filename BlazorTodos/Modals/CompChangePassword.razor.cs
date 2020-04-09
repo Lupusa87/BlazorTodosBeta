@@ -9,7 +9,7 @@ using static TodosShared.TSEnums;
 
 namespace BlazorTodos.Modals
 {
-    public class CompChangePasswordBase : ComponentBase
+    public partial class CompChangePassword
     {
 
         public string NewPassword { get; set; }

@@ -37,8 +37,8 @@ namespace TodosCosmos
         {
             Insert = 0,
             Update = 1,
-            Delete = 2,
-            Processing = 9,
+            PreDelete = 2,
+            PostDelete = 9,
         }
 
     }

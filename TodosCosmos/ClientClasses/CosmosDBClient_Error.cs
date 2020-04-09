@@ -40,7 +40,7 @@ namespace TodosCosmos.ClientClasses
      
             try
             {
-                IEnumerable<CosmosDocErrorLog> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Error, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                IEnumerable<CosmosDocErrorLog> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Error && x.IUD < 2, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 if (result.Any())
                 {

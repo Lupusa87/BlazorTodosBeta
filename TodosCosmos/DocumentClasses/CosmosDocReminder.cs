@@ -18,11 +18,11 @@ namespace TodosCosmos.DocumentClasses
             GeneratePK();
         }
 
-        [JsonProperty(PropertyName = "tid")]
+        [JsonProperty(PropertyName = "q")]
         public Guid TodoID { get; set; }
 
 
-        [JsonProperty(PropertyName = "rd")]
+        [JsonProperty(PropertyName = "w")]
         public DateTime RemindDate { get; set; }
        
     }

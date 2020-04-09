@@ -1,19 +1,22 @@
-﻿@inherits CompModalBase
-
-@using BlazorTodos.Components
+﻿@using BlazorTodos.Components
 @using BlazorTodos.Modals
 
 <div class="bm-container @(btModal.IsDisplayed ? "bm-active" : string.Empty)">
 
+    @if (btModal.CanCloseModal)
+    {
     <div class="bm-overlay" @onclick="@CloseModal"></div>
-
+    }
     <div class="blazor-modal">
         <div class="bm-header">
             <h3 class="bm-title">@LocalData.uiTranslator.Translate(Title)</h3>
-            <button type="button" class="bm-close" @onclick="@CloseModal">
-                <span>&times;</span>
-            </button>
-        </div>
+            @if (btModal.CanCloseModal)
+            {
+                <button type="button" class="bm-close" @onclick="@CloseModal">
+                    <span>&times;</span>
+                </button>
+            }
+            </div>
         <div class="bm-content">
             <div class="bm-content">
 

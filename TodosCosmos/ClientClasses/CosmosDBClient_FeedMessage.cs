@@ -38,7 +38,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocFeedMessage> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.FeedMessage, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                IEnumerable<CosmosDocFeedMessage> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.FeedMessage && x.IUD < 2, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 if (result.Any())
                 {

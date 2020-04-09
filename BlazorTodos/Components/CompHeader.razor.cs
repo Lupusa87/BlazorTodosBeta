@@ -10,7 +10,7 @@ using static BlazorTodos.Classes.Enums;
 
 namespace BlazorTodos.Components
 {
-    public class CompHeaderBase : LayoutComponentBase
+    public partial class CompHeader
     {
 
 

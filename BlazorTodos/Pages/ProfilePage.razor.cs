@@ -10,7 +10,7 @@ using static BlazorTodos.Classes.Enums;
 
 namespace BlazorTodos.Pages
 {
-    public class ProfilePageBase:ComponentBase
+    public partial class ProfilePage
     {
 
      

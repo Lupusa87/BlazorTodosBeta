@@ -10,7 +10,7 @@ using static BlazorTodos.Classes.Enums;
 
 namespace BlazorTodos.Modals
 {
-    public class CompAddOrUpdateTodoBase : ComponentBase
+    public partial class CompAddOrUpdateTodo
     {
 
         [Parameter] public string UniqueID { get; set; }

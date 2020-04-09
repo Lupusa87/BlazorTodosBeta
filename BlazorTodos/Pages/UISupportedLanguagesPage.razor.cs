@@ -10,7 +10,7 @@ using TodosShared;
 
 namespace BlazorTodos.Pages
 {
-    public class UISupportedLanguagesPageBase: ComponentBase
+    public partial class UISupportedLanguagesPage
     {
 
      

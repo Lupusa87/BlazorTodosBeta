@@ -28,13 +28,13 @@ namespace TodosCosmos.DocumentClasses
 
 
 
-        [JsonProperty(PropertyName = "uid")]
+        [JsonProperty(PropertyName = "q")]
         public Guid UserID { get; set; }
 
-        [JsonProperty(PropertyName = "t")]
+        [JsonProperty(PropertyName = "w")]
         public string Text { get; set; }
 
-        [JsonProperty(PropertyName = "ad")]
+        [JsonProperty(PropertyName = "e")]
         public DateTime AddDate { get; set; }
 
         public TSFeedback toTSFeedback()

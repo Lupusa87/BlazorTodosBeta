@@ -11,7 +11,7 @@ using static BlazorTodos.Classes.Enums;
 
 namespace BlazorTodos.Pages
 {
-    public class FeedbackPageBase : ComponentBase
+    public partial class FeedbackPage
     {
        
 

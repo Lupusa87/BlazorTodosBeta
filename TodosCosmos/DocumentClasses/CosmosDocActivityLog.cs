@@ -17,13 +17,13 @@ namespace TodosCosmos.DocumentClasses
         }
 
 
-        [JsonProperty(PropertyName = "uid")]
+        [JsonProperty(PropertyName = "q")]
         public Guid UserID { get; set; }
 
-        [JsonProperty(PropertyName = "d")]
+        [JsonProperty(PropertyName = "w")]
         public string Description { get; set; }
 
-        [JsonProperty(PropertyName = "mn")]
+        [JsonProperty(PropertyName = "e")]
         public string MethodName { get; set; }
     }
 }

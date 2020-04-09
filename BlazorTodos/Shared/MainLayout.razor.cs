@@ -12,7 +12,7 @@ using static BlazorTodos.Classes.Enums;
 
 namespace BlazorTodos.Shared
 {
-    public class MainLayoutBase: LayoutComponentBase
+    public partial class MainLayout
     {
         [Inject]
         HttpClient httpClient { get; set; }

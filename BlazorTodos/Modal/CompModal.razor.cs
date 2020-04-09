@@ -7,7 +7,7 @@ using static BlazorTodos.Classes.Enums;
 
 namespace BlazorTodos.Modal
 {
-    public class CompModalBase : ComponentBase, IDisposable
+    public partial class CompModal: IDisposable
     {
 
         [Parameter]
@@ -107,6 +107,12 @@ namespace BlazorTodos.Modal
                         {
                             Title = "Errors ("+ LocalData.BTErrorsList.Count + ")";
                         }
+
+
+                        if (!btModal.CanCloseModal)
+                        {
+                            Title = "Fatal " + Title;
+                        }
                     }
                     break;
                 case ModalForm.Confirm:
@@ -163,23 +169,27 @@ namespace BlazorTodos.Modal
 
         public void CloseModal()
         {
-            Title = string.Empty;
-            btModal.IsDisplayed = false;
 
-            switch (btModal.modalForm)
+            if (btModal.CanCloseModal)
             {
-                case ModalForm.Message:
-                    LocalFunctions.ClearMessages();
-                    break;
-                case ModalForm.Error:
-                    LocalFunctions.ClearErrors();
-                    break;
-                default:
-                    break;
+                Title = string.Empty;
+                btModal.IsDisplayed = false;
+
+                switch (btModal.modalForm)
+                {
+                    case ModalForm.Message:
+                        LocalFunctions.ClearMessages();
+                        break;
+                    case ModalForm.Error:
+                        LocalFunctions.ClearErrors();
+                        break;
+                    default:
+                        break;
+                }
+
+                StateHasChanged();
             }
-
-            StateHasChanged();
-
+            
         }
 
         public void Dispose()

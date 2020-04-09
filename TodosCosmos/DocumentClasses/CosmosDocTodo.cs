@@ -34,38 +34,38 @@ namespace TodosCosmos.DocumentClasses
 
 
 
-        [JsonProperty(PropertyName = "uid")]
+        [JsonProperty(PropertyName = "q")]
         public Guid UserID { get; set; }
 
-        [JsonProperty(PropertyName = "n")]
+        [JsonProperty(PropertyName = "w")]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "d")]
+        [JsonProperty(PropertyName = "e")]
         public string Description { get; set; }
 
 
-        [JsonProperty(PropertyName = "p")]
+        [JsonProperty(PropertyName = "r")]
         public int Priority { get; set; }
 
-        [JsonProperty(PropertyName = "isd")]
+        [JsonProperty(PropertyName = "t")]
         public bool IsDone { get; set; }
 
 
-        [JsonProperty(PropertyName = "hdd")]
+        [JsonProperty(PropertyName = "y")]
         public bool HasDueDate { get; set; }
 
-        [JsonProperty(PropertyName = "dd")]
+        [JsonProperty(PropertyName = "u")]
         public DateTime DueDate { get; set; }
 
-        [JsonProperty(PropertyName = "cd")]
+        [JsonProperty(PropertyName = "i")]
         public DateTime CreateDate { get; set; }
 
 
-        [JsonProperty(PropertyName = "cid")]
+        [JsonProperty(PropertyName = "o")]
         public Guid CategoryID { get; set; }
 
         [JsonIgnore]
-        [JsonProperty(PropertyName = "rs")]
+        [JsonProperty(PropertyName = "p")]
         public List<DateTime> Reminders { get; set; } = new List<DateTime>();
 
 

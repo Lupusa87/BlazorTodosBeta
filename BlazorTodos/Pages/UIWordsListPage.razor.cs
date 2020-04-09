@@ -11,7 +11,7 @@ using TodosShared;
 namespace BlazorTodos.Pages
 {
 
-    public class UIWordsListPageBase : ComponentBase
+    public partial class UIWordsListPage
     {
 
         [Parameter]

@@ -502,6 +502,39 @@ namespace BlazorTodos
 
         }
 
+        public static async Task<bool> CmdGetAppVersion()
+        {
+            try
+            {
+
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", LocalData.CurrJWT);
+
+
+                TSAppVersion latestAppVersion = await httpClient.MyGetJsonAsync<TSAppVersion>("appversion/get");
+
+                if (latestAppVersion.VersionNumber != LocalData.AppVersion.VersionNumber ||
+                    latestAppVersion.VersionDate != LocalData.AppVersion.VersionDate)
+                {
+                    LocalFunctions.AddError("Your App current version (" + LocalData.AppVersion.VersionNumber + ") is obsolete, please empty cache and reload to get latest version (" + latestAppVersion.VersionNumber + ")",
+                         MethodBase.GetCurrentMethod(),true, false, false);
+
+                    return false;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                LocalFunctions.AddError(ex.Message, MethodBase.GetCurrentMethod(), true, false);
+            }
+
+
+            return true;
+
+        }
+
 
         public static async Task CmdGetReaction()
         {

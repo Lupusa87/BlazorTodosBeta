@@ -35,7 +35,7 @@ namespace TodosCosmos.ClientClasses
             try
             {
 
-                IEnumerable<CosmosDocSetting> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Setting &&
+                IEnumerable<CosmosDocSetting> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Setting && x.IUD < 2 &&
                 x.UserID==UserID &&
                 x.Key.ToLower() == Key.ToLower(), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 

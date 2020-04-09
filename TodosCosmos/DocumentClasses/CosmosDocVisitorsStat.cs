@@ -27,13 +27,13 @@ namespace TodosCosmos.DocumentClasses
 
         }
 
-        [JsonProperty(PropertyName = "ia")]
+        [JsonProperty(PropertyName = "q")]
         public string IPAddress { get; set; }
 
-        [JsonProperty(PropertyName = "c")]
+        [JsonProperty(PropertyName = "w")]
         public int Count { get; set; }
 
-        [JsonProperty(PropertyName = "lid")]
+        [JsonProperty(PropertyName = "e")]
         public Guid LangID { get; set; }
 
 

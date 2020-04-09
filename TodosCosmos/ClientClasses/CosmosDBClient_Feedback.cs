@@ -51,7 +51,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocFeedback> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Feedback, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                IEnumerable<CosmosDocFeedback> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Feedback && x.IUD < 2, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
                 {
@@ -96,7 +96,7 @@ namespace TodosCosmos.ClientClasses
         public async Task<CosmosDocFeedback> FindFeedback(Guid UserID, List<string> CallTrace)
         {
 
-            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.Feedback &&
+            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.Feedback && x.IUD < 2 &&
             x.UserID == UserID, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
         }

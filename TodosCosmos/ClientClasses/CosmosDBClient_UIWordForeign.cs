@@ -51,7 +51,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocUIWordForeign> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.UIWordForeign,
+                IEnumerable<CosmosDocUIWordForeign> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.UIWordForeign && x.IUD < 2,
                     LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
@@ -80,7 +80,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocUIWordForeign> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.UIWordForeign && x.UILanguageID == LangID,
+                IEnumerable<CosmosDocUIWordForeign> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.UIWordForeign && x.IUD < 2 && x.UILanguageID == LangID,
                     LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
@@ -126,7 +126,7 @@ namespace TodosCosmos.ClientClasses
 
         public async Task<CosmosDocUIWordForeign> FindByWordAndNativeWordID(string Word, Guid NativeWordID, List<string> CallTrace)
         {
-            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.UIWordForeign &&
+            return await cosmosDBRepo.FindFirstItemsAsync(x => x.DocType == (int)DocTypeEnum.UIWordForeign && x.IUD < 2 &&
             x.Word.ToLower() == Word.ToLower() && x.UIWordNativeID == NativeWordID,
             LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 

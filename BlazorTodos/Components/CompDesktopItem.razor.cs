@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BlazorTodos.Components
 {
-    public class CompDesktopItemBase:ComponentBase
+    public partial class CompDesktopItem
     {
         [Parameter]
         public DesktopItem desktopItem { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlazorTodos.Pages
 {
-    public class DesktopPageBase:ComponentBase
+    public partial class DesktopPage
     {
 
         

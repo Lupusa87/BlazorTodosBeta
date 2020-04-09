@@ -98,7 +98,7 @@ namespace TodosCosmos.ClientClasses
                 }
                 else
                 {
-                    await cosmosDBRepo.DeleteItemAsync(id, pkValue, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                    await cosmosDBRepo.SoftDeleteItemAsync(id, pkValue, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     return true;
                 }

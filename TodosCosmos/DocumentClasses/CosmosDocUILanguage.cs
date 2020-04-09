@@ -30,17 +30,17 @@ namespace TodosCosmos.DocumentClasses
         }
 
 
-        [JsonProperty(PropertyName = "n")]
+        [JsonProperty(PropertyName = "q")]
         public string Name { get; set; }
 
 
-        [JsonProperty(PropertyName = "c")]
+        [JsonProperty(PropertyName = "w")]
         public string Code { get; set; }
 
-        [JsonProperty(PropertyName = "fl")]
+        [JsonProperty(PropertyName = "e")]
         public string FlagLink { get; set; }
 
-        [JsonProperty(PropertyName = "v")]
+        [JsonProperty(PropertyName = "r")]
         public DateTime Version { get; set; }
 
         public TSUILanguage toTSUILanguage()
