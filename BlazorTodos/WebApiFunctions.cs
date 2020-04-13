@@ -32,9 +32,6 @@ namespace BlazorTodos
             try
             {
 
-                httpClient.BaseAddress = LocalData.WebApi_Uri;
-                httpClient.Timeout = TimeSpan.FromMilliseconds(Timeout.Infinite);
-
                 return await httpClient.GetStringAsync("setupdata");
 
             }
@@ -318,7 +315,44 @@ namespace BlazorTodos
 
         }
 
+        public static async Task<string> CmdTSUserUpdateFont(TSVisitor ParTSVisitor)
+        {
+            string result=string.Empty;
+            try
+            {
 
+        
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", LocalData.CurrJWT);
+
+            
+                GlobalFunctions.CmdTrimEntity(ParTSVisitor);
+
+                TSVisitor tsVisitorForSend = GlobalFunctions.CopyObject<TSVisitor>(ParTSVisitor);
+
+            
+                result = await httpClient.PostJsonAsync<string>("user/updatefont", tsVisitorForSend);
+
+             
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+
+              
+
+            }
+            catch (Exception ex)
+            {
+
+                LocalFunctions.AddError(ex.Message, MethodBase.GetCurrentMethod(), true, false);
+               
+            }
+
+           
+
+
+            return result;
+
+        }
 
         public static async Task<string> CmdAddTodo(TSTodo ParTSTodo)
         {
@@ -535,6 +569,34 @@ namespace BlazorTodos
 
         }
 
+        public static async Task<bool> CmdGetVisitor()
+        {
+            try
+            {              
+                LocalData.CurrVisitor = await httpClient.MyGetJsonAsync<TSVisitor>("visitor/get");
+              
+                if (!string.IsNullOrEmpty(LocalData.CurrVisitor.DefaultFont))
+                {
+                    if (LocalData.CurrDefaultFont != LocalData.CurrVisitor.DefaultFont)
+                    {
+                        LocalData.CurrDefaultFont = LocalData.CurrVisitor.DefaultFont;
+                        LocalData.mainLayout.Refresh();
+                        LocalData.indexPage.Refresh();
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                LocalFunctions.AddError(ex.Message, MethodBase.GetCurrentMethod(), true, false);
+            }
+
+
+            return true;
+
+        }
+
 
         public static async Task CmdGetReaction()
         {
@@ -733,6 +795,30 @@ namespace BlazorTodos
 
 
             string result = await httpClient.PutJsonAsync<string>("category/update", tsCategoryForSend);
+
+
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+
+
+            return result;
+
+        }
+
+
+        public static async Task<string> CmdUpdateVisitor()
+        {
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", LocalData.CurrJWT);
+
+            GlobalFunctions.CmdTrimEntity(LocalData.CurrVisitor);
+
+
+
+            TSVisitor tsVisitorForSend = GlobalFunctions.CopyObject<TSVisitor>(LocalData.CurrVisitor);
+
+
+            string result = await httpClient.PutJsonAsync<string>("Visitor/update", tsVisitorForSend);
 
 
             httpClient.DefaultRequestHeaders.Accept.Clear();

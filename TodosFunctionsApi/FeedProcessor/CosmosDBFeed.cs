@@ -25,8 +25,7 @@ namespace TodosFunctionsApi.FeedProcessor
             CreateLeaseCollectionIfNotExists = true)]IReadOnlyList<Document> input, ILogger log)
         {
 
-            //TodosCosmos.LocalFunctions.ConsolePrint("============== feed =================",true);
-            
+
             ILookup<DocTypeEnum, Document> dict = input.ToLookup(x => (DocTypeEnum)x.GetPropertyValue<byte>("dt"), x => x);
 
             //process errors
@@ -48,17 +47,14 @@ namespace TodosFunctionsApi.FeedProcessor
                 if (d.IUD == (byte)DocStateMarkEnum.Insert)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Insert todo " + d.UserID + " " + d.Name, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("Insert todo Id " + d.ID + ", name - " + d.Name);
                 }
                 else if (d.IUD == (byte)DocStateMarkEnum.Update)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Update todo " + d.UserID + " " + d.Name, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("Update todo Id " + d.ID + ", name - " + d.Name);
                 }
                 else if (d.IUD == (byte)DocStateMarkEnum.PreDelete)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Delete todo " + d.UserID + " " + d.Name, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("Delete todo Id " + d.ID + ", name - " + d.Name);
                 }
 
 
@@ -72,17 +68,14 @@ namespace TodosFunctionsApi.FeedProcessor
                 if (d.IUD == (byte)DocStateMarkEnum.Insert)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Insert category " + d.UserID + " " + d.Name, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("insert category Id " + d.ID + ", name - " + d.Name);
                 }
                 else if (d.IUD == (byte)DocStateMarkEnum.Update)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Update category " + d.UserID + " " + d.Name, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("update category Id " + d.ID + ", name - " + d.Name);
                 }
                 else if (d.IUD == (byte)DocStateMarkEnum.PreDelete)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Delete category " + d.UserID + " " + d.Name, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("delete category Id " + d.ID + ", name - " + d.Name);
                 }
             }
 
@@ -93,17 +86,14 @@ namespace TodosFunctionsApi.FeedProcessor
                 if (d.IUD == (byte)DocStateMarkEnum.Insert)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Insert Feedback " + d.UserID + " " + d.Text, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("insert Feedback Id " + d.ID + ", name - " + d.Text);
                 }
                 else if (d.IUD == (byte)DocStateMarkEnum.Update)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Update Feedback " + d.UserID + " " + d.Text, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("update Feedback Id " + d.ID + ", name - " + d.Text);
                 }
                 else if (d.IUD == (byte)DocStateMarkEnum.PreDelete)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Delete Feedback " + d.UserID + " " + d.Text, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("delete Feedback Id " + d.ID + ", name - " + d.Text);
                 }
             }
 
@@ -114,17 +104,14 @@ namespace TodosFunctionsApi.FeedProcessor
                 if (d.IUD == (byte)DocStateMarkEnum.Insert)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Insert Reaction " + d.UserID + " " + d.LikeOrDislike, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("insert reaction Id " + d.ID + ", LikeOrDislike - " + d.LikeOrDislike);
                 }
                 else if (d.IUD == (byte)DocStateMarkEnum.Update)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Update Reaction " + d.UserID + " " + d.LikeOrDislike, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("update reaction Id " + d.ID + ", LikeOrDislike - " + d.LikeOrDislike);
                 }
                 else if (d.IUD == (byte)DocStateMarkEnum.PreDelete)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Delete Reaction " + d.UserID + " " + d.LikeOrDislike, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("delete reaction Id " + d.ID + ", LikeOrDislike - " + d.LikeOrDislike);
                 }
             }
 
@@ -134,20 +121,17 @@ namespace TodosFunctionsApi.FeedProcessor
             foreach (var item in dict[DocTypeEnum.User])
             {
                 CosmosDocUser d = (dynamic)item;
-                if (d.IUD == (byte)DocStateMarkEnum.Insert)
-                {
-                    await TodosCosmos.LocalFunctions.NotifyAdmin("Insert user " + d.FullName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("insert user Id " + d.ID + ", name - " + d.FullName);
-                }
-                else if (d.IUD == (byte)DocStateMarkEnum.Update)
-                {
-                    // await TodosCosmos.LocalFunctions.NotifyAdmin("Update user " + d.FullName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("update user Id " + d.ID + ", name - " + d.FullName);
-                }
-                else if (d.IUD == (byte)DocStateMarkEnum.PreDelete)
+                //if (d.IUD == (byte)DocStateMarkEnum.Insert)
+                //{
+                //    await TodosCosmos.LocalFunctions.NotifyAdmin("Insert user " + d.FullName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                //}  no sense to check this because user gets updated because of stat soon after creation
+                //if (d.IUD == (byte)DocStateMarkEnum.Update)
+                //{
+                // await TodosCosmos.LocalFunctions.NotifyAdmin("Update user " + d.FullName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                //}
+                if (d.IUD == (byte)DocStateMarkEnum.PreDelete)
                 {
                     await TodosCosmos.LocalFunctions.NotifyAdmin("Delete user " + d.FullName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                    TodosCosmos.LocalFunctions.ConsolePrint("delete user Id " + d.ID + ", name - " + d.FullName);
                 }
             }
 
@@ -168,21 +152,22 @@ namespace TodosFunctionsApi.FeedProcessor
                             break;
                         case RequestedActionEnum.NotifyAdmin:
                             await TodosCosmos.LocalFunctions.NotifyAdmin(d.Bag, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                            TodosCosmos.LocalFunctions.ConsolePrint("feed action notifyAdmin - " + d.Bag);
                             break;
                         case RequestedActionEnum.UpdateStat:
                             break;
                         default:
                             break;
                     }
+
+                    LocalFunctions.SoftDeleteDoc(item);
                 }
 
-                
+
             }
 
 
 
-            //Soft Delete all predelete marked docs
+            //Soft Delete all preDelete marked docs
             IEnumerable<Document> shouldDeleteList = input.Where(x => x.GetPropertyValue<byte>("iud") == (byte)DocStateMarkEnum.PreDelete);
             foreach (var item in shouldDeleteList)
             {
@@ -191,6 +176,6 @@ namespace TodosFunctionsApi.FeedProcessor
 
         }
 
-       
+
     }
 }

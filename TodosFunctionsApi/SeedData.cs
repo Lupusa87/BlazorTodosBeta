@@ -11,29 +11,28 @@ using TodosShared;
 
 namespace TodosFunctionsApi
 {
-    public class SeedData
+    public static class SeedData
     {
 
-        public SeedData(CosmosClient cosmosClient, List<string> CallTrace)
+
+        public static async void Run(CosmosClient cosmosClient, List<string> CallTrace)
         {
-
-            cosmosClient.CreateDatabaseIfNotExistsAsync(CosmosAPI.databaseID, 400).Wait();
-
-
-            Database database = cosmosClient.GetDatabase(CosmosAPI.databaseID);
+            Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(CosmosAPI.databaseID, 400);
 
             if (database is null)
             {
                 throw new ArgumentException("database is null");
             }
 
-            database.CreateContainerIfNotExistsAsync(new ContainerProperties { Id = CosmosAPI.collectionID,
+            await database.CreateContainerIfNotExistsAsync(new ContainerProperties
+            {
+                Id = CosmosAPI.collectionID,
                 PartitionKeyPath = "/pk",
-                DefaultTimeToLive = -1}).Wait();
-           
+                DefaultTimeToLive = -1
+            });
 
 
-            CosmosAPI.container = cosmosClient.GetContainer(CosmosAPI.databaseID, CosmosAPI.collectionID);
+            CosmosAPI.container = database.GetContainer(CosmosAPI.collectionID);
 
             if (CosmosAPI.container is null)
             {
@@ -41,20 +40,18 @@ namespace TodosFunctionsApi
             }
 
 
-            EnsureDemoUser(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-            ReadDBSettings(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            await EnsureDemoUser(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            await ReadDBSettings(TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             //SeedUILanguageData.Seed();
-
-
         }
 
-        public bool EnsureDemoUser(List<string> CallTrace)
+        public static async Task<bool> EnsureDemoUser(List<string> CallTrace)
         {
             try
             {
 
-                CosmosDocUser demoUser = CosmosAPI.cosmosDBClientUser.FindUserByUserName("demouser", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
+                CosmosDocUser demoUser = await CosmosAPI.cosmosDBClientUser.FindUserByUserName("demouser", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 if (demoUser is null)
                 {
@@ -68,7 +65,7 @@ namespace TodosFunctionsApi
                         CreateDate = DateTime.Now,
                     };
 
-                    CosmosAPI.cosmosDBClientUser.AddUser(newUser, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                    await CosmosAPI.cosmosDBClientUser.AddUser(newUser, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     demoUser = CosmosAPI.cosmosDBClientUser.FindUserByUserName("demouser", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
 
@@ -79,17 +76,17 @@ namespace TodosFunctionsApi
                     }
 
                 }
-              
+
 
 
                 CosmosAPI.DemoUserID = demoUser.ID;
 
-        }
+            }
             catch (CosmosException)
             {
 
                 throw new ArgumentException("Can't add/check demouser");
-    }
+            }
 
             return true;
 
@@ -97,16 +94,16 @@ namespace TodosFunctionsApi
 
 
 
-        public bool ReadDBSettings(List<string> CallTrace)
+        public static async Task<bool> ReadDBSettings(List<string> CallTrace)
         {
 
-            CosmosDocSetting setting = CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "DoActivityLog", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
+            CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "DoActivityLog", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             if (setting != null)
             {
                 if (string.IsNullOrEmpty(setting.Value))
                 {
-                    CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "DoActivityLog", CosmosAPI.DoActivityLog.ToString().ToLower(), TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                    await CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "DoActivityLog", CosmosAPI.DoActivityLog.ToString().ToLower(), TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                     if (!CosmosAPI.DoActivityLog)
                     {
@@ -124,13 +121,13 @@ namespace TodosFunctionsApi
             }
 
 
-            CosmosDocSetting settingAppVersion = CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "AppVersion", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod())).Result;
+            CosmosDocSetting settingAppVersion = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "AppVersion", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
             if (settingAppVersion != null)
             {
                 if (string.IsNullOrEmpty(settingAppVersion.Value))
                 {
-                    CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "AppVersion", "0.0.0,2000,1,1", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                    await CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "AppVersion", "0.0.0,2000,1,1", TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                 }
             }
 

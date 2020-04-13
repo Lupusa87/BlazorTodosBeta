@@ -108,8 +108,6 @@ namespace TodosCosmos.ClientClasses
                     newUser.HashedPassword = GlobalFunctions.CmdHashPasswordBytes(tsUser.Password, newUser.Salt);
                 }
 
-               
-
 
                 await cosmosDBClientBase.UpdateItemAsync(newUser, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
@@ -137,6 +135,12 @@ namespace TodosCosmos.ClientClasses
         {
 
             return await cosmosDBClientBase.GetItemAsync(new CosmosDocUser(tsUser), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+        }
+
+        public async Task<CosmosDocUser> GetUserDoc(Guid id, List<string> CallTrace)
+        {
+
+            return await cosmosDBClientBase.GetItemAsync(id, id, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
 
@@ -271,15 +275,16 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IUD < 2 && x.IsLive && x.TimeStamp < GlobalFunctions.ToUnixEpochDate(DateTime.Now.AddSeconds(-30)), 
+                IEnumerable<CosmosDocUser> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.User && x.IUD < 2 && x.IsLive && x.TimeStamp < GlobalFunctions.ToUnixEpochDate(DateTime.Now.AddSeconds(-30)),
                     LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
-                    foreach (var item in result)
-                    {
-                        item.IsLive = false;
-                        await CosmosAPI.cosmosDBClientUser.UpdateUserDoc(item, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-                    }
- 
+                foreach (var item in result)
+                {
+                    item.IsLive = false;
+
+                    await CosmosAPI.cosmosDBClientUser.UpdateUserDoc(item, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                }
+
             }
             catch (CosmosException ex)
             {

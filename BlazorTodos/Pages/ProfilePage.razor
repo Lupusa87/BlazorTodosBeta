@@ -34,6 +34,8 @@
             <br />
             <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Email")</label>
             <br />
+            <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Font(s)")</label>
+            <br />
             <br />
 
             @if (!LocalData.CurrTSUser.UserName.Equals("demouser"))
@@ -55,6 +57,10 @@
             <br />
             <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem;font-weight:bold">
                 @LocalData.CurrTSUser.Email
+            </label>
+            <br />
+            <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem;font-weight:bold">
+                <a href="ProfilePage" class="ml-md-auto" @onclick="@CmdDisplayDefaultFont">@LocalData.CurrDefaultFont</a>
             </label>
         </div>
     </div>

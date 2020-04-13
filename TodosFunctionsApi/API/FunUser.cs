@@ -65,7 +65,6 @@ namespace TodosFunctionsApi.API
           ILogger log)
         {
 
-          
 
             TSUser tsUser = await MyFromBody<TSUser>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
            
@@ -83,7 +82,7 @@ namespace TodosFunctionsApi.API
 
             tsUser.ID = UserID;
 
-            result = CosmosAPI.cosmosDBClientUser.GetUser(tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())).Result;
+            result = await CosmosAPI.cosmosDBClientUser.GetUser(tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
          
 
             if (!result.ID.Equals(Guid.Empty))
@@ -101,7 +100,7 @@ namespace TodosFunctionsApi.API
 
             }
 
-            TimeAnalyzer.LogAll();
+         
 
             return result;
         }
@@ -384,6 +383,8 @@ ILogger log)
 
                     if (await CosmosAPI.cosmosDBClientUser.AddUser(tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())))
                     {
+                        await CosmosAPI.cosmosDBClientFeedMessage.AddFeedMessage(RequestedActionEnum.NotifyAdmin, "New User registration " + tsUser.UserName, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+
                         await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "UsersCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                         return new OkObjectResult("OK");
@@ -523,6 +524,48 @@ ILogger log)
                     return new UnprocessableEntityResult();
                 }
            
+
+
+        }
+
+        [FunctionName("FunUserUpdatefont")]
+        public async Task<ActionResult> UpdateFont(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "User/updatefont")] HttpRequest req,
+    ILogger log)
+        {
+
+            TSVisitor tsVisitor = await MyFromBody<TSVisitor>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+
+
+            ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+
+
+            Guid UserID = Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
+            await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "update user font", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+
+            CosmosDocUser doc = await CosmosAPI.cosmosDBClientUser.GetUserDoc(UserID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+
+            if (!string.IsNullOrEmpty(tsVisitor.DefaultFont))
+            {
+                doc.DefaultFont = tsVisitor.DefaultFont;
+            }
+            else
+            {
+                doc.DefaultFont = string.Empty;
+            }
+
+            bool b = await CosmosAPI.cosmosDBClientUser.UpdateUserDoc(doc, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+
+            if (b)
+            {
+
+                return new OkObjectResult("OK");
+            }
+            else
+            {
+                return new UnprocessableEntityResult();
+            }
+
 
 
         }

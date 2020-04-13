@@ -124,6 +124,9 @@ namespace BlazorTodos.Modal
                 case ModalForm.Registration:
                     Title = "Registration";
                     break;
+                case ModalForm.DefaultFont:
+                    Title = "Set default font";
+                    break;
                 case ModalForm.AddOrUpdateTodo:
                     if (LocalData.AddOrUpdateMode)
                     {

@@ -15,9 +15,15 @@ using static BlazorTodos.Classes.Enums;
 
 namespace BlazorTodos.Pages
 {
-    public partial class Index
+    public partial class IndexPage
     {
+        protected override void OnInitialized()
+        {
 
+            LocalData.indexPage = this;
+
+            base.OnInitialized();
+        }
 
         protected override void OnAfterRender(bool firstRender)
         {
@@ -31,7 +37,12 @@ namespace BlazorTodos.Pages
             base.OnAfterRender(firstRender);
         }
 
-      
+        public void Refresh()
+        {
+            StateHasChanged();
+        }
+
+
         public void TranslatorOnNotFoundWord(string word)
         {
             LocalFunctions.ConsolePrint("Could not translate word - " + word + ", not found!");
@@ -56,6 +67,13 @@ namespace BlazorTodos.Pages
             }
             
 
+        }
+
+
+        public void CmdDisplayDefaultFont()
+        {
+          LocalData.OldDefaultFont = LocalData.CurrDefaultFont;
+          LocalFunctions.DisplayModal(ModalForm.DefaultFont);
         }
 
         public void CmdLoginDemoUser()

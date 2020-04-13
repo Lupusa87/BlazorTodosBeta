@@ -39,9 +39,13 @@
         <br />
         <br />
         <div style="font-size:20px;color:green">
-            <span>@LocalData.uiTranslator.Translate("App Version ") @LocalData.AppVersion.VersionNumber released @LocalData.AppVersion.VersionDate.ToShortDateString()</span>
+            <span>@LocalData.uiTranslator.Translate("Font(s) ") </span><a href="" class="ml-md-auto" @onclick="@CmdDisplayDefaultFont">@LocalData.CurrDefaultFont</a>
         </div>
         <br />
+        <div style="font-size:20px;color:green">
+            <span>@LocalData.uiTranslator.Translate("App Version ") @LocalData.AppVersion.VersionNumber released @LocalData.AppVersion.VersionDate.ToShortDateString()</span>
+        </div>
 
+        <br />
 
     </div>

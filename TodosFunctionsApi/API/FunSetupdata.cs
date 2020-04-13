@@ -24,9 +24,6 @@ namespace TodosFunctionsApi.API
         {
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(Guid.Empty, "Requested setup data", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            await CosmosAPI.cosmosDBClientVisitor.AddVisitor(req.HttpContext.Connection.RemoteIpAddress.ToString(), TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
-
             return GlobalFunctions.CmdGetPublicData();
         }
 

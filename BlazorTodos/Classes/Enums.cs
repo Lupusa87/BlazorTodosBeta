@@ -16,6 +16,7 @@ namespace BlazorTodos.Classes
             Confirm,
             Login,
             Registration,
+            DefaultFont,
             AddOrUpdateTodo,
             AddOrUpdateCategory,
             AddOrUpdateFeedback,

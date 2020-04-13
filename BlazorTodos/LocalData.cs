@@ -3,6 +3,7 @@ using BlazorTodos.Classes;
 using BlazorTodos.Components;
 using BlazorTodos.Modal;
 using BlazorTodos.Modals;
+using BlazorTodos.Pages;
 using BlazorTodos.Shared;
 using System;
 using System.Collections.Generic;
@@ -19,16 +20,17 @@ namespace BlazorTodos
 {
     public class LocalData
     {
-        public static bool WebOrLocalMode = true; // determines where is azure functions backend
+        public static bool WebOrLocalMode = false; // determines where is azure functions backend
         public static bool ProductionOrDevelopmentMode = false;
         public static TSAppVersion AppVersion = new TSAppVersion
         {
-            VersionNumber = "1.0.1",
-            VersionDate = new DateTime(2020, 4, 8)
+            VersionNumber = "1.0.2",
+            VersionDate = new DateTime(2020, 4, 12)
         };
 
-
-
+        public static string CurrDefaultFont = "Sylfaen";
+        public static string OldDefaultFont;
+        public static TSVisitor CurrVisitor = new TSVisitor();
 
         public static Uri WebApi_Uri
         {
@@ -96,7 +98,9 @@ namespace BlazorTodos
 
 
 
+        public static IndexPage indexPage { get; set; } = new IndexPage();
 
+        public static ProfilePage profilePage { get; set; } = new ProfilePage();
         public static MainLayout mainLayout { get; set; } = new MainLayout();
         public static CompHeader compHeader { get; set; } = new CompHeader();
         public static CompFooter compFooter { get; set; } = new CompFooter();

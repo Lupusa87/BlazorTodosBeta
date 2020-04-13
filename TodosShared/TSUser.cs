@@ -64,12 +64,18 @@ namespace TodosShared
         public Guid LangID { get; set; }
 
 
+        [JsonPropertyName("s")]
+        [JsonProperty(PropertyName = "s")]
+        public string DefaultFont { get; set; }
+
         [Required(ErrorMessage = "{0} is required")]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "{0} lenght should be 10")]
         [DataType(DataType.Text)]
-        [JsonPropertyName("p")]
-        [JsonProperty(PropertyName = "p")]
+        [JsonPropertyName("a")]
+        [JsonProperty(PropertyName = "a")]
         public string EmailedCode { get; set; }
+
+       
 
     }
 }

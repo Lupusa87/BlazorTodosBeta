@@ -104,7 +104,7 @@ namespace TodosCosmos.ClientClasses
 
                 if (result.Any())
                 {
-                    bool b = false;
+                  
                     string body = string.Empty;
                     foreach (var item in result)
                     {

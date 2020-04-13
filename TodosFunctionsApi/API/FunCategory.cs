@@ -30,7 +30,7 @@ namespace TodosFunctionsApi.API
         };
 
 
-        [FunctionName("FunCaregoryGetAll")]
+        [FunctionName("FunCategoryGetAll")]
         public async Task<ActionResult<IEnumerable<TSCategory>>> GetAll(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "category/getall")] HttpRequest req,
             ILogger log)
@@ -49,7 +49,7 @@ namespace TodosFunctionsApi.API
 
         }
 
-        [FunctionName("FunCaregoryGet")]
+        [FunctionName("FunCategoryGet")]
         public async Task<ActionResult<TSCategory>> Get(
            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "category/get")] HttpRequest req,
            ILogger log)
@@ -71,7 +71,7 @@ namespace TodosFunctionsApi.API
         }
 
 
-        [FunctionName("FunCaregoryAdd")]
+        [FunctionName("FunCategoryAdd")]
         public async Task<ActionResult> Add(
          [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "category/add")] HttpRequest req,
          ILogger log)
@@ -103,7 +103,7 @@ namespace TodosFunctionsApi.API
 
 
 
-        [FunctionName("FunCaregoryUpdate")]
+        [FunctionName("FunCategoryUpdate")]
         public async Task<ActionResult> Update(
         [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "category/update")] HttpRequest req,
         ILogger log)
@@ -134,7 +134,7 @@ namespace TodosFunctionsApi.API
 
 
 
-        [FunctionName("FunCaregoryDelete")]
+        [FunctionName("FunCategoryDelete")]
         public async Task<ActionResult> Delete(
       [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "category/delete")] HttpRequest req,
       ILogger log)

@@ -1,0 +1,35 @@
+﻿<style>
+
+    .MyContainerDefaultFont {
+        display: grid;
+        position: relative;
+        width: 450px;
+        height: 200px;
+        grid-template-columns: 0.8fr 1.2fr;
+        grid-template-rows: 100px 50px;
+        overflow: hidden;
+        align-self: center;
+        margin: 10px;
+        margin-top: 20px;
+    }
+</style>
+
+
+
+<div class="MyContainerDefaultFont">
+    <div style="vertical-align:top;text-align:right;grid-column:1/1;grid-row:1/1;">
+        <label style="margin:10px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Font(s)")</label>
+        <br />
+        <span>@LocalData.uiTranslator.Translate("Default - Sylfaen ") </span>
+    </div>
+
+    <div style="vertical-align:top;grid-column:2/2;grid-row:1/1;">
+        <input style="margin:10px;line-height:30px" type="text" @bind="@LocalData.CurrDefaultFont" @onkeyup="@CmdKeyUp" minlength="3" maxlength="100" required />
+    </div>
+
+    <div style="grid-column:2/2;grid-row:2/2;margin:10px;">
+        <button class="btn btn-primary" @onclick="@CmdSaveFont" disabled="@IsButtonDisabled">@LocalData.uiTranslator.Translate("Save")</button>
+    </div>
+
+
+</div>

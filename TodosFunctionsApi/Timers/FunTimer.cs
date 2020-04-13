@@ -20,6 +20,7 @@ namespace TodosFunctionsApi.Timers
         public static async Task Timer1([TimerTrigger("*/30 * * * * *")]TimerInfo myTimer, ILogger log)
         {
 
+
             CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "LatsStatRequest", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (setting != null)
@@ -40,27 +41,27 @@ namespace TodosFunctionsApi.Timers
         public static async void Timer2([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log)
         {
            
-            bool b;
-            CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "DoActivityLog", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            //bool b;
+            //CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "DoActivityLog", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            if (setting != null)
-            {
-                if (string.IsNullOrEmpty(setting.Value))
-                {
-                    if (CosmosAPI.DoActivityLog)
-                    {
-                        CosmosAPI.DoActivityLog = false;
-                    }
-                }
-                else
-                {
-                    b = bool.Parse(setting.Value);
-                    if (CosmosAPI.DoActivityLog != b)
-                    {
-                        CosmosAPI.DoActivityLog = b;
-                    }
-                }
-            }
+            //if (setting != null)
+            //{
+            //    if (string.IsNullOrEmpty(setting.Value))
+            //    {
+            //        if (CosmosAPI.DoActivityLog)
+            //        {
+            //            CosmosAPI.DoActivityLog = false;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        b = bool.Parse(setting.Value);
+            //        if (CosmosAPI.DoActivityLog != b)
+            //        {
+            //            CosmosAPI.DoActivityLog = b;
+            //        }
+            //    }
+            //}
 
             await CosmosAPI.cosmosDBClientReminder.SendTodoReminders(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
         }

@@ -8,7 +8,7 @@ namespace TodosGlobal
 {
     public static class GlobalData
     {
-        public static bool WebOrLocalMode = true; //determines where is cosmosDB
+        public static bool WebOrLocalMode = true; //if local is not sending admin notify emails
 
         public static bool ProductionOrDevelopmentMode; //coming from settings
 

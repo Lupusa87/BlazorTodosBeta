@@ -39,6 +39,9 @@ namespace TodosCosmos.ClientClasses
 
         public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate, List<string> CallTrace)
         {
+
+           
+
             List<T> result = new List<T>();
 
             var setIterator = CosmosAPI.container.GetItemLinqQueryable<T>().Where(predicate).ToFeedIterator();

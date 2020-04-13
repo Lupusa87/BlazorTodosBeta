@@ -17,7 +17,9 @@ namespace BlazorTodos.Pages
 
         protected override void OnInitialized()
         {
-           
+
+            LocalData.profilePage = this;
+
 
             if (!LocalData.IsAuthenticated)
             {
@@ -40,6 +42,25 @@ namespace BlazorTodos.Pages
             {
                 LocalFunctions.AddMessage("You are not authenticated!", true, false);
             }
+        }
+
+        public void CmdDisplayDefaultFont()
+        {
+            if (LocalData.IsAuthenticated)
+            {
+                LocalData.OldDefaultFont = LocalData.CurrDefaultFont;
+                LocalFunctions.DisplayModal(ModalForm.DefaultFont);
+            }
+            else
+            {
+                LocalFunctions.AddMessage("You are not authenticated!", true, false);
+            }
+            
+        }
+
+        public void Refresh()
+        {
+            StateHasChanged();
         }
     }
 }

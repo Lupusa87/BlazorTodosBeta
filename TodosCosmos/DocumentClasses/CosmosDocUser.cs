@@ -28,7 +28,7 @@ namespace TodosCosmos.DocumentClasses
             CreateDate = tsUser.CreateDate;
             TodosCount = tsUser.TodosCount;
             LangID = tsUser.LangID;
-
+            DefaultFont = tsUser.DefaultFont;
 
             DocType = (int)DocTypeEnum.User;
             GeneratePK();
@@ -63,6 +63,8 @@ namespace TodosCosmos.DocumentClasses
         [JsonProperty(PropertyName = "o")]
         public Guid LangID { get; set; }
 
+        [JsonProperty(PropertyName = "s")]
+        public string DefaultFont { get; set; }
 
         [JsonProperty(PropertyName = "_ts")]
         public int TimeStamp { get; set; }
@@ -80,6 +82,7 @@ namespace TodosCosmos.DocumentClasses
                 CreateDate = CreateDate,
                 TodosCount = TodosCount,
                 LangID = LangID,
+                DefaultFont = DefaultFont,
             };
         }
 

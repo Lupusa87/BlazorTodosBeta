@@ -101,6 +101,9 @@ namespace BlazorTodos
                         return;
                     }
 
+                    
+
+                    
 
                     if (LocalData.UsingUITranslator)
                     {
@@ -221,7 +224,7 @@ namespace BlazorTodos
 
             
                 LocalData.CurrTSUser = await WebApiFunctions.CmdTSUserAuthorize(tmpTSUser);
-        
+
 
                 if (LocalData.CurrTSUser.UserName.ToLower().Equals("error!"))
                 {
@@ -237,7 +240,32 @@ namespace BlazorTodos
                         timerHelper.OnTick = TimerTick;
                         timerHelper.Start(1, 10000);
 
-                       
+
+
+                        if (!LocalData.CurrTSUser.UserName.Equals("demouser"))
+                        {
+                            if (!string.IsNullOrEmpty(LocalData.CurrTSUser.DefaultFont))
+                            {
+                                if (LocalData.CurrTSUser.DefaultFont != LocalData.CurrDefaultFont)
+                                {
+                                    LocalData.CurrDefaultFont = LocalData.CurrTSUser.DefaultFont;
+                                    LocalData.CurrVisitor.DefaultFont = LocalData.CurrDefaultFont;
+                                    await WebApiFunctions.CmdUpdateVisitor();
+                                    LocalData.mainLayout.Refresh();
+                                }
+                            }
+                            else
+                            {
+                                LocalData.CurrTSUser.DefaultFont = LocalData.CurrDefaultFont;
+                                await WebApiFunctions.CmdTSUserUpdateFont(new TSVisitor { IPAddress = string.Empty, DefaultFont = LocalData.CurrDefaultFont });
+                            }
+                        }
+                        else
+                        {
+                            LocalData.CurrTSUser.DefaultFont = LocalData.CurrDefaultFont;
+                        }
+
+
                         await WebApiFunctions.CmdGetFeedback();
 
                         

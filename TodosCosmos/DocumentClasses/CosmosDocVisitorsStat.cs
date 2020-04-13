@@ -36,6 +36,9 @@ namespace TodosCosmos.DocumentClasses
         [JsonProperty(PropertyName = "e")]
         public Guid LangID { get; set; }
 
+        [JsonProperty(PropertyName = "r")]
+        public string DefaultFont { get; set; }
+
 
     }
 }

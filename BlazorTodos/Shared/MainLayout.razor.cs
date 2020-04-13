@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using TG.Blazor.IndexedDB;
 using TodosUITranslator;
@@ -23,10 +24,29 @@ namespace BlazorTodos.Shared
         [Inject]
         IJSRuntime jsRuntime { get; set; }
 
-       // [Inject] IndexedDBManager indexedDbManager { get; set; }
+        // [Inject] IndexedDBManager indexedDbManager { get; set; }
 
-        protected override void OnInitialized()
+
+
+
+        protected override Task OnInitializedAsync()
         {
+            if (WebApiFunctions.httpClient is null)
+            {
+                WebApiFunctions.httpClient = httpClient;
+                WebApiFunctions.httpClient.BaseAddress = LocalData.WebApi_Uri;
+                WebApiFunctions.httpClient.Timeout = TimeSpan.FromMilliseconds(Timeout.Infinite);
+
+                WebApiFunctions.CmdGetVisitor();
+            }
+
+            if (BTodosJsInterop.jsRuntime is null)
+            {
+                BTodosJsInterop.jsRuntime = jsRuntime;
+
+            }
+
+
             if (!LocalData.ProductionOrDevelopmentMode)
             {
                 if (!BlazorWindowHelper.BWHJsInterop.IsReady)
@@ -37,22 +57,11 @@ namespace BlazorTodos.Shared
 
             }
 
-
-            if (WebApiFunctions.httpClient is null)
-            {
-                WebApiFunctions.httpClient = httpClient;
-            }
-
             if (LocalFunctions.navigationManager is null)
             {
                 LocalFunctions.navigationManager = navigationManager;
             }
 
-            if (BTodosJsInterop.jsRuntime is null)
-            {
-                BTodosJsInterop.jsRuntime = jsRuntime;
-
-            }
 
             if (LocalData.UsingIndexedDb)
             {
@@ -74,15 +83,11 @@ namespace BlazorTodos.Shared
             LocalData.mainLayout = this;
 
 
-           
+
             LocalFunctions.CmdPrepare();
 
-
-
-
-            base.OnInitialized();
+            return base.OnInitializedAsync();
         }
-
 
         public void Refresh()
         {

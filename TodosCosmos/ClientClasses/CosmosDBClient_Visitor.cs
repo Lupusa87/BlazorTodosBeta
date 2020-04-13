@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TodosCosmos.DocumentClasses;
+using TodosShared;
 using static TodosCosmos.Enums;
 
 namespace TodosCosmos.ClientClasses
@@ -65,7 +66,22 @@ namespace TodosCosmos.ClientClasses
 
         }
 
+        public async Task<bool> UpdateVisitor(TSVisitor tsVisitor, List<string> CallTrace)
+        {
 
+            CosmosDocVisitorsStat doc = await GetVisitor(tsVisitor.IPAddress, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+
+            if (!string.IsNullOrEmpty(tsVisitor.DefaultFont))
+            {
+                doc.DefaultFont = tsVisitor.DefaultFont;
+            }
+            else
+            {
+                doc.DefaultFont = string.Empty;
+            }
+
+            return await cosmosDBClientBase.UpdateItemAsync(doc, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+        }
 
     }
 }
