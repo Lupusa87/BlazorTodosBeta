@@ -15,12 +15,12 @@ namespace BlazorTodos.Modals
 
         protected bool IsButtonDisabled { get; set; } = false;
 
-        public void CmdKeyUp(KeyboardEventArgs a)
+        public async void CmdKeyUp(KeyboardEventArgs a)
         {
     
             if (a.Key.Equals("Enter"))
             {
-                CmdSaveFont();
+                await CmdSaveFont();
             }
         }
 

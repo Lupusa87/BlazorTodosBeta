@@ -24,8 +24,8 @@ namespace TodosFunctionsApi.API
     public class FunUser
     {
 
-    
-        private List<WebApiUserTypesEnum> AllowedRoles = new List<WebApiUserTypesEnum>
+
+        private readonly List<WebApiUserTypesEnum> AllowedRoles = new List<WebApiUserTypesEnum>
             {
                 WebApiUserTypesEnum.Authorized,
                 WebApiUserTypesEnum.Admin
@@ -34,8 +34,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunUserGetAll")]
         public async Task<ActionResult<IEnumerable<TSUser>>> GetAll(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/getall")] HttpRequest req,
-           ILogger log)
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/getall")] HttpRequest req)
         {
 
             List<WebApiUserTypesEnum>  localAllowedRoles = new List<WebApiUserTypesEnum>
@@ -49,20 +48,13 @@ namespace TodosFunctionsApi.API
             Guid UserID =Guid.Parse(LocalFunctions.CmdGetValueFromClaim(User.Claims, "UserID", 10, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())));
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "Requested all users", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            List<TSUser> users = new List<TSUser>();
+            return  await CosmosAPI.cosmosDBClientUser.GetAllUsers(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-
-                users = await CosmosAPI.cosmosDBClientUser.GetAllUsers(TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-
-           
-
-            return users;
         }
 
         [FunctionName("FunUserAuthorize")]
         public async Task<ActionResult<TSUser>> Authorize(
-          [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/authorize")] HttpRequest req,
-          ILogger log)
+          [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/authorize")] HttpRequest req)          
         {
 
 
@@ -77,12 +69,9 @@ namespace TodosFunctionsApi.API
 
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(UserID, "Requested authentication", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            TSUser result = new TSUser();
-
-
             tsUser.ID = UserID;
 
-            result = await CosmosAPI.cosmosDBClientUser.GetUser(tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            TSUser result = await CosmosAPI.cosmosDBClientUser.GetUser(tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
          
 
             if (!result.ID.Equals(Guid.Empty))
@@ -108,8 +97,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunUserSendMail")]
         public async Task<ActionResult<TSEmail>> SendMail(
-         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/sendmail")] HttpRequest req,
-         ILogger log)
+         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/sendmail")] HttpRequest req)         
         {
 
             TSEmail tsEmail = await MyFromBody<TSEmail>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -149,8 +137,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunUserPassRecovery")]
         public async Task<ActionResult<TSEmail>> PassRecovery(
-  [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/passrecovery")] HttpRequest req,
-  ILogger log)
+  [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/passrecovery")] HttpRequest req)  
         {
 
             TSEmail tsEmail = await MyFromBody<TSEmail>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -204,8 +191,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunUserCheckUserName")]
         public async Task<ActionResult<TSEmail>> CheckUserName(
-  [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/checkusername")] HttpRequest req,
-  ILogger log)
+  [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/checkusername")] HttpRequest req)  
         {
 
             TSEmail tsEmail = await MyFromBody<TSEmail>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -252,8 +238,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunUserCheckEmail")]
         public async Task<ActionResult<TSEmail>> CheckEmail(
-[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/checkemail")] HttpRequest req,
-ILogger log)
+[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/checkemail")] HttpRequest req)
         {
             TSEmail result = new TSEmail
             {
@@ -321,8 +306,7 @@ ILogger log)
 
         [FunctionName("FunUserLogout")]
         public async Task<ActionResult> Logout(
-[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/logout")] HttpRequest req,
-ILogger log)
+[HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/logout")] HttpRequest req)
         {
 
 
@@ -342,8 +326,7 @@ ILogger log)
 
         [FunctionName("FunUserAdd")]
         public async Task<ActionResult> Add(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/add")] HttpRequest req,
-        ILogger log)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/add")] HttpRequest req)
         {
 
             TSUser tsUser = await MyFromBody<TSUser>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -410,8 +393,7 @@ ILogger log)
 
         [FunctionName("ChangePassword")]
         public async Task<ActionResult> ChangePassword(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/changepassword")] HttpRequest req,
-        ILogger log)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "user/changepassword")] HttpRequest req)        
         {
 
             TSUser tsUser = await MyFromBody<TSUser>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -470,8 +452,7 @@ ILogger log)
 
         [FunctionName("FunUserGetLiveUsers")]
         public async Task<ActionResult<IEnumerable<TSUserOpen>>> GetLiveUsers(
-          [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/getliveusers")] HttpRequest req,
-          ILogger log)
+          [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user/getliveusers")] HttpRequest req)          
         {
 
             List<WebApiUserTypesEnum> localAllowedRoles = new List<WebApiUserTypesEnum>
@@ -497,8 +478,7 @@ ILogger log)
 
         [FunctionName("FunUserUpdate")]
         public async Task<ActionResult> Update(
-     [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "User/update")] HttpRequest req,
-     ILogger log)
+     [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "User/update")] HttpRequest req)     
         {
 
             TSUser tsUser = await MyFromBody<TSUser>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -530,8 +510,7 @@ ILogger log)
 
         [FunctionName("FunUserUpdatefont")]
         public async Task<ActionResult> UpdateFont(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "User/updatefont")] HttpRequest req,
-    ILogger log)
+    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "User/updatefont")] HttpRequest req)
         {
 
             TSVisitor tsVisitor = await MyFromBody<TSVisitor>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -573,8 +552,7 @@ ILogger log)
 
         [FunctionName("FunUserDelete")]
         public async Task<ActionResult> Delete(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "User/delete")] HttpRequest req,
-    ILogger log)
+    [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "User/delete")] HttpRequest req)
         {
 
             TSUser tsUser = await MyFromBody<TSUser>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));

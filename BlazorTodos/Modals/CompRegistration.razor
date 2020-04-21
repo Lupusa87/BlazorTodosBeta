@@ -38,7 +38,7 @@
         <input style="margin:10px;line-height:30px;width:250px" type="text" @bind="@tsUser.FullName" minlength="3" maxlength="100" required />
         <input style="margin:10px;line-height:30px;width:250px" type="email" @bind="@tsUser.Email" autocomplete="on" required />
         <div style="display:flex;margin:10px;">
-            <input style="line-height:30px;width:200px" type="text" disabled="@IsEmailedCodeDisabled" @bind="@tsUser.EmailedCode" minlength="10" maxlength="10" required/>
+            <input style="line-height:30px;width:200px" type="text" disabled="@IsEmailedCodeDisabled" @bind="@tsUser.EmailedCode" minlength="10" maxlength="10" required  @onkeyup="@cmdKeyUp" />
             @if (IsSendMailVisible)
             {
                 <img width="35" height="30" style="margin:2px;margin-left:5px" @onclick="@CmdSendMail" title=@LocalData.uiTranslator.Translate("Send code to mail") src="icons/SendMail.png" />

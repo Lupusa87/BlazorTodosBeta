@@ -55,7 +55,7 @@
         @if (LocalData.IsAuthenticated)
         {
         <div>
-            <input style="margin:5px;line-height:30px;width:450px" type="text" @bind="@LocalData.CurrTodo.Name" minlength="3" maxlength="1000" required />
+            <input style="margin:5px;line-height:30px;width:450px" type="text" @bind="@LocalData.CurrTodo.Name" minlength="3" maxlength="1000" required @onkeyup="@cmdKeyUp" />
         </div>
         <div>
             <input style="margin:5px;line-height:30px;width:450px" type="text" @bind="@LocalData.CurrTodo.Description" maxlength="1000" />

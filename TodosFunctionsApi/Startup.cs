@@ -6,8 +6,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using TodosGlobal;
+using System.Linq;
+using System.Collections;
 
 [assembly: FunctionsStartup(typeof(TodosFunctionsApi.Startup))]
 
@@ -23,6 +26,9 @@ namespace TodosFunctionsApi
     public class Startup : FunctionsStartup
     {
 
+
+        
+
         private static IConfigurationRoot configuration = new ConfigurationBuilder()
                .SetBasePath(Environment.CurrentDirectory)
                .AddJsonFile("AppSettings.json", optional: true, reloadOnChange: true)
@@ -32,8 +38,7 @@ namespace TodosFunctionsApi
         public override void Configure(IFunctionsHostBuilder builder)
         {
 
-           
-            GlobalData.ProductionOrDevelopmentMode = configuration["ProdOrDevMode"].Equals("1");
+            GlobalData.IsDevelopmentMode = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT"));
 
 
             string endpoint = configuration["CosmosDbEndPoint"];

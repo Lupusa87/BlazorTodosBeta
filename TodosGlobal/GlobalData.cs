@@ -10,7 +10,7 @@ namespace TodosGlobal
     {
         public static bool WebOrLocalMode = true; //if local is not sending admin notify emails
 
-        public static bool ProductionOrDevelopmentMode; //coming from settings
+        public static bool IsDevelopmentMode;
 
         public static string NotAuthorizedUserName = string.Empty;
         public static string NotAuthorizedUserPass = string.Empty;

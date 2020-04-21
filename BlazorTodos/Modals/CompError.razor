@@ -13,7 +13,7 @@
 
         <div class="MyContainerError">
 
-            @if (LocalData.ProductionOrDevelopmentMode)
+            @if (!LocalData.IsDevelopmentMode)
             {
                 @foreach (var item in LocalData.BTErrorsList)
                 {

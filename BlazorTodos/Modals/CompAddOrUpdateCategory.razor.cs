@@ -1,5 +1,6 @@
 ﻿using BlazorTodos;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +44,14 @@ namespace BlazorTodos.Modals
 
         }
 
+        public async void cmdKeyUp(KeyboardEventArgs e)
+        {
+            if (e.Key == "Enter")
+            {
+               await CmdAddOrUpdateCategory();
+            }
 
+        }
 
         public async Task CmdAddOrUpdateCategory()
         {
@@ -58,7 +66,7 @@ namespace BlazorTodos.Modals
                 if (!LocalData.currCategoryName.Equals(LocalData.currCategory.Name, StringComparison.InvariantCultureIgnoreCase))
                 {
 
-                    string a = string.Empty;
+                    string a;
 
                     if (LocalData.AddOrUpdateMode)
                     {

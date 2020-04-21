@@ -18,7 +18,7 @@
 <div class="MyContainerAddOrupdateFeedback">
     <div style="display:flex;vertical-align:top;text-align:center;grid-row:1/1;margin:20px">
         <label style="text-align:right;margin:10px;line-height:30px;color:darkblue;font-size:1.2rem;width:120px">@LocalData.uiTranslator.Translate("Feedback")</label>
-        <input style="margin:10px;line-height:30px;width:500px" type="text" @bind="@LocalData.currFeedback.Text" minlength="3" maxlength="1000" required />
+        <input style="margin:10px;line-height:30px;width:500px" type="text" @bind="@LocalData.currFeedback.Text" minlength="3" maxlength="1000" required @onkeyup="@cmdKeyUp" />
     </div>
 
     <div style="grid-column:2/2;grid-row:2/2;margin:10px;margin-bottom:30px">

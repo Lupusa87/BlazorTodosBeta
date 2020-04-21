@@ -22,6 +22,9 @@ namespace BlazorTodos.Pages
 
             LocalData.indexPage = this;
 
+
+
+
             base.OnInitialized();
         }
 
@@ -32,6 +35,7 @@ namespace BlazorTodos.Pages
 
                 LocalData.uiTranslator.OnNotFoundWord = TranslatorOnNotFoundWord;
                 LocalData.uiTranslator.OnUILanguageChanged = TranslatorOnUILanguageChanged;
+
             }
 
             base.OnAfterRender(firstRender);

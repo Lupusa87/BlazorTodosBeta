@@ -26,7 +26,7 @@ namespace TodosFunctionsApi.API
 
        
 
-        private List<WebApiUserTypesEnum> AllowedRoles = new List<WebApiUserTypesEnum>
+        private readonly List<WebApiUserTypesEnum> AllowedRoles = new List<WebApiUserTypesEnum>
             {
                 WebApiUserTypesEnum.Authorized, WebApiUserTypesEnum.Admin
             };
@@ -36,8 +36,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunTodoGetAll")]
         public async Task<ActionResult<IEnumerable<TSTodo>>> GetAll(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "todo/getall")] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "todo/getall")] HttpRequest req)
         {
 
             ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -58,8 +57,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunTodoGet")]
         public async Task<ActionResult<TSTodo>> Get(
-         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "todo/get")] HttpRequest req,
-         ILogger log)
+         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "todo/get")] HttpRequest req)
         {
 
             TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -80,8 +78,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunTodoAdd")]
         public async Task<ActionResult> Add(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "todo/add")] HttpRequest req,
-        ILogger log)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "todo/add")] HttpRequest req)
         {
 
             TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -123,8 +120,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunTodoUpdate")]
         public async Task<ActionResult> Update(
-       [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "todo/update")] HttpRequest req,
-       ILogger log)
+       [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "todo/update")] HttpRequest req)
         {
 
             TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -155,8 +151,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunTodoDelete")]
         public async Task<ActionResult> Delete(
-     [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "todo/delete")] HttpRequest req,
-     ILogger log)
+     [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "todo/delete")] HttpRequest req)
         {
 
             TSTodo tsTodo = await MyFromBody<TSTodo>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));

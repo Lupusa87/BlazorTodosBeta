@@ -301,7 +301,7 @@ namespace TodosCosmos
 
         public static void ConsolePrint(string text, bool BeforeLine=false, bool AfterLine = false)
         {
-            if (GlobalData.ProductionOrDevelopmentMode) return;
+            if (!GlobalData.IsDevelopmentMode) return;
 
 
             if (BeforeLine) Console.WriteLine();

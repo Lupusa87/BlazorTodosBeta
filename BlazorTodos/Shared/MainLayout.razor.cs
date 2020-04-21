@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using TG.Blazor.IndexedDB;
@@ -31,6 +32,13 @@ namespace BlazorTodos.Shared
 
         protected override Task OnInitializedAsync()
         {
+            if (BTodosJsInterop.jsRuntime is null)
+            {
+                BTodosJsInterop.jsRuntime = jsRuntime;
+
+            }
+
+
             if (WebApiFunctions.httpClient is null)
             {
                 WebApiFunctions.httpClient = httpClient;
@@ -40,14 +48,10 @@ namespace BlazorTodos.Shared
                 WebApiFunctions.CmdGetVisitor();
             }
 
-            if (BTodosJsInterop.jsRuntime is null)
-            {
-                BTodosJsInterop.jsRuntime = jsRuntime;
-
-            }
+           
 
 
-            if (!LocalData.ProductionOrDevelopmentMode)
+            if (LocalData.IsDevelopmentMode)
             {
                 if (!BlazorWindowHelper.BWHJsInterop.IsReady)
                 {
@@ -98,6 +102,12 @@ namespace BlazorTodos.Shared
 
         protected override void OnAfterRender(bool firstRender)
         {
+
+
+            if (firstRender)
+            {
+              LocalFunctions.CheckIfMobile();
+            }
 
             if (LocalData.compContextMenu != null)
             {

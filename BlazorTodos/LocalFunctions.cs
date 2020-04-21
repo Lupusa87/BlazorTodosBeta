@@ -21,7 +21,7 @@ namespace BlazorTodos
 {
     public static class LocalFunctions
     {
-        private static TimerHelper timerHelper = new TimerHelper();
+        private static readonly TimerHelper timerHelper = new TimerHelper();
         public static NavigationManager navigationManager { get; set; } = null;
 
         public static void CmdNavigate(string ParRoute = "")
@@ -350,7 +350,7 @@ namespace BlazorTodos
             };
 
 
-            if (!LocalData.ProductionOrDevelopmentMode)
+            if (LocalData.IsDevelopmentMode)
             {
                 err.Source = Source.DeclaringType.FullName;
             }
@@ -893,16 +893,31 @@ namespace BlazorTodos
 
         public static void ConsolePrint(string text, bool BeforeLine = false, bool AfterLine = false)
         {
-            if (LocalData.ProductionOrDevelopmentMode) return;
+            if (!LocalData.IsDevelopmentMode) return;
 
 
             if (BeforeLine) BTodosJsInterop.Log(string.Empty);
 
 
-            BTodosJsInterop.Log(string.Empty);
+            BTodosJsInterop.Log(text);
 
             if (AfterLine) BTodosJsInterop.Log(string.Empty);
 
+        }
+
+        public static async void CheckIfMobile()
+        {
+            double w = await BTodosJsInterop.GetWindowWidth();
+
+            double h = await BTodosJsInterop.GetWindowHeight();
+
+
+            if (h > w)
+            {
+
+                AddError("Sorry this app isn't designed for mobile screen, please use desktop. You see this because screen height is more than width.",
+                           MethodBase.GetCurrentMethod(), true, false, false);
+            }
         }
 
     }

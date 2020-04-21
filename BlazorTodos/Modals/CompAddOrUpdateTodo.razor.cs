@@ -1,5 +1,6 @@
 ﻿using BlazorTodos.Helpers;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,6 +72,14 @@ namespace BlazorTodos.Modals
             }
         }
 
+        public async void cmdKeyUp(KeyboardEventArgs e)
+        {
+            if (e.Key == "Enter")
+            {
+                await CmdAddOrUpdateTodo();
+            }
+
+        }
 
         public async Task CmdAddOrUpdateTodo()
         {
@@ -109,7 +118,7 @@ namespace BlazorTodos.Modals
             {
 
 
-                string a = string.Empty;
+                string a;
 
                 if (LocalData.AddOrUpdateMode)
                 {
@@ -411,8 +420,7 @@ namespace BlazorTodos.Modals
 
         public void CmdDueDateOnChange(ChangeEventArgs e)
         {
-            DateTime d;
-            if (DateTime.TryParse(e.Value.ToString(), out d))
+            if (DateTime.TryParse(e.Value.ToString(), out _))
             {
                 AdjustOptions();
             }

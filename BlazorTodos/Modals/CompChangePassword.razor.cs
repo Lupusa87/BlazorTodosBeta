@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,6 +94,16 @@ namespace BlazorTodos.Modals
            
 
     }
+
+
+        public async void cmdKeyUp(KeyboardEventArgs e)
+        {
+            if (e.Key == "Enter")
+            {
+                await CmdChangePassword();
+            }
+
+        }
 
         public async Task CmdChangePassword()
         {

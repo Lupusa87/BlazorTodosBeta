@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,15 @@ namespace BlazorTodos.Modals
             else if (ConfirmPassword != tsUser.Password)
             {
                 LocalFunctions.AddError("Confirm password is not same", MethodBase.GetCurrentMethod(), false, false);
+            }
+
+        }
+
+        public async void cmdKeyUp(KeyboardEventArgs e)
+        {
+            if (e.Key == "Enter")
+            {
+                await CmdAddUser();
             }
 
         }

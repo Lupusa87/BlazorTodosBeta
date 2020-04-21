@@ -15,6 +15,7 @@ using System.Security;
 using static TodosShared.TSEnums;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Net.Http.Json;
 
 namespace BlazorTodos
 {
@@ -283,8 +284,9 @@ namespace BlazorTodos
             TSUser tsUserForSend = GlobalFunctions.CopyObject<TSUser>(ParTSUser);
 
 
-            string result = await httpClient.PostJsonAsync<string>("user/add", tsUserForSend);
-            //string result = await httpClient.MyPostJsonGetStringAsync("user/add", tsUserForSend);
+
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync("user/add", tsUserForSend);
+            string result = await response.Content.ReadFromJsonAsync<string>();
 
 
             httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -304,9 +306,10 @@ namespace BlazorTodos
 
             TSUser tsUserForSend = GlobalFunctions.CopyObject<TSUser>(ParTSUser);
 
+    
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync("user/changepassword", tsUserForSend);
+            string result = await response.Content.ReadFromJsonAsync<string>();
 
-           
-            string result = await httpClient.PostJsonAsync<string>("user/changepassword", tsUserForSend);
 
             httpClient.DefaultRequestHeaders.Accept.Clear();
 
@@ -332,9 +335,9 @@ namespace BlazorTodos
                 TSVisitor tsVisitorForSend = GlobalFunctions.CopyObject<TSVisitor>(ParTSVisitor);
 
             
-                result = await httpClient.PostJsonAsync<string>("user/updatefont", tsVisitorForSend);
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync("user/updatefont", tsVisitorForSend);
+                result = await response.Content.ReadFromJsonAsync<string>();
 
-             
                 httpClient.DefaultRequestHeaders.Accept.Clear();
 
               
@@ -367,9 +370,8 @@ namespace BlazorTodos
             GlobalFunctions.CmdAdjustDate(tsTodoForSend, true);
 
 
-            
-            string result = await httpClient.PostJsonAsync<string>("todo/add", tsTodoForSend);
-
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync("todo/add", tsTodoForSend);
+            string result = await response.Content.ReadFromJsonAsync<string>();
 
             httpClient.DefaultRequestHeaders.Accept.Clear();
 
@@ -390,10 +392,10 @@ namespace BlazorTodos
             TSTodo tsTodoForSend = GlobalFunctions.CopyObject<TSTodo>(ParTSTodo);
 
             GlobalFunctions.CmdAdjustDate(tsTodoForSend, true);
-            
 
-            string result = await httpClient.PutJsonAsync<string>("todo/update", tsTodoForSend);
 
+            HttpResponseMessage response = await httpClient.PutAsJsonAsync("todo/update", tsTodoForSend);
+            string result = await response.Content.ReadFromJsonAsync<string>();
 
             httpClient.DefaultRequestHeaders.Accept.Clear();
 
@@ -413,13 +415,20 @@ namespace BlazorTodos
 
             //TSTodo tsTodoForSend = GlobalFunctions.CopyObject<TSTodo>(ParTSTodo);
 
-            TSTodo tsTodoForSend = new TSTodo();
-            tsTodoForSend.UserID = ParTSTodo.UserID;
-            tsTodoForSend.ID = ParTSTodo.ID;
-           
+            TSTodo tsTodoForSend = new TSTodo
+            {
+                UserID = ParTSTodo.UserID,
+                ID = ParTSTodo.ID
+            };
 
-            string result = await httpClient.SendJsonAsync<string>(HttpMethod.Delete, "todo/delete", tsTodoForSend);
 
+            var sendRequest = new HttpRequestMessage(HttpMethod.Delete, "todo/delete")
+            {
+                Content = JsonContent.Create(tsTodoForSend)
+            };
+
+            HttpResponseMessage response = await httpClient.SendAsync(sendRequest);
+            string result = await response.Content.ReadFromJsonAsync<string>();
 
             httpClient.DefaultRequestHeaders.Accept.Clear();
 
@@ -725,8 +734,8 @@ namespace BlazorTodos
             TSCategory tsCategoryForSend = GlobalFunctions.CopyObject<TSCategory>(ParTSCategory);
 
 
-            string result = await httpClient.PostJsonAsync<string>("category/add", tsCategoryForSend);
-
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync("category/add", tsCategoryForSend);
+            string result = await response.Content.ReadFromJsonAsync<string>();
 
             httpClient.DefaultRequestHeaders.Accept.Clear();
 
@@ -794,8 +803,8 @@ namespace BlazorTodos
             TSCategory tsCategoryForSend = GlobalFunctions.CopyObject<TSCategory>(ParTSCategory as TSCategory);
 
 
-            string result = await httpClient.PutJsonAsync<string>("category/update", tsCategoryForSend);
-
+            HttpResponseMessage response = await httpClient.PutAsJsonAsync("category/update", tsCategoryForSend);
+            string result = await response.Content.ReadFromJsonAsync<string>();
 
             httpClient.DefaultRequestHeaders.Accept.Clear();
 
@@ -818,8 +827,8 @@ namespace BlazorTodos
             TSVisitor tsVisitorForSend = GlobalFunctions.CopyObject<TSVisitor>(LocalData.CurrVisitor);
 
 
-            string result = await httpClient.PutJsonAsync<string>("Visitor/update", tsVisitorForSend);
-
+            HttpResponseMessage response = await httpClient.PutAsJsonAsync("Visitor/update", tsVisitorForSend);
+            string result = await response.Content.ReadFromJsonAsync<string>();
 
             httpClient.DefaultRequestHeaders.Accept.Clear();
 
@@ -838,12 +847,21 @@ namespace BlazorTodos
             GlobalFunctions.CmdTrimEntity(ParTSCategory);
 
 
-            TSCategory tsCategoryForSend = new TSCategory();
-            tsCategoryForSend.UserID = ParTSCategory.UserID;
-            tsCategoryForSend.ID = ParTSCategory.ID;
+            TSCategory tsCategoryForSend = new TSCategory
+            {
+                UserID = ParTSCategory.UserID,
+                ID = ParTSCategory.ID
+            };
 
-            string result = await httpClient.SendJsonAsync<string>(HttpMethod.Delete, "category/delete", tsCategoryForSend);
 
+
+            var sendRequest = new HttpRequestMessage(HttpMethod.Delete, "category/delete")
+            {
+                Content = JsonContent.Create(tsCategoryForSend)
+            };
+
+            HttpResponseMessage response = await httpClient.SendAsync(sendRequest);
+            string result = await response.Content.ReadFromJsonAsync<string>();
 
             httpClient.DefaultRequestHeaders.Accept.Clear();
 

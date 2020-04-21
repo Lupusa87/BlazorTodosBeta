@@ -24,7 +24,7 @@ namespace TodosFunctionsApi.API
     {
 
 
-        private List<WebApiUserTypesEnum> AllowedRoles = new List<WebApiUserTypesEnum>
+        private readonly List<WebApiUserTypesEnum> AllowedRoles = new List<WebApiUserTypesEnum>
         {
                 WebApiUserTypesEnum.Authorized, WebApiUserTypesEnum.Admin
         };
@@ -32,8 +32,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunCategoryGetAll")]
         public async Task<ActionResult<IEnumerable<TSCategory>>> GetAll(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "category/getall")] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "category/getall")] HttpRequest req)
         {
 
             ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -51,8 +50,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunCategoryGet")]
         public async Task<ActionResult<TSCategory>> Get(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "category/get")] HttpRequest req,
-           ILogger log)
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "category/get")] HttpRequest req)
         {
 
             TSCategory tsCategory = await MyFromBody<TSCategory>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -73,8 +71,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunCategoryAdd")]
         public async Task<ActionResult> Add(
-         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "category/add")] HttpRequest req,
-         ILogger log)
+         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "category/add")] HttpRequest req)
         {
 
             TSCategory tsCategory = await MyFromBody<TSCategory>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -105,8 +102,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunCategoryUpdate")]
         public async Task<ActionResult> Update(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "category/update")] HttpRequest req,
-        ILogger log)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "category/update")] HttpRequest req)
         {
 
             TSCategory tsCategory = await MyFromBody<TSCategory>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -136,8 +132,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunCategoryDelete")]
         public async Task<ActionResult> Delete(
-      [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "category/delete")] HttpRequest req,
-      ILogger log)
+      [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "category/delete")] HttpRequest req)
         {
 
             TSCategory tsCategory = await MyFromBody<TSCategory>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));

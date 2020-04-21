@@ -13,7 +13,7 @@ namespace TodosFunctionsApi.API
 {
     public static class MyFromBody<T> where T : class
     {
-        static JsonSerializerOptions options = new JsonSerializerOptions
+        readonly static JsonSerializerOptions options = new JsonSerializerOptions
         {
             AllowTrailingCommas = true,
             PropertyNameCaseInsensitive = true,
