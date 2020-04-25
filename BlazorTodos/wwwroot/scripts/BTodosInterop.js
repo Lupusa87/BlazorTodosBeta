@@ -8,6 +8,11 @@ window.BTodosJSFunctions = {
         console.log(msg);
         return true;
     },
+    SetFocus: function (id) {
+        if (document.getElementById(id) !== null) {
+            document.getElementById(id).focus();
+        }
+    },
     GetTimezoneOffset: function () {
         return new Date().getTimezoneOffset()/60;
     },

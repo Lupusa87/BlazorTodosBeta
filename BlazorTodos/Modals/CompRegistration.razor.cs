@@ -13,6 +13,9 @@ namespace BlazorTodos.Modals
     public partial class CompRegistration
     {
 
+        public Guid FirstInputID = Guid.NewGuid();
+        public bool ShouldSetFocus = false;
+        [Parameter] public string UniqueID { get; set; }
         public TSUser tsUser { get; set; } = new TSUser();
 
         public string ConfirmPassword { get; set; }
@@ -22,6 +25,28 @@ namespace BlazorTodos.Modals
         protected bool IsSendMailVisible { get; set; } = true;
         protected bool IsEmailedCodeDisabled { get; set; } = true;
 
+
+        public void EmptyValues()
+        {
+            tsUser = new TSUser();
+            ConfirmPassword = string.Empty;
+          
+        }
+
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+            }
+            if (ShouldSetFocus)
+            {
+                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+                ShouldSetFocus = false;
+            }
+            base.OnAfterRender(firstRender);
+        }
 
         public void Validate()
         {

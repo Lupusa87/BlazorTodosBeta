@@ -1,6 +1,8 @@
 ﻿using BlazorContextMenu;
 using BlazorTodos.Classes;
 using BlazorTodos.Helpers;
+using BlazorTodos.Modal;
+using BlazorTodos.Modals;
 using BlazorWindowHelper;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -407,6 +409,43 @@ namespace BlazorTodos
         {
             if (LocalData.IsReady)
             {
+
+                switch (parModalForm)
+                {
+                    case ModalForm.Message:
+                        break;
+                    case ModalForm.Error:
+                        break;
+                    case ModalForm.Confirm:
+                        break;
+                    case ModalForm.Login:
+                        LocalData.compLogin.EmptyValues();
+                        LocalData.compLogin.ShouldSetFocus = true;
+                        break;
+                    case ModalForm.Registration:
+                        LocalData.compRegistration.EmptyValues();
+                        LocalData.compRegistration.ShouldSetFocus = true;
+                        break;
+                    case ModalForm.DefaultFont:
+                        LocalData.compDefaultFont.ShouldSetFocus = true;
+                        break;
+                    case ModalForm.AddOrUpdateTodo:
+                        LocalData.compAddOrUpdateTodo.ShouldSetFocus = true;
+                        break;
+                    case ModalForm.AddOrUpdateCategory:
+                        LocalData.compAddOrUpdateCategory.ShouldSetFocus = true;
+                        break;
+                    case ModalForm.AddOrUpdateFeedback:
+                        LocalData.compAddOrUpdateFeedback.ShouldSetFocus = true;
+                        break;
+                    case ModalForm.ChangePassword:
+                        LocalData.compChangePassword.EmptyValues();
+                        LocalData.compChangePassword.ShouldSetFocus = true;
+                        break;
+                    default:
+                        break;
+                }
+                
                 LocalData.btModal.Show(parModalForm);
             }
             else

@@ -24,7 +24,7 @@
     </div>
 
     <div style="vertical-align:top;grid-column:2/2;grid-row:1/1;">
-        <input style="margin:10px;line-height:30px" type="text" @bind="@LocalData.CurrDefaultFont" @onkeyup="@CmdKeyUp" minlength="3" maxlength="100" required />
+        <input style="margin:10px;line-height:30px" type="text" id="@FirstInputID" @bind="@LocalData.CurrDefaultFont" @onkeyup="@CmdKeyUp" minlength="3" maxlength="100" required />
     </div>
 
     <div style="grid-column:2/2;grid-row:2/2;margin:10px;">

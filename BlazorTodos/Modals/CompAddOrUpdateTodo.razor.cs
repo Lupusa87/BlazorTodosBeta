@@ -13,7 +13,8 @@ namespace BlazorTodos.Modals
 {
     public partial class CompAddOrUpdateTodo
     {
-
+        public Guid FirstInputID = Guid.NewGuid();
+        public bool ShouldSetFocus = false;
         [Parameter] public string UniqueID { get; set; }
 
         protected bool IsButtonDisabled { get; set; } = false;
@@ -53,11 +54,17 @@ namespace BlazorTodos.Modals
         {
             if (firstRender)
             {
+                BTodosJsInterop.SetFocus(FirstInputID.ToString());
                 AdjustOptions();
             }
-
+            if (ShouldSetFocus)
+            {
+                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+                ShouldSetFocus = false;
+            }
             base.OnAfterRender(firstRender);
         }
+
 
         public void Bootstrap()
         {

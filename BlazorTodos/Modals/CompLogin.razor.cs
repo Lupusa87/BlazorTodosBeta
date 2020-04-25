@@ -13,7 +13,10 @@ namespace BlazorTodos.Modals
 
     public partial class CompLogin
     {
-      
+        public Guid FirstInputID = Guid.NewGuid();
+
+        public bool ShouldSetFocus = false;
+        [Parameter] public string UniqueID { get; set; }
         public string UserName { get; set; }
         public string UserPassword { get; set; }
 
@@ -22,7 +25,11 @@ namespace BlazorTodos.Modals
 
         protected bool IsRecoveryIconVisible { get; set; } = true;
 
-
+        public void EmptyValues()
+        {
+            UserName = string.Empty;
+            UserPassword = string.Empty;
+        }
 
         protected override void OnInitialized()
         {
@@ -32,6 +39,22 @@ namespace BlazorTodos.Modals
             }
 
             base.OnInitialized();
+        }
+
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+
+            if (firstRender)
+            {
+                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+            }
+            if (ShouldSetFocus)
+            {
+                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+                ShouldSetFocus = false;
+            }
+            base.OnAfterRender(firstRender);
         }
 
         protected void ValidateUserName()

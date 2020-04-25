@@ -24,6 +24,12 @@ namespace BlazorTodos
                 "BTodosJSFunctions.Log", msg);
         }
 
+        public static ValueTask SetFocus(string id)
+        {
+            return jsRuntime.InvokeVoidAsync(
+                "BTodosJSFunctions.SetFocus", id);
+        }
+
 
 
         public static ValueTask<int> GetTimezoneOffset()

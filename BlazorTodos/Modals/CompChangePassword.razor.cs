@@ -12,7 +12,9 @@ namespace BlazorTodos.Modals
 {
     public partial class CompChangePassword
     {
-
+        public Guid FirstInputID = Guid.NewGuid();
+        public bool ShouldSetFocus = false;
+        [Parameter] public string UniqueID { get; set; }
         public string NewPassword { get; set; }
 
         public string ConfirmPassword { get; set; }
@@ -25,6 +27,29 @@ namespace BlazorTodos.Modals
         protected bool IsSendMailVisible { get; set; } = true;
         protected bool IsEmailedCodeDisabled { get; set; } = true;
 
+
+        public void EmptyValues()
+        {
+            NewPassword = string.Empty;
+            ConfirmPassword = string.Empty;
+            EmailedCode = string.Empty;
+        }
+
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+
+            if (firstRender)
+            {
+                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+            }
+            if (ShouldSetFocus)
+            {
+                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+                ShouldSetFocus = false;
+            }
+            base.OnAfterRender(firstRender);
+        }
 
         public void Validate()
         {

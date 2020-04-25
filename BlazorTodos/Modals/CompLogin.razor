@@ -23,7 +23,7 @@
         </div>
 
         <div style="vertical-align:top;grid-column:2/2;grid-row:1/1;">
-            <input style="margin:10px;line-height:30px" type="text" @bind="@UserName" minlength="3" maxlength="100" required />
+            <input style="margin:10px;line-height:30px" id="@FirstInputID" type="text" @bind="@UserName" minlength="3" maxlength="100" required />
             <div style="display:flex;margin:10px;">
                 <input style="line-height:30px" type="password" @bind="@UserPassword" minlength="6" maxlength="30" required @onkeyup="@cmdKeyUp" />
                 @if (IsRecoveryIconVisible)

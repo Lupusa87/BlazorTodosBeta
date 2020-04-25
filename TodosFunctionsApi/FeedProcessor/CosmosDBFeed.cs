@@ -5,7 +5,6 @@ using System.Reflection;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
-using Microsoft.Build.Utilities;
 using Microsoft.Extensions.Logging;
 using TodosCosmos;
 using TodosCosmos.DocumentClasses;

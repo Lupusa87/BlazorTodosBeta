@@ -24,8 +24,8 @@ namespace BlazorTodos
         public static bool IsDevelopmentMode;
         public static TSAppVersion AppVersion = new TSAppVersion
         {
-            VersionNumber = "1.0.3",
-            VersionDate = new DateTime(2020, 4, 21)
+            VersionNumber = "1.0.4",
+            VersionDate = new DateTime(2020, 4, 24)
         };
 
         public static string CurrDefaultFont = "Sylfaen";
@@ -88,7 +88,13 @@ namespace BlazorTodos
         public static CompAddOrUpdateCategory compAddOrUpdateCategory { get; set; } = new CompAddOrUpdateCategory();
 
         public static CompAddOrUpdateFeedback compAddOrUpdateFeedback { get; set; } = new CompAddOrUpdateFeedback();
-        
+
+        public static CompLogin compLogin { get; set; } = new CompLogin();
+        public static CompRegistration compRegistration { get; set; } = new CompRegistration();
+        public static CompDefaultFont compDefaultFont { get; set; } = new CompDefaultFont();
+        public static CompChangePassword compChangePassword { get; set; } = new CompChangePassword();
+
+
         public static ComponentBridge componentBridge { get; set; } = new ComponentBridge();
 
         public static bool AddOrUpdateMode { get; set; } = true;

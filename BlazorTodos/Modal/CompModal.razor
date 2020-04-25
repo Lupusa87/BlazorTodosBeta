@@ -32,13 +32,13 @@
                         <CompConfirm></CompConfirm>
                         break;
                     case Classes.Enums.ModalForm.Login:
-                        <CompLogin></CompLogin>
+                        <CompLogin @ref="@LocalData.compLogin"  UniqueID="@LocalFunctions.GetUniqueID()"></CompLogin>
                         break;
                     case Classes.Enums.ModalForm.Registration:
-                        <CompRegistration></CompRegistration>
+                        <CompRegistration @ref="@LocalData.compRegistration" UniqueID="@LocalFunctions.GetUniqueID()"></CompRegistration>
                         break;
                     case Classes.Enums.ModalForm.DefaultFont:
-                        <CompDefaultFont></CompDefaultFont>
+                        <CompDefaultFont @ref="@LocalData.compDefaultFont" UniqueID="@LocalFunctions.GetUniqueID()"></CompDefaultFont>
                         break;
                     case Classes.Enums.ModalForm.AddOrUpdateTodo:
                         <CompAddOrUpdateTodo @ref="@LocalData.compAddOrUpdateTodo" UniqueID="@LocalFunctions.GetUniqueID()"></CompAddOrUpdateTodo>
@@ -50,7 +50,7 @@
                         <CompAddOrUpdateFeedback @ref="@LocalData.compAddOrUpdateFeedback" UniqueID="@LocalFunctions.GetUniqueID()"></CompAddOrUpdateFeedback>
                         break;
                     case Classes.Enums.ModalForm.ChangePassword:
-                        <CompChangePassword></CompChangePassword>
+                        <CompChangePassword @ref="@LocalData.compChangePassword" UniqueID="@LocalFunctions.GetUniqueID()"></CompChangePassword>
                         break;
                     default:
                         break;

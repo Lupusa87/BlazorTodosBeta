@@ -32,7 +32,7 @@
     </div>
 
     <div style="vertical-align:top;grid-column:2/2;grid-row:1/1;">
-        <input style="margin:10px;line-height:30px" type="text" @bind="@tsUser.UserName" minlength="3" maxlength="100" required />
+        <input style="margin:10px;line-height:30px" type="text" id="@FirstInputID" @bind="@tsUser.UserName" minlength="3" maxlength="100" required />
         <input style="margin:10px;line-height:30px" type="password" @bind="@tsUser.Password" minlength="6" maxlength="30" required />
         <input style="margin:10px;line-height:30px" type="password" @bind="@ConfirmPassword" minlength="6" maxlength="30" required />
         <input style="margin:10px;line-height:30px;width:250px" type="text" @bind="@tsUser.FullName" minlength="3" maxlength="100" required />

@@ -13,6 +13,9 @@ namespace BlazorTodos.Modals
 
     public partial class CompAddOrUpdateCategory
     {
+        public Guid FirstInputID = Guid.NewGuid();
+
+        public bool ShouldSetFocus = false;
 
         [Parameter] public string UniqueID { get; set; }
 
@@ -27,6 +30,24 @@ namespace BlazorTodos.Modals
             Bootstrap();
 
             base.OnInitialized();
+        }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+
+            if (firstRender)
+            {
+                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+            }
+
+
+            if (ShouldSetFocus)
+            {
+                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+                ShouldSetFocus = false;
+            }
+
+            base.OnAfterRender(firstRender);
         }
 
         public void Bootstrap()
