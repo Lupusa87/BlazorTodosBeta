@@ -32,9 +32,10 @@ namespace BlazorTodos
 
             try
             {
-
-                return await httpClient.GetStringAsync("setupdata");
-
+                httpClient.DefaultRequestHeaders.Add("x-functions-key", "eE45GSQAGSOEDDJCeQPDqAsNbry5Zw/rzQ8woBMxFRf/Q5PrNiPokg==");
+                string a = await httpClient.GetStringAsync("setupdata");
+                httpClient.DefaultRequestHeaders.Remove("x-functions-key");
+                return a;
             }
             catch (Exception ex)
             {
@@ -102,7 +103,7 @@ namespace BlazorTodos
             LocalData.IsDownloadedSetupData = false;
             try
             {
-
+                
                 string a = await CmdDownloadSetupData();
 
 
@@ -115,7 +116,7 @@ namespace BlazorTodos
                 else
                 {
 
-                    a = a.Substring(10, a.Length - 20);
+                    a = a[10..^10];
                    
                     string tmp_Server_NotAuthorized_UserName = a.Substring(0,20);
                     string tmp_Server_NotAuthorized_UserPass = a.Substring(20,20);
@@ -158,7 +159,7 @@ namespace BlazorTodos
                 TSUser result = await httpClient.MyPostJsonGetJsonAsync("user/authorize", ParTSUser);
 
 
-                GlobalFunctions.CmdAdjustDate(result, false);
+                GlobalFunctions.CmdAdjustEntityDate(result, false);
 
                 return result;
 
@@ -367,7 +368,7 @@ namespace BlazorTodos
 
             TSTodo tsTodoForSend = GlobalFunctions.CopyObject<TSTodo>(ParTSTodo);
 
-            GlobalFunctions.CmdAdjustDate(tsTodoForSend, true);
+            GlobalFunctions.CmdAdjustEntityDate(tsTodoForSend, true);
 
 
             HttpResponseMessage response = await httpClient.PostAsJsonAsync("todo/add", tsTodoForSend);
@@ -391,7 +392,7 @@ namespace BlazorTodos
 
             TSTodo tsTodoForSend = GlobalFunctions.CopyObject<TSTodo>(ParTSTodo);
 
-            GlobalFunctions.CmdAdjustDate(tsTodoForSend, true);
+            GlobalFunctions.CmdAdjustEntityDate(tsTodoForSend, true);
 
 
             HttpResponseMessage response = await httpClient.PutAsJsonAsync("todo/update", tsTodoForSend);
@@ -451,7 +452,7 @@ namespace BlazorTodos
 
                 foreach (var item in result)
                 {
-                    GlobalFunctions.CmdAdjustDate(item, false);
+                    GlobalFunctions.CmdAdjustEntityDate(item, false);
                 }
 
                 return result;
@@ -484,7 +485,7 @@ namespace BlazorTodos
 
                 foreach (var item in result)
                 {
-                    GlobalFunctions.CmdAdjustDate(item, false);
+                    GlobalFunctions.CmdAdjustEntityDate(item, false);
                 }
 
 
@@ -521,7 +522,7 @@ namespace BlazorTodos
 
                 if (!LocalData.currFeedback.UserID.Equals(Guid.Empty))
                 {
-                    GlobalFunctions.CmdAdjustDate(LocalData.currFeedback, false);
+                    GlobalFunctions.CmdAdjustEntityDate(LocalData.currFeedback, false);
                 }
 
 
@@ -649,7 +650,7 @@ namespace BlazorTodos
                 foreach (var item in result)
                 {
                     
-                    GlobalFunctions.CmdAdjustDate(item, false);
+                    GlobalFunctions.CmdAdjustEntityDate(item, false);
                 }
 
                 return result;

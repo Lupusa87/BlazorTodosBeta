@@ -82,15 +82,15 @@ namespace TodosFunctionsApi
             //Console.WriteLine("?.?>?>?>??????????????????????????????????????");
 
 
-            //DateTime dt1 = DateTime.Now;
+            //DateTime dt1 = DateTime.UtcNow;
 
             //Console.WriteLine(dt1.ToString("MM/dd/yyyy HH:mm:ss.fff"));
 
-           
+
             SeedData.Run(new CosmosClient(endpoint, authKey), TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
-            //DateTime dt2 = DateTime.Now;
+            //DateTime dt2 = DateTime.UtcNow;
             //Console.WriteLine(dt2.ToString("MM/dd/yyyy HH:mm:ss.fff"));
             //Console.WriteLine((dt2 - dt1).Duration().ToString());
 

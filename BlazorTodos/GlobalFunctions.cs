@@ -16,8 +16,6 @@ namespace BlazorTodos
     {
         public static Random rnd = new Random();
 
-       
-
         public static void CmdTrimEntity<T>(T Par_entity)
         {
 
@@ -33,7 +31,7 @@ namespace BlazorTodos
             }
         }
 
-        public static void CmdAdjustDate<T>(T Par_entity, bool ToServerOrToLocal)
+        public static void CmdAdjustEntityDate<T>(T Par_entity, bool ToUtcOrToLocal)
         {
 
             DateTime tmpdate;
@@ -46,21 +44,16 @@ namespace BlazorTodos
                     tmpdate = (DateTime)item.GetValue(Par_entity);
                     item.SetValue(Par_entity, tmpdate);
 
-                    if (ToServerOrToLocal)
+                    if (ToUtcOrToLocal)
                     {
-                        if (LocalData.TimezoneOffset != -99999)
-                        {
-                            item.SetValue(Par_entity, tmpdate.AddHours(LocalData.TimezoneOffset));
-                        }
-                       
+                        item.SetValue(Par_entity, LocalFunctions.ToUtcDate(tmpdate));
                     }
                     else
                     {
-                        if (LocalData.TimezoneOffset != -99999)
-                        {
-                            item.SetValue(Par_entity, tmpdate.AddHours(-LocalData.TimezoneOffset));
-                        }
-                       
+
+                        item.SetValue(Par_entity, LocalFunctions.ToLocalDate(tmpdate));
+
+
                     }
                 }
             }
@@ -158,11 +151,9 @@ namespace BlazorTodos
 
 
         public static T CopyObject<T>(object objSource)
-
         {
 
             using (MemoryStream stream = new MemoryStream())
-
             {
 
                 BinaryFormatter formatter = new BinaryFormatter();

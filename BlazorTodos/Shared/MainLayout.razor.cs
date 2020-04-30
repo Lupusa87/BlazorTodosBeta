@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BlazorWindowHelper;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
@@ -32,6 +33,9 @@ namespace BlazorTodos.Shared
 
         protected override Task OnInitializedAsync()
         {
+
+            BWHJsInterop.jsRuntime = jsRuntime;
+
             if (BTodosJsInterop.jsRuntime is null)
             {
                 BTodosJsInterop.jsRuntime = jsRuntime;
@@ -49,17 +53,6 @@ namespace BlazorTodos.Shared
             }
 
            
-
-
-            if (LocalData.IsDevelopmentMode)
-            {
-                if (!BlazorWindowHelper.BWHJsInterop.IsReady)
-                {
-                    BlazorWindowHelper.BWHJsInterop.jsRuntime = jsRuntime;
-                    BlazorWindowHelper.BWHJsInterop.IsReady = true;
-                }
-
-            }
 
             if (LocalFunctions.navigationManager is null)
             {

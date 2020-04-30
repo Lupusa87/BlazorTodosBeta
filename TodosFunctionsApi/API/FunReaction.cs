@@ -36,7 +36,7 @@ namespace TodosFunctionsApi.API
         public async Task<ActionResult<TSReaction>> Get(
     [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "reaction/get")] HttpRequest req,
     ILogger log)
-        {
+        { 
 
             ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 

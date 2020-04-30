@@ -41,7 +41,7 @@ namespace TodosFunctionsApi.API
         {
 
 
-            await CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "LatsStatRequest", "ts", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            await CosmosAPI.cosmosDBClientSetting.SetSetting(Guid.Empty, "LastStatRequest", "ts", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             ClaimsPrincipal User = MyTokenValidator.Authenticate(req, AllowedRoles, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 

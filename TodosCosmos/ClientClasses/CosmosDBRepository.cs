@@ -40,11 +40,27 @@ namespace TodosCosmos.ClientClasses
         public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate, List<string> CallTrace)
         {
 
-           
-
             List<T> result = new List<T>();
 
             var setIterator = CosmosAPI.container.GetItemLinqQueryable<T>().Where(predicate).ToFeedIterator();
+
+
+            while (setIterator.HasMoreResults)
+            {
+
+                result.AddRange(await setIterator.ReadNextAsync());
+            }
+
+            return result.AsEnumerable();
+        }
+
+
+        public async Task<IEnumerable<T>> TakeNewestItemsAsync(Expression<Func<T, bool>> FilterPredicate, Expression<Func<T, int>> SortPredicate, int Count, List<string> CallTrace)
+        {
+
+            List<T> result = new List<T>();
+
+            var setIterator = CosmosAPI.container.GetItemLinqQueryable<T>().Where(FilterPredicate).OrderByDescending(SortPredicate).Take(Count).ToFeedIterator();
 
 
             while (setIterator.HasMoreResults)

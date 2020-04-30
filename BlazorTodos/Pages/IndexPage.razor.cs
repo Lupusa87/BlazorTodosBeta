@@ -22,9 +22,6 @@ namespace BlazorTodos.Pages
 
             LocalData.indexPage = this;
 
-
-
-
             base.OnInitialized();
         }
 

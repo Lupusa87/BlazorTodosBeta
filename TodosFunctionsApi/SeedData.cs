@@ -62,7 +62,7 @@ namespace TodosFunctionsApi
                         FullName = "Demo User",
                         UserName = "demouser",
                         ID = Guid.NewGuid(),
-                        CreateDate = DateTime.Now,
+                        CreateDate = DateTime.UtcNow,
                     };
 
                     await CosmosAPI.cosmosDBClientUser.AddUser(newUser, TodosCosmos.LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));

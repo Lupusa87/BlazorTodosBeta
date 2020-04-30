@@ -49,24 +49,17 @@ namespace BlazorTodos
           
             if (LocalData.TimezoneOffset==-99999)
             {
-                LocalData.TimezoneOffset = await BTodosJsInterop.GetTimezoneOffset();
+                LocalData.TimezoneOffset = await BWHJsInterop.GetTimezoneOffset();
             }
 
-            //long milliseconds = await BTodosJsInterop.GetDateMilliseconds();
-            //.WriteLine(milliseconds);
 
-            //DateTime d = new DateTime(1970,1,1).AddMilliseconds(milliseconds);
-
-            //.WriteLine(d.ToString("MM/dd/yyyy HH:mm:ss.fff"));
-
-        
             if (!LocalData.DesktopItemsList.Any())
             {
                 PrepareDesktop();
             }
      
-            LocalData.WindowSize.W = (int)(await BTodosJsInterop.GetWindowWidth());
-            LocalData.WindowSize.H = (int)(await BTodosJsInterop.GetWindowHeight());
+            LocalData.WindowSize.W = (int)(await BWHJsInterop.GetWindowWidth());
+            LocalData.WindowSize.H = (int)(await BWHJsInterop.GetWindowHeight());
 
            
             if (string.IsNullOrEmpty(LocalData.MachineID))
@@ -348,7 +341,7 @@ namespace BlazorTodos
             {
                 ID = LocalData.BTErrorsList.Count + 1,
                 Message = LocalData.uiTranslator.Translate(ParMessage),
-                OccurDate = ToLocalDate(DateTime.Now),
+                OccurDate = DateTime.Now,
             };
 
 
@@ -714,7 +707,7 @@ namespace BlazorTodos
 
                 foreach (var item in LocalData.TsTodosList.Where(x => x.HasDueDate))
                 {
-                    item.DaysLeft = (short)(item.DueDate - ToLocalDate(DateTime.Now)).TotalDays;
+                    item.DaysLeft = (short)(item.DueDate - DateTime.Now).TotalDays;
                 }
 
                 for (int i = 0; i < LocalData.TsTodosList.Count; i++)
@@ -928,6 +921,19 @@ namespace BlazorTodos
             }
         }
 
+        public static DateTime ToUtcDate(DateTime d)
+        {
+            if (LocalData.TimezoneOffset != -99999)
+            {
+
+                return d.AddHours(LocalData.TimezoneOffset);
+            }
+            else
+            {
+                return d;
+            }
+        }
+
 
 
         public static void ConsolePrint(string text, bool BeforeLine = false, bool AfterLine = false)
@@ -935,20 +941,20 @@ namespace BlazorTodos
             if (!LocalData.IsDevelopmentMode) return;
 
 
-            if (BeforeLine) BTodosJsInterop.Log(string.Empty);
+            if (BeforeLine) BWHJsInterop.JsLog(string.Empty);
 
 
-            BTodosJsInterop.Log(text);
+            BWHJsInterop.JsLog(text);
 
-            if (AfterLine) BTodosJsInterop.Log(string.Empty);
+            if (AfterLine) BWHJsInterop.JsLog(string.Empty);
 
         }
 
         public static async void CheckIfMobile()
         {
-            double w = await BTodosJsInterop.GetWindowWidth();
+            double w = await BWHJsInterop.GetWindowWidth();
 
-            double h = await BTodosJsInterop.GetWindowHeight();
+            double h = await BWHJsInterop.GetWindowHeight();
 
 
             if (h > w)

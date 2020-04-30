@@ -164,6 +164,15 @@ namespace TodosFunctionsApi.FeedProcessor
 
             }
 
+            //process counters
+            foreach (var item in dict[DocTypeEnum.Counter])
+            {
+                CosmosDocCounter d = (dynamic)item;
+                if (d.IUD == (byte)DocStateMarkEnum.Insert)
+                {
+                    await TodosCosmos.LocalFunctions.NotifyAdmin("New Counter Activity  " + d.Source + " " + d.Action, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                }
+            }
 
 
             //Soft Delete all preDelete marked docs

@@ -92,7 +92,7 @@ namespace TodosFunctionsApi.API
 
          
             tsTodo.ID = Guid.NewGuid();
-            tsTodo.CreateDate = DateTime.Now;
+            tsTodo.CreateDate = DateTime.UtcNow;
 
 
             bool b = await CosmosAPI.cosmosDBClientTodo.AddTodo(tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));

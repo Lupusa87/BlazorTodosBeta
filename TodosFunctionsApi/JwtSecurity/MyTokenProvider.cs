@@ -84,7 +84,7 @@ namespace TodosFunctionsApi.JwtSecurity
             }
 
 
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
 
             var claims = new Claim[]
             {

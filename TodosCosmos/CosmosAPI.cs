@@ -34,5 +34,7 @@ namespace TodosCosmos
         public static readonly CosmosDBClient_FeedMessage cosmosDBClientFeedMessage = new CosmosDBClient_FeedMessage();
 
         public static readonly CosmosDBClient_Reminder cosmosDBClientReminder = new CosmosDBClient_Reminder();
+
+        public static readonly CosmosDBClient_Counter cosmosDBClientCounter = new CosmosDBClient_Counter();
     }
 }

@@ -66,7 +66,7 @@ namespace BlazorTodos.Pages
 
                 foreach (var item in TsUserOpenList)
                 {
-                    item.Days = (short)(LocalFunctions.ToLocalDate(DateTime.Now) - item.CreateDate).TotalDays;
+                    item.Days = (short)(DateTime.Now - item.CreateDate).TotalDays;
                 }
 
                 for (int i = 0; i < TsUserOpenList.Count; i++)

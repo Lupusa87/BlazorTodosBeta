@@ -1,4 +1,5 @@
 ﻿using BlazorTodos.Helpers;
+using BlazorWindowHelper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
@@ -39,7 +40,7 @@ namespace BlazorTodos.Modals
 
         protected int CurrComboReminderIndex = 0;
 
-        protected DateTime CurrRemindInputDate = LocalFunctions.ToLocalDate(DateTime.Now).AddDays(7).AddMinutes(-5);
+        protected DateTime CurrRemindInputDate = DateTime.Now.AddDays(7).AddMinutes(-5);
 
         protected override void OnInitialized()
         {
@@ -54,12 +55,12 @@ namespace BlazorTodos.Modals
         {
             if (firstRender)
             {
-                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+                BWHJsInterop.SetFocus(FirstInputID.ToString());
                 AdjustOptions();
             }
             if (ShouldSetFocus)
             {
-                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+                BWHJsInterop.SetFocus(FirstInputID.ToString());
                 ShouldSetFocus = false;
             }
             base.OnAfterRender(firstRender);
@@ -103,7 +104,7 @@ namespace BlazorTodos.Modals
 
             if (LocalData.CurrTodo.HasDueDate)
             {
-                if (LocalData.CurrTodo.DueDate <= LocalFunctions.ToLocalDate(DateTime.Now).AddMinutes(3))
+                if (LocalData.CurrTodo.DueDate <= DateTime.Now.AddMinutes(3))
                 {
                   LocalFunctions.AddError("Due date should be minimum after 3 minute from now", MethodBase.GetCurrentMethod(), false, false);
                 }
@@ -234,7 +235,7 @@ namespace BlazorTodos.Modals
             }
 
 
-            if (CurrRemindInputDate < LocalFunctions.ToLocalDate(DateTime.Now).AddMinutes(3))
+            if (CurrRemindInputDate < DateTime.Now.AddMinutes(3))
             {
                 LocalFunctions.AddError("Remainder date should be future date minimum 3 minutes from now!", MethodBase.GetCurrentMethod(), true, false);
             }
@@ -268,7 +269,7 @@ namespace BlazorTodos.Modals
         protected void AdjustOptions()
         {
  
-            TimeSpan ts = LocalData.CurrTodo.DueDate - LocalFunctions.ToLocalDate(DateTime.Now);
+            TimeSpan ts = LocalData.CurrTodo.DueDate - DateTime.Now;
             MinutesEnd = 60;
             HoursEnd = 12;
             DaysEnd = 30;

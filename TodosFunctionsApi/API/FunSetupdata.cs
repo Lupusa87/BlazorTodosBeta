@@ -19,7 +19,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunSetupdata")]
         public async Task<string> Setupdata(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Setupdata")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "Setupdata")] HttpRequest req,
             ILogger log)
         {
             await CosmosAPI.cosmosDBClientActivity.AddActivityLog(Guid.Empty, "Requested setup data", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));

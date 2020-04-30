@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BlazorWindowHelper;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
@@ -23,11 +24,11 @@ namespace BlazorTodos.Modals
         {
             if (firstRender)
             {
-                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+                BWHJsInterop.SetFocus(FirstInputID.ToString());
             }
             if (ShouldSetFocus)
             {
-                BTodosJsInterop.SetFocus(FirstInputID.ToString());
+                BWHJsInterop.SetFocus(FirstInputID.ToString());
                 ShouldSetFocus = false;
             }
             base.OnAfterRender(firstRender);

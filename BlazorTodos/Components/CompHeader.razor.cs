@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BlazorWindowHelper;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
@@ -34,11 +35,11 @@ namespace BlazorTodos.Components
                 SizeInt s = new SizeInt();
                 PointInt p = new PointInt();
 
-                p.Y = (int)(await BTodosJsInterop.GetElementActualTop(ElementID));
-                p.X = (int)(await BTodosJsInterop.GetElementActualLeft(ElementID));
+                p.Y = (int)(await BWHJsInterop.GetElementActualTop(ElementID));
+                p.X = (int)(await BWHJsInterop.GetElementActualLeft(ElementID));
 
-                s.W = (int)(await BTodosJsInterop.GetElementActualWidth(ElementID));
-                s.H = (int)(await BTodosJsInterop.GetElementActualHeight(ElementID));
+                s.W = (int)(await BWHJsInterop.GetElementActualWidth(ElementID));
+                s.H = (int)(await BWHJsInterop.GetElementActualHeight(ElementID));
 
                 p.Y += s.H;
 

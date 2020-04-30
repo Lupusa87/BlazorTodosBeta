@@ -361,7 +361,7 @@ namespace TodosFunctionsApi.API
                     await CosmosAPI.cosmosDBClientEmailedCode.DeleteEmailedCodes(tsUser.Email, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                     tsUser.ID = Guid.NewGuid();
-                    tsUser.CreateDate = DateTime.Now;
+                    tsUser.CreateDate = DateTime.UtcNow;
 
 
                     if (await CosmosAPI.cosmosDBClientUser.AddUser(tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())))

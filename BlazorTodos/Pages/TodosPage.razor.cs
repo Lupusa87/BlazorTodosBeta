@@ -143,7 +143,7 @@ namespace BlazorTodos.Pages
             LocalData.AddOrUpdateMode = true;
             LocalData.CurrTodo = new TSTodo
             {
-                DueDate = LocalFunctions.ToLocalDate(DateTime.Now).AddDays(7),
+                DueDate = DateTime.Now.AddDays(7),
                 Priority = 1,
                 CategoryID = Guid.Empty
             };
@@ -171,7 +171,7 @@ namespace BlazorTodos.Pages
 
                     if (!LocalData.CurrTodo.HasDueDate)
                     {
-                        LocalData.CurrTodo.DueDate = LocalFunctions.ToLocalDate(DateTime.Now).AddDays(7);
+                        LocalData.CurrTodo.DueDate = DateTime.Now.AddDays(7);
 
                     }
 
