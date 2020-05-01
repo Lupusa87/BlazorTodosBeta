@@ -170,7 +170,9 @@ namespace TodosFunctionsApi.FeedProcessor
                 CosmosDocCounter d = (dynamic)item;
                 if (d.IUD == (byte)DocStateMarkEnum.Insert)
                 {
-                    await TodosCosmos.LocalFunctions.NotifyAdmin("New Counter Activity  " + d.Source + " " + d.Action, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                    await TodosCosmos.LocalFunctions.NotifyAdmin("New Counter Activity  " + d.Source + " " + d.Action + " " + d.IPAddress,
+                        TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())
+                        ,"New blazor activity "  + LocalFunctions.GetDemoNameFromURL(d.Source));
                 }
             }
 

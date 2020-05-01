@@ -169,6 +169,27 @@ namespace TodosFunctionsApi
             return appVersion;
         }
 
+        public static string GetDemoNameFromURL(string input)
+        {
+            input = input.ToLower();
+            int k = input.IndexOf(".z");
+            if (k > -1)
+            {
+                input = input.Substring(0, k);
+                input = input.Replace("https://", null);
+            }
+            else
+            {
+                input = string.Empty;
+            }
 
-    }
+
+            if (!string.IsNullOrEmpty(input))
+            {
+                input = string.Empty;
+            }
+
+            return input;
+        }
+  }
 }

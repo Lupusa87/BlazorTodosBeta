@@ -19,11 +19,12 @@ namespace TodosCosmos
     public static class LocalFunctions
     {
 
-        public static async Task NotifyAdmin(string ActivityDescription, List<string> CallTrace)
+        public static async Task NotifyAdmin(string ActivityDescription, List<string> CallTrace,
+                                             string Subject = "Blazor Todo new Activity")
         {
             if (GlobalData.WebOrLocalMode)
             {
-                await CmdSendEmailAsync(GlobalData.AdminNotifyEmail.Trim(), "Blazor Todo new Activity", ActivityDescription, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                await CmdSendEmailAsync(GlobalData.AdminNotifyEmail.Trim(), Subject, ActivityDescription, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
             else
             {
