@@ -19,12 +19,14 @@ namespace TodosCosmos
     public static class LocalFunctions
     {
 
-        public static async Task NotifyAdmin(string ActivityDescription, List<string> CallTrace,
-                                             string Subject = "Blazor Todo new Activity")
+        public static async Task NotifyAdmin(string ActivityDescription,
+                                             List<string> CallTrace,
+                                             string Subject = "Blazor Todo new Activity",
+                                             string pSenderName = "Blazor Todos")
         {
             if (GlobalData.WebOrLocalMode)
             {
-                await CmdSendEmailAsync(GlobalData.AdminNotifyEmail.Trim(), Subject, ActivityDescription, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                await CmdSendEmailAsync(GlobalData.AdminNotifyEmail.Trim(), Subject, ActivityDescription, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()), pSenderName);
             }
             else
             {
@@ -36,8 +38,6 @@ namespace TodosCosmos
 
         public static async Task<TSEmail> SendEmail(TSEmail ParTSEmail, string ParIPAddress, string ParMachineID, List<string> CallTrace)
         {
-
-
 
             var attr = new EmailAddressAttribute();
 
@@ -143,7 +143,11 @@ namespace TodosCosmos
             return ParTSEmail;
         }
 
-        private static async Task<bool> CmdSendEmailAsync(string ParEmail, string ParSubject, string ParMessage, List<string> CallTrace)
+        private static async Task<bool> CmdSendEmailAsync(string ParEmail,
+                                    string ParSubject,
+                                    string ParMessage, 
+                                    List<string> CallTrace,
+                                    string pSenderName ="Blazor Todos")
         {
 
 
@@ -163,7 +167,7 @@ namespace TodosCosmos
             {
 
                 MimeMessage message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Blazor Todos", GlobalData.GmailAccountName));
+                message.From.Add(new MailboxAddress(pSenderName, GlobalData.GmailAccountName));
                 message.To.Add(new MailboxAddress(ParEmail));
                 message.Subject = ParSubject;
 

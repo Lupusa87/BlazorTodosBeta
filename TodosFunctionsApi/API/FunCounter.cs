@@ -37,7 +37,7 @@ namespace TodosFunctionsApi.API
         {
 
             string ip = req.HttpContext.Connection.RemoteIpAddress.ToString().Trim();
-            if (ip.Equals("100.35.216.76") || ip.Equals("127.0.0.1"))
+            if (ip.Equals("127.0.0.1"))
             {
                 return new OkObjectResult("OK");
             }

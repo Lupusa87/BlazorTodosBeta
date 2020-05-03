@@ -172,6 +172,7 @@ namespace TodosFunctionsApi
         public static string GetDemoNameFromURL(string input)
         {
             input = input.ToLower();
+            
             int k = input.IndexOf(".z");
             if (k > -1)
             {
@@ -184,7 +185,7 @@ namespace TodosFunctionsApi
             }
 
 
-            if (!string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(input))
             {
                 input = string.Empty;
             }
