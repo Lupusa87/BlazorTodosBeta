@@ -8,7 +8,7 @@ namespace TodosGlobal
 {
     public static class GlobalData
     {
-        public static bool WebOrLocalMode = true; //if local is not sending admin notify emails
+        public static bool WebOrLocalMode = true; //if local will not send admin notify emails
 
         public static bool IsDevelopmentMode;
 
@@ -30,6 +30,6 @@ namespace TodosGlobal
         public static string GmailAccountPass = string.Empty;
 
         public static string AzureTranslatorSubscriptionKey = string.Empty;
-
+        public static string SendGridApiKey = string.Empty;
     }
 }

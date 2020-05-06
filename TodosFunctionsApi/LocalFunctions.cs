@@ -1,9 +1,6 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Documents;
-using MimeKit;
 //using SmartDictionaryWeb.Models;
 using System;
 using System.Collections;

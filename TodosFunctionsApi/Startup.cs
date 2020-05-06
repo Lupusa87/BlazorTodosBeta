@@ -40,6 +40,7 @@ namespace TodosFunctionsApi
 
             GlobalData.IsDevelopmentMode = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT"));
 
+          
 
             string endpoint = configuration["CosmosDbEndPoint"];
             if (string.IsNullOrEmpty(endpoint))

@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="2.6.0" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.9.0-preview" />
+    <PackageReference Include="SendGrid" Version="9.14.1" />
   </ItemGroup>
 
   <ItemGroup>

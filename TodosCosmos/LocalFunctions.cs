@@ -1,5 +1,5 @@
-﻿using MailKit.Net.Smtp;
-using MimeKit;
+﻿using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -143,7 +143,46 @@ namespace TodosCosmos
             return ParTSEmail;
         }
 
+
         private static async Task<bool> CmdSendEmailAsync(string ParEmail,
+                                  string ParSubject,
+                                  string ParMessage,
+                                  List<string> CallTrace,
+                                  string pSenderName = "Blazor Todos")
+        {
+
+
+            bool result = true;
+
+            try
+            {
+                //https://docs.microsoft.com/en-us/azure/sendgrid-dotnet-how-to-send-email
+                //5/6/2020
+
+                var client = new SendGridClient(GlobalData.SendGridApiKey);
+                var msg = new SendGridMessage()
+                {
+                    From = new EmailAddress(GlobalData.GmailAccountName, pSenderName),
+                    Subject = ParSubject,
+                    PlainTextContent = ParMessage,
+                    //HtmlContent = "<strong>Hello, Email!</strong>"
+                };
+                msg.AddTo(new EmailAddress(ParEmail));
+                Response response = await client.SendEmailAsync(msg);
+
+            }
+            catch (Exception ex)
+            {
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+
+                return false;
+            }
+
+
+            return result;
+        }
+
+        private static async Task<bool> CmdSendEmailAsyncGmail(string ParEmail,
                                     string ParSubject,
                                     string ParMessage, 
                                     List<string> CallTrace,
@@ -166,37 +205,37 @@ namespace TodosCosmos
             try
             {
 
-                MimeMessage message = new MimeMessage();
-                message.From.Add(new MailboxAddress(pSenderName, GlobalData.GmailAccountName));
-                message.To.Add(new MailboxAddress(ParEmail));
-                message.Subject = ParSubject;
+                //MimeMessage message = new MimeMessage();
+                //message.From.Add(new MailboxAddress(pSenderName, GlobalData.GmailAccountName));
+                //message.To.Add(new MailboxAddress(ParEmail));
+                //message.Subject = ParSubject;
 
-                message.Body = new TextPart("plain")
-                {
-                    Text = ParMessage
-                };
+                //message.Body = new TextPart("plain")
+                //{
+                //    Text = ParMessage
+                //};
 
-                using SmtpClient client = new SmtpClient();
+                //using SmtpClient client = new SmtpClient();
 
-                await client.ConnectAsync("smtp.gmail.com", 587, false);
-
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
-
-                await client.AuthenticateAsync(GlobalData.GmailAccountName, GlobalData.GmailAccountPass);
-
-                await client.SendAsync(message);
-
-                await client.DisconnectAsync(true);
-
-                //client.Connect("smtp.gmail.com", 587, false);
+                //await client.ConnectAsync("smtp.gmail.com", 587, false);
 
                 //client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                //client.Authenticate(GlobalData.GmailAccountName, GlobalData.GmailAccountPass);
+                //await client.AuthenticateAsync(GlobalData.GmailAccountName, GlobalData.GmailAccountPass);
 
-                //client.Send(message);
+                //await client.SendAsync(message);
 
-                //client.Disconnect(true);
+                //await client.DisconnectAsync(true);
+
+                ////client.Connect("smtp.gmail.com", 587, false);
+
+                ////client.AuthenticationMechanisms.Remove("XOAUTH2");
+
+                ////client.Authenticate(GlobalData.GmailAccountName, GlobalData.GmailAccountPass);
+
+                ////client.Send(message);
+
+                ////client.Disconnect(true);
 
 
             }

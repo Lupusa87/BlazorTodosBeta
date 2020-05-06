@@ -86,6 +86,7 @@ namespace TodosGlobal
 
 
                 GlobalData.AzureTranslatorSubscriptionKey = Environment.GetEnvironmentVariable("AzureTranslatorSubscriptionKey");
+                GlobalData.SendGridApiKey = Environment.GetEnvironmentVariable("SendGridApiKey");
                 
             }
         }
