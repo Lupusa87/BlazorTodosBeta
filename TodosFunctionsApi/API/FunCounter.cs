@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -27,6 +28,20 @@ namespace TodosFunctionsApi.API
         {
 
             return await CosmosAPI.cosmosDBClientCounter.GetNewestCounters(10,TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+
+        }
+
+
+        [FunctionName("FunCounterGetReport1")]
+        public async Task<ActionResult<IEnumerable<TSReport1>>> GetReport1(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "Counter/getreport1")] HttpRequest req)
+        {
+
+            TSReport1 tsReport = await MyFromBody<TSReport1>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+
+            return await CosmosAPI.cosmosDBClientCounter.GetReport1(long.Parse(tsReport.Source),
+                long.Parse(tsReport.Action),
+                TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
         }
 

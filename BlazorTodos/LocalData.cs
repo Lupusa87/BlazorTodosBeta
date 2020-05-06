@@ -24,8 +24,8 @@ namespace BlazorTodos
         public static bool IsDevelopmentMode;
         public static TSAppVersion AppVersion = new TSAppVersion
         {
-            VersionNumber = "1.0.7",
-            VersionDate = new DateTime(2020, 5, 2)
+            VersionNumber = "1.0.8",
+            VersionDate = new DateTime(2020, 5, 6)
         };
 
         public static string CurrDefaultFont = "Sylfaen";

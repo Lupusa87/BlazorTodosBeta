@@ -336,9 +336,8 @@ namespace BlazorTodos
                 TSVisitor tsVisitorForSend = GlobalFunctions.CopyObject<TSVisitor>(ParTSVisitor);
 
             
-                HttpResponseMessage response = await httpClient.PutAsJsonAsync("user/updatefont", tsVisitorForSend);
+                HttpResponseMessage response = await httpClient.PostAsJsonAsync("user/updatefont", tsVisitorForSend);
                 result = await response.Content.ReadFromJsonAsync<string>();
-
                 httpClient.DefaultRequestHeaders.Accept.Clear();
 
               

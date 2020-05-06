@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -110,10 +111,10 @@ namespace BlazorTodos
                 });
 
 
-                return await response.Content.ReadAsStringAsync();
+                return await response.Content.ReadFromJsonAsync<string>();
 
 
-                //var stringContent = await response.Content.ReadAsStringAsync();
+                //var stringContent = await response.Content.ReadFromJsonAsync<string>();
 
                 //JsonDocument document = JsonDocument.Parse(stringContent);
 
@@ -138,7 +139,7 @@ namespace BlazorTodos
 
             return JsonSerializer.Deserialize<T>(await response.Content.ReadAsStringAsync(), opt);
 
-            //var stringContent = await response.Content.ReadAsStringAsync();
+            //var stringContent = await response.Content.ReadFromJsonAsync<string>();
 
             //JsonDocument document = JsonDocument.Parse(stringContent);
 
@@ -157,7 +158,7 @@ namespace BlazorTodos
 
             return JsonSerializer.Deserialize<U>(await response.Content.ReadAsStringAsync(), opt);
 
-            //var stringContent = await response.Content.ReadAsStringAsync();
+            //var stringContent = await response.Content.ReadFromJsonAsync<string>();
 
             //JsonDocument document = JsonDocument.Parse(stringContent);
 

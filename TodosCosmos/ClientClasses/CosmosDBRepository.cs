@@ -55,7 +55,7 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<IEnumerable<T>> TakeNewestItemsAsync(Expression<Func<T, bool>> FilterPredicate, Expression<Func<T, int>> SortPredicate, int Count, List<string> CallTrace)
+        public async Task<List<T>> TakeNewestItemsAsync(Expression<Func<T, bool>> FilterPredicate, Expression<Func<T, int>> SortPredicate, int Count, List<string> CallTrace)
         {
 
             List<T> result = new List<T>();
@@ -69,7 +69,36 @@ namespace TodosCosmos.ClientClasses
                 result.AddRange(await setIterator.ReadNextAsync());
             }
 
-            return result.AsEnumerable();
+            return result;
+        }
+
+
+
+        public async Task<List<T>> ExecuteQueryAsync(QueryDefinition query, List<string> CallTrace)
+        {
+
+            List<T> result = new List<T>();
+
+            //try
+            //{
+
+                FeedIterator<T> feedIterator = CosmosAPI.container.GetItemQueryIterator<T>(query);
+
+
+                while (feedIterator.HasMoreResults)
+                {
+
+                    result.AddRange(await feedIterator.ReadNextAsync());
+                }
+            //}
+            //catch (CosmosException ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+
+            //    await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            //}
+
+            return result;
         }
 
 

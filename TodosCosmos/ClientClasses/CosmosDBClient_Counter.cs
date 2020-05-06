@@ -69,7 +69,7 @@ namespace TodosCosmos.ClientClasses
 
             try
             {
-                IEnumerable<CosmosDocCounter> result = await cosmosDBRepo.TakeNewestItemsAsync(x => x.DocType == (int)DocTypeEnum.Counter && x.IUD < 2, x=>x.TimeStamp, Count, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                List<CosmosDocCounter> result = await cosmosDBRepo.TakeNewestItemsAsync(x => x.DocType == (int)DocTypeEnum.Counter && x.IUD < 2, x=>x.TimeStamp, Count, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 foreach (var item in result)
                 {
@@ -90,7 +90,30 @@ namespace TodosCosmos.ClientClasses
 
         }
 
+        public async Task<List<TSReport1>> GetReport1(long fromDate, long toDate, List<string> CallTrace)
+        {
+            try
+            {
+                //https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.cosmos.container.getitemqueryiterator?view=azure-dotnet
+                QueryDefinition query = new QueryDefinition("SELECT c.q as w, c.w as e, COUNT(1) AS r" +
+                                " FROM c where c.iud<2 and c.dt=15 and c._ts>=@var1 and c._ts<@var2" +
+                                " GROUP BY c.q, c.w")
+                                .WithParameter("@var1",fromDate)
+                                .WithParameter("@var2",toDate);
 
+                CosmosDBRepository<TSReport1> cosmosDBRepoReport1 = new CosmosDBRepository<TSReport1>();
+
+                return await cosmosDBRepoReport1.ExecuteQueryAsync(query, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+
+            }
+            catch (CosmosException ex)
+            {
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            }
+
+            return new List<TSReport1>();
+
+        }
 
     }
 }

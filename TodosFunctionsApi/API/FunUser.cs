@@ -510,7 +510,7 @@ namespace TodosFunctionsApi.API
 
         [FunctionName("FunUserUpdatefont")]
         public async Task<ActionResult> UpdateFont(
-    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "User/updatefont")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "User/updatefont")] HttpRequest req)
         {
 
             TSVisitor tsVisitor = await MyFromBody<TSVisitor>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
@@ -537,7 +537,6 @@ namespace TodosFunctionsApi.API
 
             if (b)
             {
-
                 return new OkObjectResult("OK");
             }
             else
