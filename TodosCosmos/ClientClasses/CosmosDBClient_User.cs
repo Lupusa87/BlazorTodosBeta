@@ -126,9 +126,9 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> DeleteUser(TSUser tsUser, List<string> CallTrace)
+        public async Task<bool> DeleteUser(DocDeleteModeEnum deleteMode, TSUser tsUser, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocUser(tsUser), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            return await cosmosDBClientBase.DeleteItemAsync(deleteMode, new CosmosDocUser(tsUser), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
         public async Task<CosmosDocUser> GetUserDoc(TSUser tsUser, List<string> CallTrace)

@@ -28,12 +28,12 @@ namespace TodosCosmos.ClientClasses
 
 
 
-        public async Task<bool> DeleteFeedMessage(CosmosDocFeedMessage tsFeedMessage, List<string> CallTrace)
+        public async Task<bool> DeleteFeedMessage(DocDeleteModeEnum deleteMode, CosmosDocFeedMessage tsFeedMessage, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(tsFeedMessage, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            return await cosmosDBClientBase.DeleteItemAsync(deleteMode, tsFeedMessage, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<bool> DeleteAllFeedMessages(List<string> CallTrace)
+        public async Task<bool> DeleteAllFeedMessages(DocDeleteModeEnum deleteMode, List<string> CallTrace)
         {
 
             try
@@ -44,7 +44,7 @@ namespace TodosCosmos.ClientClasses
                 {
                     foreach (var item in result)
                     {
-                        await cosmosDBClientBase.DeleteItemAsync(item, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                        await cosmosDBClientBase.DeleteItemAsync(deleteMode, item, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                     }
                 }
 

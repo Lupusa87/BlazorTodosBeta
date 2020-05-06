@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,42 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> DeleteCounter(TSCounter tsCounter, List<string> CallTrace)
+        public async Task<bool> DeleteCounter(DocDeleteModeEnum deleteMode, TSCounter tsCounter, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocCounter(tsCounter), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            return await cosmosDBClientBase.DeleteItemAsync(deleteMode, new CosmosDocCounter(tsCounter), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+        }
+
+
+
+        public async Task<bool> DeleteAllCounters(DocDeleteModeEnum deleteMode, List<string> CallTrace)
+        {
+
+            try
+            {
+                IEnumerable<CosmosDocCounter> result = await cosmosDBRepo.GetItemsAsync(x => x.DocType == (int)DocTypeEnum.Counter && x.IUD < 2, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+
+                if (result.Any())
+                {
+                    foreach (var item in result)
+                    {
+                        await cosmosDBClientBase.DeleteItemAsync(deleteMode, item, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                    }
+                }
+
+            }
+            catch (CosmosException ex)
+            {
+
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+
+                return false;
+            }
+
+
+            return true;
+
+
+
         }
 
 

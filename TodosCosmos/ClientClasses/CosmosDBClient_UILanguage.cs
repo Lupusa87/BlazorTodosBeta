@@ -34,9 +34,9 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> Delete(TSUILanguage tsUILanguage, List<string> CallTrace)
+        public async Task<bool> Delete(DocDeleteModeEnum deleteMode, TSUILanguage tsUILanguage, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocUILanguage(tsUILanguage), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            return await cosmosDBClientBase.DeleteItemAsync(deleteMode, new CosmosDocUILanguage(tsUILanguage), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
         public async Task<TSUILanguage> Get(TSUILanguage tsUILanguage, List<string> CallTrace)

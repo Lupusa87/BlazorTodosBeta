@@ -15,6 +15,7 @@ using TodosCosmos.DocumentClasses;
 using TodosFunctionsApi.JwtSecurity;
 using TodosGlobal;
 using TodosShared;
+using static TodosCosmos.Enums;
 using static TodosGlobal.GlobalClasses;
 using static TodosShared.TSEnums;
 
@@ -161,7 +162,7 @@ namespace TodosFunctionsApi.API
 
 
 
-            bool b = await CosmosAPI.cosmosDBClientUIWordNative.Delete(tsUIWordNative, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            bool b = await CosmosAPI.cosmosDBClientUIWordNative.Delete(DocDeleteModeEnum.Soft, tsUIWordNative, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (b)
             {

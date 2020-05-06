@@ -42,7 +42,7 @@ namespace TodosCosmos.ClientClasses
 
         public async Task<bool> UpdateTodo(TSTodo tsTodo, List<string> CallTrace)
         {
-            await CosmosAPI.cosmosDBClientReminder.DeleteTodosAllReminders(tsTodo.ID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            await CosmosAPI.cosmosDBClientReminder.DeleteTodosAllReminders(DocDeleteModeEnum.Soft,tsTodo.ID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             bool b = await cosmosDBClientBase.UpdateItemAsync(new CosmosDocTodo(tsTodo), LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
@@ -66,11 +66,11 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> DeleteTodo(TSTodo tsTodo, List<string> CallTrace)
+        public async Task<bool> DeleteTodo(DocDeleteModeEnum deleteMode, TSTodo tsTodo, List<string> CallTrace)
         {
-            await CosmosAPI.cosmosDBClientReminder.DeleteTodosAllReminders(tsTodo.ID, LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            await CosmosAPI.cosmosDBClientReminder.DeleteTodosAllReminders(deleteMode, tsTodo.ID, LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocTodo(tsTodo), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            return await cosmosDBClientBase.DeleteItemAsync(deleteMode, new CosmosDocTodo(tsTodo), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
         public async Task<TSTodo> GetTodo(TSTodo tsTodo, List<string> CallTrace)

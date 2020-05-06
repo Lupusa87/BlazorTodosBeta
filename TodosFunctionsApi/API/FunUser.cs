@@ -358,7 +358,7 @@ namespace TodosFunctionsApi.API
                 if (emailedCode.Code.ToLower().Equals(tsUser.EmailedCode))
                 {
 
-                    await CosmosAPI.cosmosDBClientEmailedCode.DeleteEmailedCodes(tsUser.Email, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                    await CosmosAPI.cosmosDBClientEmailedCode.DeleteEmailedCodes(DocDeleteModeEnum.Soft, tsUser.Email, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                     tsUser.ID = Guid.NewGuid();
                     tsUser.CreateDate = DateTime.UtcNow;
@@ -417,7 +417,7 @@ namespace TodosFunctionsApi.API
                 if (emailedCode.Code.ToLower().Equals(tsUser.EmailedCode))
                 {
 
-                    await CosmosAPI.cosmosDBClientEmailedCode.DeleteEmailedCodes(tsUser.Email, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                    await CosmosAPI.cosmosDBClientEmailedCode.DeleteEmailedCodes(DocDeleteModeEnum.Soft, tsUser.Email, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
 
                     TSUser currUser = (await CosmosAPI.cosmosDBClientUser.FindUserByID(UserID, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()))).toTSUser();
@@ -567,7 +567,7 @@ namespace TodosFunctionsApi.API
           
 
 
-                bool b = await CosmosAPI.cosmosDBClientUser.DeleteUser(tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                bool b = await CosmosAPI.cosmosDBClientUser.DeleteUser(DocDeleteModeEnum.Soft, tsUser, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
                 if (b)
                 {

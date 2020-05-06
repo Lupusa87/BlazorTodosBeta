@@ -32,8 +32,10 @@ namespace TodosFunctionsApi.FeedProcessor
             {
 
                 CosmosDocErrorLog d = (dynamic)item;
-                await TodosCosmos.LocalFunctions.NotifyAdmin("Error: " + d.Description, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-                TodosCosmos.LocalFunctions.ConsolePrint("Error: " + d.Description);
+                if (d.IUD == (byte)DocStateMarkEnum.Insert)
+                {
+                    await TodosCosmos.LocalFunctions.NotifyAdmin("Error: " + d.Description, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                }
             }
 
 

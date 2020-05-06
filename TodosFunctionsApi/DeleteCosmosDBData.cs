@@ -7,6 +7,7 @@ using TodosCosmos;
 using TodosCosmos.ClientClasses;
 using TodosCosmos.DocumentClasses;
 using TodosShared;
+using static TodosCosmos.Enums;
 
 namespace TodosFunctionsApi
 {
@@ -19,7 +20,7 @@ namespace TodosFunctionsApi
 
             foreach (var item in list)
             {
-                 CosmosAPI.cosmosDBClientActivity.Delete(item, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                 CosmosAPI.cosmosDBClientActivity.Delete(DocDeleteModeEnum.Soft, item, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             }
 
 
@@ -34,7 +35,7 @@ namespace TodosFunctionsApi
 
             foreach (var item in list)
             {
-                 CosmosAPI.cosmosDBClientUILanguage.Delete(item, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                 CosmosAPI.cosmosDBClientUILanguage.Delete(DocDeleteModeEnum.Soft, item, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             }
 
 
@@ -51,7 +52,7 @@ namespace TodosFunctionsApi
 
                 //Console.WriteLine("deleting " + item.Word);
 
-                 CosmosAPI.cosmosDBClientUIWordNative.Delete(item, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                 CosmosAPI.cosmosDBClientUIWordNative.Delete(DocDeleteModeEnum.Soft, item, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             }
 
 
@@ -65,7 +66,7 @@ namespace TodosFunctionsApi
 
             foreach (var item in list)
             {
-                 CosmosAPI.cosmosDBClientUIWordForeign.Delete(item, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                 CosmosAPI.cosmosDBClientUIWordForeign.Delete(DocDeleteModeEnum.Soft, item, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             }
 
 

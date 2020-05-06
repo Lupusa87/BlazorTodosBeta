@@ -37,7 +37,7 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> DeleteEmailedCodes(string Email, List<string> CallTrace)
+        public async Task<bool> DeleteEmailedCodes(DocDeleteModeEnum deleteMode, string Email, List<string> CallTrace)
         {
 
             try
@@ -48,7 +48,7 @@ namespace TodosCosmos.ClientClasses
                 {
                     foreach (var item in result)
                     {
-                        await cosmosDBClientBase.DeleteItemAsync(item, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                        await cosmosDBClientBase.DeleteItemAsync(deleteMode, item, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                     }
                 }
 

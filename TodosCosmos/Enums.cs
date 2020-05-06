@@ -42,5 +42,10 @@ namespace TodosCosmos
             PostDelete = 9,
         }
 
+        public enum DocDeleteModeEnum
+        {
+            Soft = 0,
+            Hard = 1,
+        }
     }
 }

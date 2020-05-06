@@ -30,12 +30,12 @@ namespace TodosCosmos.ClientClasses
 
 
 
-        public async Task<bool> DeleteReminder(CosmosDocReminder reminder, List<string> CallTrace)
+        public async Task<bool> DeleteReminder(DocDeleteModeEnum deleteMode, CosmosDocReminder reminder, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(reminder, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            return await cosmosDBClientBase.DeleteItemAsync(deleteMode, reminder, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<bool> DeleteTodosAllReminders(Guid todoID, List<string> CallTrace)
+        public async Task<bool> DeleteTodosAllReminders(DocDeleteModeEnum deleteMode, Guid todoID, List<string> CallTrace)
         {
 
             try
@@ -46,7 +46,7 @@ namespace TodosCosmos.ClientClasses
                 {
                     foreach (var item in result)
                     {
-                        await DeleteReminder(item, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                        await DeleteReminder(deleteMode, item, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                     }
                 }
 
@@ -131,7 +131,7 @@ namespace TodosCosmos.ClientClasses
                                 }
                             }
 
-                            await DeleteReminder(item, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                            await DeleteReminder(DocDeleteModeEnum.Soft, item, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                         }
 
 

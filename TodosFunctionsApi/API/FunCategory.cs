@@ -17,6 +17,7 @@ using static TodosShared.TSEnums;
 using static TodosGlobal.GlobalClasses;
 using TodosCosmos;
 using TodosGlobal;
+using static TodosCosmos.Enums;
 
 namespace TodosFunctionsApi.API
 {
@@ -145,7 +146,7 @@ namespace TodosFunctionsApi.API
 
            
 
-            bool b = await CosmosAPI.cosmosDBClientCategory.DeleteCategory(tsCategory, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            bool b = await CosmosAPI.cosmosDBClientCategory.DeleteCategory(DocDeleteModeEnum.Soft, tsCategory, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (b)
             {

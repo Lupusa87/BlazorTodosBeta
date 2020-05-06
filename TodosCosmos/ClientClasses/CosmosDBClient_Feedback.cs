@@ -34,9 +34,9 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> DeleteFeedback(TSFeedback tsFeedback, List<string> CallTrace)
+        public async Task<bool> DeleteFeedback(DocDeleteModeEnum deleteMode, TSFeedback tsFeedback, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocFeedback(tsFeedback), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            return await cosmosDBClientBase.DeleteItemAsync(deleteMode, new CosmosDocFeedback(tsFeedback), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
         public async Task<TSFeedback> GetFeedback(TSFeedback tsFeedback, List<string> CallTrace)

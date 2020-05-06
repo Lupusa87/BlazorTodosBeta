@@ -33,9 +33,9 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> DeleteCategory(TSCategory tsCategory, List<string> CallTrace)
+        public async Task<bool> DeleteCategory(DocDeleteModeEnum deleteMode, TSCategory tsCategory, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(new CosmosDocCategory(tsCategory), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            return await cosmosDBClientBase.DeleteItemAsync(deleteMode, new CosmosDocCategory(tsCategory), pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
         public async Task<TSCategory> GetCategory(TSCategory tsCategory, List<string> CallTrace)

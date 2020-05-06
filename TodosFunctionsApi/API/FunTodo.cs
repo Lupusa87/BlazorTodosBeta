@@ -15,6 +15,7 @@ using TodosCosmos;
 using TodosFunctionsApi.JwtSecurity;
 using TodosGlobal;
 using TodosShared;
+using static TodosCosmos.Enums;
 using static TodosGlobal.GlobalClasses;
 using static TodosShared.TSEnums;
 
@@ -166,7 +167,7 @@ namespace TodosFunctionsApi.API
          
            
 
-            bool b = await CosmosAPI.cosmosDBClientTodo.DeleteTodo(tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            bool b = await CosmosAPI.cosmosDBClientTodo.DeleteTodo(DocDeleteModeEnum.Soft, tsTodo, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             if (b)
             {

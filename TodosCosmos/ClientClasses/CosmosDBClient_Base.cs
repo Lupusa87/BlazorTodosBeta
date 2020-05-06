@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TodosCosmos.DocumentClasses;
+using static TodosCosmos.Enums;
 
 namespace TodosCosmos.ClientClasses
 {
@@ -80,7 +81,7 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> DeleteItemAsync(T item, string pkPrefix, List<string> CallTrace)
+        public async Task<bool> DeleteItemAsync(DocDeleteModeEnum deleteMode, T item, string pkPrefix, List<string> CallTrace)
         {
             try
             {
@@ -98,8 +99,14 @@ namespace TodosCosmos.ClientClasses
                 }
                 else
                 {
-                    await cosmosDBRepo.SoftDeleteItemAsync(id, pkValue, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-
+                    if (deleteMode == DocDeleteModeEnum.Soft)
+                    {
+                        await cosmosDBRepo.SoftDeleteItemAsync(id, pkValue, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                    }
+                    else
+                    {
+                        await cosmosDBRepo.DeleteItemAsync(id, pkValue, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                    }
                     return true;
                 }
 

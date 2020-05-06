@@ -12,6 +12,7 @@ using TodosCosmos.Diagnostics;
 using TodosCosmos.DocumentClasses;
 using TodosGlobal;
 using TodosShared;
+using static TodosCosmos.Enums;
 using static TodosShared.TSEnums;
 
 namespace TodosCosmos
@@ -173,7 +174,10 @@ namespace TodosCosmos
             }
             catch (Exception ex)
             {
-                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, ex.Message, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty, 
+                    ex.Message, 
+                    AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()),
+                    true);
 
                 return false;
             }
@@ -261,7 +265,7 @@ namespace TodosCosmos
             try
             {
 
-                await CosmosAPI.cosmosDBClientEmailedCode.DeleteEmailedCodes(ParEmailedCode.Email, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                await CosmosAPI.cosmosDBClientEmailedCode.DeleteEmailedCodes(DocDeleteModeEnum.Soft, ParEmailedCode.Email, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
                 result = await CosmosAPI.cosmosDBClientEmailedCode.AddEmailedCode(ParEmailedCode, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }

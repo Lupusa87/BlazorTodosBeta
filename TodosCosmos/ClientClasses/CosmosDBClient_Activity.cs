@@ -65,9 +65,9 @@ namespace TodosCosmos.ClientClasses
         }
 
 
-        public async Task<bool> Delete(CosmosDocActivityLog tsActivity, List<string> CallTrace)
+        public async Task<bool> Delete(DocDeleteModeEnum deleteMode, CosmosDocActivityLog tsActivity, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(tsActivity, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            return await cosmosDBClientBase.DeleteItemAsync(deleteMode, tsActivity, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
     }
 }

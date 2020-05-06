@@ -18,10 +18,18 @@ namespace TodosCosmos.ClientClasses
         private readonly CosmosDBClient_Base<CosmosDocErrorLog> cosmosDBClientBase = new CosmosDBClient_Base<CosmosDocErrorLog>();
         private readonly string pkPrefix = ((int)DocTypeEnum.Error).ToString();
 
-        public async Task<bool> AddErrorLog(Guid UserID, string Description, List<string> CallTrace)
+        public async Task<bool> AddErrorLog(Guid UserID,
+            string Description,
+            List<string> CallTrace,
+            bool DoNotNotifyAdmin = false)
         {
 
             CosmosDocErrorLog newErrorLog = new CosmosDocErrorLog(UserID, Description, LocalFunctions.GetCallTraceString(CallTrace));
+
+            if (DoNotNotifyAdmin)
+            {
+                newErrorLog.IUD = 2;
+            }
 
             await cosmosDBRepo.CreateItemAsync(newErrorLog, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
 
@@ -30,12 +38,12 @@ namespace TodosCosmos.ClientClasses
 
 
 
-        public async Task<bool> DeleteErrorLog(CosmosDocErrorLog tsErrorLog, List<string> CallTrace)
+        public async Task<bool> DeleteErrorLog(DocDeleteModeEnum deleteMode, CosmosDocErrorLog tsErrorLog, List<string> CallTrace)
         {
-            return await cosmosDBClientBase.DeleteItemAsync(tsErrorLog, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+            return await cosmosDBClientBase.DeleteItemAsync(deleteMode, tsErrorLog, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
         }
 
-        public async Task<bool> DeleteAllErrorLogs(List<string> CallTrace)
+        public async Task<bool> DeleteAllErrorLogs(DocDeleteModeEnum deleteMode, List<string> CallTrace)
         {
      
             try
@@ -46,7 +54,7 @@ namespace TodosCosmos.ClientClasses
                 {
                     foreach (var item in result)
                     {
-                        await cosmosDBClientBase.DeleteItemAsync(item, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                        await cosmosDBClientBase.DeleteItemAsync(deleteMode, item, pkPrefix, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                     }
                 }
 
