@@ -98,21 +98,21 @@
             <input style="margin:5px;height:30px" type="checkbox" name="A" @bind="@LocalData.CurrTodo.IsDone" />
             <label style="margin:5px;line-height:30px;color:darkblue;font-size:1.2rem">@LocalData.uiTranslator.Translate("Is Done")</label>
         </div>
-        @if (@LocalData.CurrTodo.IsDone==false)
+        @if (LocalData.CurrTodo.IsDone==false)
         {
         <div style="display:flex">
             <input style="margin:5px;line-height:30px" type="datetime-local" min="@DateTime.Now" disabled="@(!LocalData.CurrTodo.HasDueDate)" @bind="@LocalData.CurrTodo.DueDate" @oninput="@CmdDueDateOnChange" />
             <input style="margin:5px;height:30px" type="checkbox" name="B" @bind="@LocalData.CurrTodo.HasDueDate" />
         </div>
-        @if (@LocalData.CurrTodo.HasDueDate)
+        @if (LocalData.CurrTodo.HasDueDate)
         {
         <div style="display:flex">
             <select style="margin:5px;height:30px;width:300px" @onchange="@ComboReminderSelectionChanged">
-                @if (@LocalData.CurrTodo.Reminders.Any())
+                @if (LocalData.CurrTodo.Reminders.Any())
                 {
                     @for (int i = 0; i < LocalData.CurrTodo.Reminders.Count; i++)
                     {
-                        @if (@i == @CurrComboReminderIndex)
+                        @if (i == CurrComboReminderIndex)
                         {
                             <option value="@i" selected>@GetReminderDateString(LocalData.CurrTodo.Reminders[i])</option>
                         }

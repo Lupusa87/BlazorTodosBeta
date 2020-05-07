@@ -95,11 +95,23 @@ namespace TodosCosmos.ClientClasses
             try
             {
                 //https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.cosmos.container.getitemqueryiterator?view=azure-dotnet
-                QueryDefinition query = new QueryDefinition("SELECT c.q as w, c.w as e, COUNT(1) AS r" +
-                                " FROM c where c.iud<2 and c.dt=15 and c._ts>=@var1 and c._ts<@var2" +
-                                " GROUP BY c.q, c.w")
-                                .WithParameter("@var1",fromDate)
-                                .WithParameter("@var2",toDate);
+
+                QueryDefinition query;
+                if (fromDate == 0 || toDate==0)
+                {
+                    query = new QueryDefinition("SELECT c.q as w, c.w as e, COUNT(1) AS r" +
+                               " FROM c where c.iud<2 and c.dt=15" +
+                               " GROUP BY c.q, c.w");
+                }
+                else
+                {
+                    query = new QueryDefinition("SELECT c.q as w, c.w as e, COUNT(1) AS r" +
+                                  " FROM c where c.iud<2 and c.dt=15 and c._ts>=@var1 and c._ts<@var2" +
+                                  " GROUP BY c.q, c.w")
+                                  .WithParameter("@var1", fromDate)
+                                  .WithParameter("@var2", toDate);
+
+                }
 
                 CosmosDBRepository<TSReport1> cosmosDBRepoReport1 = new CosmosDBRepository<TSReport1>();
 

@@ -39,6 +39,17 @@ namespace TodosFunctionsApi.API
 
             TSReport1 tsReport = await MyFromBody<TSReport1>.FromBody(req, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
+
+            if (string.IsNullOrEmpty(tsReport.Source))
+            {
+                tsReport.Source = "0";
+            }
+
+            if (string.IsNullOrEmpty(tsReport.Action))
+            {
+                tsReport.Action = "0";
+            }
+
             return await CosmosAPI.cosmosDBClientCounter.GetReport1(long.Parse(tsReport.Source),
                 long.Parse(tsReport.Action),
                 TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
