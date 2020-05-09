@@ -25,11 +25,17 @@ namespace TodosGlobal
 
 
         public static string AdminNotifyEmail = string.Empty;
+        public static string AdminNotifyPhone = string.Empty;
 
         public static string GmailAccountName = string.Empty;
         public static string GmailAccountPass = string.Empty;
 
         public static string AzureTranslatorSubscriptionKey = string.Empty;
         public static string SendGridApiKey = string.Empty;
+
+
+        public static string TwilioSID = string.Empty;
+        public static string TwilioAuthToken = string.Empty;
+        public static string TwilioPhoneNumber = string.Empty;
     }
 }

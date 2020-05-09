@@ -167,17 +167,17 @@ namespace TodosFunctionsApi.FeedProcessor
             }
 
             //process counters
-            foreach (var item in dict[DocTypeEnum.Counter])
-            {
-                CosmosDocCounter d = (dynamic)item;
-                if (d.IUD == (byte)DocStateMarkEnum.Insert)
-                {
-                    string a = LocalFunctions.GetDemoNameFromURL(d.Source);
-                    await TodosCosmos.LocalFunctions.NotifyAdmin("New Counter Activity  " + d.Source + " " + d.Action + " " + d.IPAddress,
-                        TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())
-                        ,"New blazor activity "  + a, a);
-                }
-            }
+            //foreach (var item in dict[DocTypeEnum.Counter])
+            //{
+            //    CosmosDocCounter d = (dynamic)item;
+            //    if (d.IUD == (byte)DocStateMarkEnum.Insert)
+            //    {
+            //        string a = LocalFunctions.GetDemoNameFromURL(d.Source);
+            //        await TodosCosmos.LocalFunctions.NotifyAdmin("New Counter Activity  " + d.Source + " " + d.Action + " " + d.IPAddress,
+            //            TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod())
+            //            ,"New blazor activity "  + a, a);
+            //    }
+            //}
 
 
             //Soft Delete all preDelete marked docs

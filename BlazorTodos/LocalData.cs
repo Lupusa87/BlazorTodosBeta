@@ -20,7 +20,7 @@ namespace BlazorTodos
 {
     public class LocalData
     {
-        public static bool WebOrLocalMode = true; // determines where is azure functions backend
+        public static bool WebOrLocalMode = false; // determines where is azure functions backend
         public static bool IsDevelopmentMode;
         public static TSAppVersion AppVersion = new TSAppVersion
         {

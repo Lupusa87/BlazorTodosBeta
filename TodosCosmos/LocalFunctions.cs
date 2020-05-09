@@ -12,6 +12,10 @@ using TodosCosmos.Diagnostics;
 using TodosCosmos.DocumentClasses;
 using TodosGlobal;
 using TodosShared;
+using Twilio;
+using Twilio.Clients;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 using static TodosCosmos.Enums;
 using static TodosShared.TSEnums;
 
@@ -27,7 +31,10 @@ namespace TodosCosmos
         {
             if (GlobalData.WebOrLocalMode)
             {
+
                 await CmdSendEmailAsync(GlobalData.AdminNotifyEmail.Trim(), Subject, ActivityDescription, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()), pSenderName);
+
+                await SendSMS(GlobalData.AdminNotifyPhone, Subject + ". " + ActivityDescription, AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
             }
             else
             {
@@ -36,6 +43,34 @@ namespace TodosCosmos
             }
         }
 
+        public static async Task<bool> SendSMS(string phoneNumber, string msg, List<string> CallTrace)
+        {
+            bool result = true;
+
+            try
+            {
+                TwilioClient.Init(GlobalData.TwilioSID, GlobalData.TwilioAuthToken);
+
+                var message = MessageResource.Create(
+                    body: msg,
+                    from: new PhoneNumber(GlobalData.TwilioPhoneNumber),
+                    to: new PhoneNumber(phoneNumber)
+                );
+
+               
+            }
+            catch (Exception ex)
+            {
+                await CosmosAPI.cosmosDBClientError.AddErrorLog(Guid.Empty,
+                    ex.Message,
+                    AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()),
+                    true);
+
+                return false;
+            }
+
+            return result;
+        }
 
         public static async Task<TSEmail> SendEmail(TSEmail ParTSEmail, string ParIPAddress, string ParMachineID, List<string> CallTrace)
         {

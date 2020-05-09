@@ -81,13 +81,18 @@ namespace TodosGlobal
 
 
                 GlobalData.AdminNotifyEmail = Environment.GetEnvironmentVariable("AdminNotifyEmail");
+                GlobalData.AdminNotifyPhone = Environment.GetEnvironmentVariable("AdminNotifyPhone");
                 GlobalData.GmailAccountName = Environment.GetEnvironmentVariable("GmailAccountName");
                 GlobalData.GmailAccountPass = Environment.GetEnvironmentVariable("GmailAccountPass");
 
 
                 GlobalData.AzureTranslatorSubscriptionKey = Environment.GetEnvironmentVariable("AzureTranslatorSubscriptionKey");
                 GlobalData.SendGridApiKey = Environment.GetEnvironmentVariable("SendGridApiKey");
-                
+
+
+                GlobalData.TwilioSID = Environment.GetEnvironmentVariable("TwilioSID");
+                GlobalData.TwilioAuthToken = Environment.GetEnvironmentVariable("TwilioAuthToken");
+                GlobalData.TwilioPhoneNumber = Environment.GetEnvironmentVariable("TwilioPhoneNumber");
             }
         }
 
