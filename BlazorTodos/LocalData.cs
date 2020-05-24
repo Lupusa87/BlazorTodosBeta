@@ -20,12 +20,12 @@ namespace BlazorTodos
 {
     public class LocalData
     {
-        public static bool WebOrLocalMode = false; // determines where is azure functions backend
+        public static bool WebOrLocalMode = true; // determines where is azure functions backend
         public static bool IsDevelopmentMode;
         public static TSAppVersion AppVersion = new TSAppVersion
         {
-            VersionNumber = "1.0.8",
-            VersionDate = new DateTime(2020, 5, 6)
+            VersionNumber = "1.0.9",
+            VersionDate = new DateTime(2020, 5, 23)
         };
 
         public static string CurrDefaultFont = "Sylfaen";
