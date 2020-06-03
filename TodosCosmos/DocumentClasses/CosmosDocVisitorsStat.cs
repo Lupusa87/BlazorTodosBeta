@@ -10,7 +10,7 @@ namespace TodosCosmos.DocumentClasses
         {
             ID = Guid.NewGuid();
             IPAddress = pIPAddress;
-            Count = pCount;
+            VisitsCount = pCount;
             LangID = pLangID;
 
 
@@ -31,7 +31,7 @@ namespace TodosCosmos.DocumentClasses
         public string IPAddress { get; set; }
 
         [JsonProperty(PropertyName = "w")]
-        public int Count { get; set; }
+        public int VisitsCount { get; set; }
 
         [JsonProperty(PropertyName = "e")]
         public Guid LangID { get; set; }

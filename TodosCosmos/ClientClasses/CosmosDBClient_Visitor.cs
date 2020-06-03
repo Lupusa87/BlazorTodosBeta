@@ -13,7 +13,7 @@ namespace TodosCosmos.ClientClasses
     public class CosmosDBClient_Visitor
     {
         private readonly CosmosDBRepository<CosmosDocVisitorsStat> cosmosDBRepo = new CosmosDBRepository<CosmosDocVisitorsStat>();
-        private readonly CosmosDBClient_Base<CosmosDocVisitorsStat> cosmosDBClientBase =new CosmosDBClient_Base<CosmosDocVisitorsStat>();
+        public readonly CosmosDBClient_Base<CosmosDocVisitorsStat> cosmosDBClientBase =new CosmosDBClient_Base<CosmosDocVisitorsStat>();
        
 
         private readonly string pkPrefix = ((int)DocTypeEnum.Todo).ToString();
@@ -33,15 +33,18 @@ namespace TodosCosmos.ClientClasses
                     await cosmosDBClientBase.AddItemAsync(visitor, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
                
                     await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "IPAddressesCount", true, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-        
+
+
+                    await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "VisitsCount", true, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+                    visitor.VisitsCount += 1;
+
+
+                    await CosmosAPI.cosmosDBClientVisitor.cosmosDBClientBase.UpdateItemAsync(visitor, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
+
+
                 }
 
-                await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "VisitsCount", true, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-                visitor.Count += 1;
-           
 
-                await cosmosDBClientBase.UpdateItemAsync(visitor, LocalFunctions.AddThisCaller(CallTrace, MethodBase.GetCurrentMethod()));
-        
 
                 return true;
 

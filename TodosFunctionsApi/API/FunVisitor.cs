@@ -56,6 +56,15 @@ namespace TodosFunctionsApi.API
                 doc = await CosmosAPI.cosmosDBClientVisitor.GetVisitor(tsVisitor.IPAddress, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 
             }
+            else
+            {
+
+                await CosmosAPI.cosmosDBClientSetting.UpdateSettingCounter(Guid.Empty, "VisitsCount", true, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+                doc.VisitsCount += 1;
+
+
+                await CosmosAPI.cosmosDBClientVisitor.cosmosDBClientBase.UpdateItemAsync(doc, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
+            }
 
 
 
