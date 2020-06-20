@@ -16,10 +16,6 @@ namespace BlazorContextMenu
         [Parameter]
         public BCMenu bcMenu { get; set; }
 
-
-
-       
-
         public void Refresh()
         {
             StateHasChanged();

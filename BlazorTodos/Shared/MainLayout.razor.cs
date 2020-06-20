@@ -29,7 +29,8 @@ namespace BlazorTodos.Shared
         // [Inject] IndexedDBManager indexedDbManager { get; set; }
 
 
-
+        private string GlobalStylesID = "globalstyles1";
+        private string GlobalStylesData;
 
         protected override Task OnInitializedAsync()
         {
@@ -79,7 +80,7 @@ namespace BlazorTodos.Shared
 
             LocalData.mainLayout = this;
 
-
+            GlobalStylesData = CssStyleGenerator.GenerateAppCSS(GlobalStylesID);
 
             LocalFunctions.CmdPrepare();
 

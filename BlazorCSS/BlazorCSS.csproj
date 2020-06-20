@@ -10,5 +10,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.0-preview.4.20257.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\BlazorOldGeorgianScripts\BlazorShared\BlazorShared.csproj" />
+  </ItemGroup>
+
 
 </Project>

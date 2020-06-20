@@ -12,7 +12,11 @@ namespace BlazorCSS
 
         bool EnabledRender = true;
 
+        [Parameter]
+        public string StyleID { get; set; }
 
+        [Parameter]
+        public string StyleData { get; set; }
 
         protected override Task OnParametersSetAsync()
         {
@@ -37,11 +41,9 @@ namespace BlazorCSS
 
             int k = 0;
 
-            CssHelper cssHelper = new CssHelper();
-
             builder.OpenElement(k++, "style");
-            builder.AddAttribute(k++, "id", "bvgStyle1");
-            builder.AddContent(k++, cssHelper.GetString("bvgStyle1"));
+            builder.AddAttribute(k++, "id", StyleID);
+            builder.AddContent(k++, StyleData);
             builder.CloseElement();
         }
 
