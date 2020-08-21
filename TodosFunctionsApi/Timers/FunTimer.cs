@@ -21,11 +21,11 @@ namespace TodosFunctionsApi.Timers
         public static async Task Timer1([TimerTrigger("*/30 * * * * *")]TimerInfo myTimer, ILogger log)
         {
 
-            //Console.WriteLine("A1");
+
             //await CosmosAPI.cosmosDBClientError.DeleteAllErrorLogs(DocDeleteModeEnum.Hard, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-            //Console.WriteLine("A2");
+           
             //await CosmosAPI.cosmosDBClientCounter.DeleteAllCounters(DocDeleteModeEnum.Hard, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
-            //Console.WriteLine("A3");
+     
 
             CosmosDocSetting setting = await CosmosAPI.cosmosDBClientSetting.GetSetting(Guid.Empty, "LastStatRequest", TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
 

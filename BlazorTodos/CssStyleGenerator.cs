@@ -34,9 +34,6 @@ namespace BlazorTodos
 
             GenerateContextMenuCSS();
 
-
-            Console.WriteLine(CssHelper1.GetString(StyleID));
-
             return CssHelper1.GetString(StyleID);
         }
 

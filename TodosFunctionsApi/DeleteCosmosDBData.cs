@@ -49,9 +49,6 @@ namespace TodosFunctionsApi
 
             foreach (var item in list)
             {
-
-                //Console.WriteLine("deleting " + item.Word);
-
                  CosmosAPI.cosmosDBClientUIWordNative.Delete(DocDeleteModeEnum.Soft, item, TodosCosmos.LocalFunctions.AddThisCaller(new List<string>(), MethodBase.GetCurrentMethod()));
             }
 
