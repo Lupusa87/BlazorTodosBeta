@@ -35,9 +35,20 @@ namespace BlazorContextMenu
             builder.OpenElement(1, "div");
             builder.AddAttribute(2, "id", bcMenuItem.ID);
             builder.AddAttribute(3, "class", "bContextMenuItem");
-            builder.AddAttribute(4, "style", "height:30px");
+            builder.AddAttribute(4, "style", "margin:0.5vh");
             builder.AddAttribute(5, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, OnClick));
-            builder.AddContent(6, bcMenuItem.Text);
+
+            if (!string.IsNullOrEmpty(bcMenuItem.Icon))
+            {
+                builder.OpenElement(6, "img");
+                builder.AddAttribute(8, "style", "height:2.5vh;width:2.5vh;margin-right:1vh");
+                builder.AddAttribute(9, "src", bcMenuItem.Icon);
+                builder.AddAttribute(10, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, OnClick));
+                builder.CloseElement();
+            }
+
+
+            builder.AddContent(11, bcMenuItem.Text);
 
             builder.CloseElement();
 

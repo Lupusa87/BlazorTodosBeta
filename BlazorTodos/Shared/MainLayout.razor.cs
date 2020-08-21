@@ -35,7 +35,7 @@ namespace BlazorTodos.Shared
         protected override Task OnInitializedAsync()
         {
 
-            BWHJsInterop.jsRuntime = jsRuntime;
+            BWHWindowHelper.jsRuntime = jsRuntime;
 
             if (BTodosJsInterop.jsRuntime is null)
             {
@@ -135,12 +135,12 @@ namespace BlazorTodos.Shared
 
             if (LocalData.bcMenu.ID > -1)
             {
-                if (e.ClientX < LocalData.bcMenu.X || e.ClientX > LocalData.bcMenu.X + LocalData.bcMenu.width)
+                if (e.ClientX < LocalData.bcMenu.ActualSize.W || e.ClientX > LocalData.bcMenu.ActualSize.W + LocalData.bcMenu.ActualSize.W)
                 {
                     LocalFunctions.ContextMenu_Hide();
                    
                 }
-                else if(e.ClientY < LocalData.bcMenu.Y || e.ClientY > LocalData.bcMenu.Y + LocalData.bcMenu.height)
+                else if(e.ClientY < LocalData.bcMenu.ActualSize.H || e.ClientY > LocalData.bcMenu.ActualSize.H + LocalData.bcMenu.ActualSize.H)
                 {
                     LocalFunctions.ContextMenu_Hide();
                    

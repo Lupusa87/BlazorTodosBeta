@@ -512,15 +512,12 @@ namespace BlazorTodos
 
             //  LocalData.bcMenu.Show();
 
-            LocalData.bcMenu.X = p.X;
-            LocalData.bcMenu.Y = p.Y;
+            //LocalData.bcMenu.X = p.X;
+            //LocalData.bcMenu.Y = p.Y;
 
-            LocalData.bcMenu.width = 50;
+            //LocalData.bcMenu.width = 50;
 
-            LocalData.bcMenu.height = LocalData.bcMenu.Children.Count * 30+12;
-
-            NormalizeContextMenuPosition();
-
+            //LocalData.bcMenu.height = LocalData.bcMenu.Children.Count * 30+12;
 
             LocalData.compContextMenu.bcMenu = LocalData.bcMenu;
             LocalData.compContextMenu.Refresh();
@@ -540,26 +537,6 @@ namespace BlazorTodos
 
         }
 
-
-
-        private static void NormalizeContextMenuPosition()
-        {
-
-            if (LocalData.bcMenu.width<100)
-            {
-                LocalData.bcMenu.width = 100;
-            }
-
-            if (LocalData.bcMenu.Y + LocalData.bcMenu.height > LocalData.WindowSize.H)
-            {
-                LocalData.bcMenu.Y = LocalData.WindowSize.H - LocalData.bcMenu.height-10;
-            }
-
-            if (LocalData.bcMenu.X + LocalData.bcMenu.width > LocalData.WindowSize.W)
-            {
-                LocalData.bcMenu.X = LocalData.WindowSize.W - LocalData.bcMenu.width-10;
-            }
-        }
 
 
         private static void PrepareDesktop()

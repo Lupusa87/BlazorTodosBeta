@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static BlazorShared.Classes.CustomClasses;
 
 namespace BlazorContextMenu
 {
@@ -10,13 +11,10 @@ namespace BlazorContextMenu
         public int ID { get; set; } = -1;
         public string Name { get; set; }
 
-        public int Y { get; set; }
-        public int X { get; set; }
+        public PointInt Position { get; set; } = new PointInt();
 
-
-        public int width { get; set; }
-        public int height { get; set; }
-
+        public SizeInt ActualSize { get; set; } = new SizeInt();
+        
         public List<BCMenuItem> Children = new List<BCMenuItem>();
 
        
