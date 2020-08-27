@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using TG.Blazor.IndexedDB;
 using TodosShared;
 using TodosUITranslator;
-using static BlazorTodos.Classes.CustomClasses;
+using static BlazorContextMenu.CustomClasses;
 using static BlazorTodos.Classes.Enums;
 using static TodosShared.TSEnums;
 
@@ -510,14 +510,10 @@ namespace BlazorTodos
                 Text = LocalData.uiTranslator.Translate("Logout"),
             });
 
-            //  LocalData.bcMenu.Show();
+            
 
-            //LocalData.bcMenu.X = p.X;
-            //LocalData.bcMenu.Y = p.Y;
-
-            //LocalData.bcMenu.width = 50;
-
-            //LocalData.bcMenu.height = LocalData.bcMenu.Children.Count * 30+12;
+            LocalData.bcMenu.Position = p;
+           
 
             LocalData.compContextMenu.bcMenu = LocalData.bcMenu;
             LocalData.compContextMenu.Refresh();

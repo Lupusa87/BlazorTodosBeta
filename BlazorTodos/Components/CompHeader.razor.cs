@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static BlazorTodos.Classes.CustomClasses;
+using static BlazorContextMenu.CustomClasses;
 using static BlazorTodos.Classes.Enums;
 
 
@@ -32,16 +32,24 @@ namespace BlazorTodos.Components
             else
             {
 
-                SizeInt s = new SizeInt();
-                PointInt p = new PointInt();
+                SizeInt s = new SizeInt
+                {
+                    W = 0,
+                    H = (int)await BWHJsInterop.GetElementActualHeight(ElementID)
+                };
 
-                p.Y = (int)(await BWHJsInterop.GetElementActualTop(ElementID));
-                p.X = (int)(await BWHJsInterop.GetElementActualLeft(ElementID));
 
-                s.W = (int)(await BWHJsInterop.GetElementActualWidth(ElementID));
-                s.H = (int)(await BWHJsInterop.GetElementActualHeight(ElementID));
+                PointInt p = new PointInt
+                {
+                    Y = (int)await BWHJsInterop.GetElementActualTop(ElementID) + 5,
+                    X = (int)await BWHJsInterop.GetElementActualLeft(ElementID)
+                };
+
+
 
                 p.Y += s.H;
+
+                
 
                 LocalFunctions.ContextMenu_DisplayLogout(p);
 
