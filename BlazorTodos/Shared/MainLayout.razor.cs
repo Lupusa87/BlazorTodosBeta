@@ -135,15 +135,15 @@ namespace BlazorTodos.Shared
 
             if (LocalData.bcMenu.ID > -1)
             {
-                if (e.ClientX < LocalData.bcMenu.ActualSize.W || e.ClientX > LocalData.bcMenu.ActualSize.W + LocalData.bcMenu.ActualSize.W)
+                if (e.ClientX < LocalData.bcMenu.Position.X || e.ClientX > LocalData.bcMenu.Position.X + LocalData.bcMenu.ActualSize.W)
                 {
                     LocalFunctions.ContextMenu_Hide();
-                   
+
                 }
-                else if(e.ClientY < LocalData.bcMenu.ActualSize.H || e.ClientY > LocalData.bcMenu.ActualSize.H + LocalData.bcMenu.ActualSize.H)
+                else if (e.ClientY < LocalData.bcMenu.Position.Y || e.ClientY > LocalData.bcMenu.Position.Y + LocalData.bcMenu.ActualSize.H)
                 {
                     LocalFunctions.ContextMenu_Hide();
-                   
+
                 }
             }
         }
