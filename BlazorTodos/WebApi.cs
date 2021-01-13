@@ -49,6 +49,10 @@ namespace BlazorTodos
                 JwtResult tmp_jwt = await WebApiFunctions.CmdDownloadToken(ParUserName, ParPassword, ParWebApiUserTypesEnum);
 
 
+
+
+
+
                 if (string.IsNullOrEmpty(tmp_jwt.ErrorMessage))
                 {
                     LocalData.CurrJWT = tmp_jwt.AccessToken;

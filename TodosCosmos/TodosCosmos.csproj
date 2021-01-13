@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net5.0</TargetFramework>
+	  <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.13.0-preview" />
-    <PackageReference Include="SendGrid" Version="9.21.0" />
-    <PackageReference Include="Twilio" Version="5.46.0" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.16.0" />
+    <PackageReference Include="SendGrid" Version="9.22.0" />
+    <PackageReference Include="Twilio" Version="5.52.1" />
   </ItemGroup>
 
   <ItemGroup>

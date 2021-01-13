@@ -106,8 +106,7 @@ namespace BlazorTodos
                 
                 string a = await CmdDownloadSetupData();
 
-
-
+               
 
                 if (a.Equals("Error"))
                 {
